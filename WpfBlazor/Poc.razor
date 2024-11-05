@@ -1,0 +1,42 @@
+<h1>k0x Workbench - PoC</h1>
+
+<p>Path: @path</p>
+
+<p>isPathExist: @isPathExist</p>
+
+<button class="btn btn-primary" @onclick="OpenDirectory">Open Directory</button>
+
+@code {
+
+    //private string path = "C:/_BkGit/bryanknox/k0x-workbench";
+    private string path = "C:/Users/bryan/OneDrive/BK Shortcuts";
+
+    private bool? isPathExist = null;
+
+
+    protected override void OnInitialized()
+    {
+        CheckPathExistence();
+    }
+
+    private void CheckPathExistence()
+    {
+        isPathExist = System.IO.Directory.Exists(path);
+    }
+
+    private void OpenDirectory()
+    {
+        if (isPathExist == true)
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = path,
+                    UseShellExecute = true
+                };
+            System.Diagnostics.Process.Start(psi);
+        }
+    }
+
+
+
+}
