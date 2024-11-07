@@ -13,17 +13,38 @@ public partial class App : Application
 
     public App()
     {
-        // Load configuration from appsettings.json in the directory
-        // where the application is running.
-        var builder = new ConfigurationBuilder()
-                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        Configuration = InitializeConfiguration();
+    }
 
-        Configuration = builder.Build();
+    private IConfigurationRoot InitializeConfiguration()
+    {
+        try
+        {
+            // Load configuration from the required appsettings.json file in the directory
+            // where the application is running.
+            var builder = new ConfigurationBuilder()
+                            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                            .AddJsonFile("zzz.appsettings.json", optional: false, reloadOnChange: true);
 
-        // Register a callback to be called after a change in the the configuration
-        // (appsettings.json) has been detected and the configuration has been reloaded.
-        ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnConfigurationReloaded);
+            IConfigurationRoot configuration = builder.Build();
+
+            // Register a callback to be called after a change in the the configuration
+            // (appsettings.json) has been detected and the configuration has been reloaded.
+            ChangeToken.OnChange(() => configuration.GetReloadToken(), OnConfigurationReloaded);
+
+            return configuration;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be strated.",
+                "Error Configuring the App",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            // Rethrow the exception to terminate the application.
+            throw;
+        }
     }
 
     /// <summary>
