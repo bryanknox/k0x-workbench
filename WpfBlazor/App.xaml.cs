@@ -24,7 +24,7 @@ public partial class App : Application
             // where the application is running.
             var builder = new ConfigurationBuilder()
                             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                            .AddJsonFile("zzz.appsettings.json", optional: false, reloadOnChange: true);
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
             IConfigurationRoot configuration = builder.Build();
 
