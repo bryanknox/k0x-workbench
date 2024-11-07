@@ -1,4 +1,7 @@
+@using System.Windows
 <h1>k0x Workbench - PoC</h1>
+
+<p>appSetting1: @appSetting1</p>
 
 <p>Path: @path</p>
 
@@ -8,6 +11,8 @@
 
 @code {
 
+    private string appSetting1 = string.Empty;
+
     //private string path = "C:/_BkGit/bryanknox/k0x-workbench";
     private string path = "C:/Users/bryan/OneDrive/BK Shortcuts";
 
@@ -16,6 +21,9 @@
 
     protected override void OnInitialized()
     {
+        appSetting1 = ((App)Application.Current).Configuration["AppSettings:Setting1"]
+            ?? "Setting1 Not Found";
+
         CheckPathExistence();
     }
 
