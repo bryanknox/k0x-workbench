@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using System.Windows;
 
@@ -10,34 +12,48 @@ namespace WpfBlazor;
 public partial class App : Application
 {
     public IConfiguration Configuration { get; }
+    public IServiceProvider ServiceProvider { get; }
 
     public App()
     {
-        Configuration = InitializeConfiguration();
+        var host = CreateHostBuilder().Build();
+        ServiceProvider = host.Services;
+        Configuration = ServiceProvider.GetRequiredService<IConfiguration>();
+        InitializeConfiguration();
     }
 
-    private IConfigurationRoot InitializeConfiguration()
+    private IHostBuilder CreateHostBuilder()
+    {
+        IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
+
+        hostBuilder.ConfigureAppConfiguration((context, config) =>
+        {
+            config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        });
+
+        hostBuilder.ConfigureServices((context, services) =>
+        {
+            // NOTE: IConfiguration is registered above by CreateDefaultBuilder().
+
+            services.AddWpfBlazorWebView();
+        });
+
+        return hostBuilder;
+    }
+
+    private void InitializeConfiguration()
     {
         try
         {
-            // Load configuration from the required appsettings.json file in the directory
-            // where the application is running.
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            IConfigurationRoot configuration = builder.Build();
-
-            // Register a callback to be called after a change in the the configuration
+            // Register a callback to be called after a change in the configuration
             // (appsettings.json) has been detected and the configuration has been reloaded.
-            ChangeToken.OnChange(() => configuration.GetReloadToken(), OnConfigurationReloaded);
-
-            return configuration;
+            ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnConfigurationReloaded);
         }
         catch (Exception ex)
         {
             MessageBox.Show(
-                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be strated.",
+                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be started.",
                 "Error Configuring the App",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -47,10 +63,6 @@ public partial class App : Application
         }
     }
 
-    /// <summary>
-    /// Event handler called after a change in the the configuration
-    /// (appsettings.json) has been detected and the configuration has been reloaded.
-    /// </summary>
     private void OnConfigurationReloaded()
     {
         MessageBox.Show("Configuration (appsettings.json) has been reloaded.");
