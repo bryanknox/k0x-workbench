@@ -16,10 +16,24 @@ public partial class App : Application
 
     public App()
     {
-        var host = CreateHostBuilder().Build();
-        ServiceProvider = host.Services;
-        Configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-        InitializeConfiguration();
+        try
+        {
+            var host = CreateHostBuilder().Build();
+            ServiceProvider = host.Services;
+            Configuration = ServiceProvider.GetRequiredService<IConfiguration>();
+            InitializeConfiguration();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be started.",
+                "Error Configuring the App",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            // Rethrow the exception to terminate the application.
+            throw;
+        }
     }
 
     private IHostBuilder CreateHostBuilder()
@@ -29,7 +43,7 @@ public partial class App : Application
         hostBuilder.ConfigureAppConfiguration((context, config) =>
         {
             config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                  .AddJsonFile("zzz-appsettings.json", optional: false, reloadOnChange: true);
         });
 
         hostBuilder.ConfigureServices((context, services) =>
@@ -44,23 +58,9 @@ public partial class App : Application
 
     private void InitializeConfiguration()
     {
-        try
-        {
-            // Register a callback to be called after a change in the configuration
-            // (appsettings.json) has been detected and the configuration has been reloaded.
-            ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnConfigurationReloaded);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be started.",
-                "Error Configuring the App",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-
-            // Rethrow the exception to terminate the application.
-            throw;
-        }
+        // Register a callback to be called after a change in the configuration
+        // (appsettings.json) has been detected and the configuration has been reloaded.
+        ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnConfigurationReloaded);
     }
 
     private void OnConfigurationReloaded()
