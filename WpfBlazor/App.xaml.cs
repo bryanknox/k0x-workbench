@@ -11,7 +11,8 @@ namespace WpfBlazor;
 /// </summary>
 public partial class App : Application
 {
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
+
     public IServiceProvider ServiceProvider { get; }
 
     public App()
@@ -21,7 +22,7 @@ public partial class App : Application
             var host = CreateHostBuilder().Build();
             ServiceProvider = host.Services;
             Configuration = ServiceProvider.GetRequiredService<IConfiguration>();
-            InitializeConfiguration();
+            RegisterConfigurationChangeReloadHandler();
         }
         catch (Exception ex)
         {
@@ -56,7 +57,7 @@ public partial class App : Application
         return hostBuilder;
     }
 
-    private void InitializeConfiguration()
+    private void RegisterConfigurationChangeReloadHandler()
     {
         // Register a callback to be called after a change in the configuration
         // (appsettings.json) has been detected and the configuration has been reloaded.
