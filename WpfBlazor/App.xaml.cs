@@ -44,7 +44,7 @@ public partial class App : Application
         hostBuilder.ConfigureAppConfiguration((context, config) =>
         {
             config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                  .AddJsonFile("zzz-appsettings.json", optional: false, reloadOnChange: true);
+                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
         });
 
         hostBuilder.ConfigureServices((context, services) =>
