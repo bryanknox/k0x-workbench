@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Components.WebView.Wpf;
+using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
 namespace WpfBlazor;
@@ -14,8 +15,8 @@ public partial class MainWindow : Window
         // at app build time and added to the compilation object for the calling class.
         InitializeComponent();
 
-        var serviceCollection = new ServiceCollection();
-        serviceCollection.AddWpfBlazorWebView();
-        Resources.Add("services", serviceCollection.BuildServiceProvider());
+        // Setup dependency injection for the BlazorWebView
+        // by setting it to use the WPF app's ServiceProvider.
+        blazorWebView.Services = ((App)Application.Current).ServiceProvider;
     }
 }
