@@ -15,10 +15,8 @@ public partial class MainWindow : Window
         // at app build time and added to the compilation object for the calling class.
         InitializeComponent();
 
-        // Get the service provider from the WPF app's App class.
-        var serviceProvider = ((App)Application.Current).ServiceProvider;
-
-        // Set the BlazorWebView's Services property to that service provider.
-        blazorWebView.Services = serviceProvider;
+        // Setup dependency injection for the BlazorWebView
+        // by setting it to use the WPF app's ServiceProvider.
+        blazorWebView.Services = ((App)Application.Current).ServiceProvider;
     }
 }

@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
-using System.Windows;
+﻿using System.Windows;
 
 namespace WpfBlazor;
 
