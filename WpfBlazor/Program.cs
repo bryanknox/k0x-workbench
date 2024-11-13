@@ -8,10 +8,16 @@ public class Program
     [STAThread]
     static void Main()
     {
-        IServiceProvider serviceProvider;
+        IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
+
+        RunWpfApp(serviceProvider);
+    }
+
+    private static IServiceProvider SetupProgramConfigurationAndDI()
+    {
         try
         {
-            serviceProvider = DependencyInjection.Configure();
+            return ProgramConfiguration.Setup();
         }
         catch (Exception ex)
         {
@@ -21,11 +27,9 @@ public class Program
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 
-            // Rethrow the exception to terminate the application.
+            // Rethrow the exception to terminate the program.
             throw;
         }
-
-        RunWpfApp(serviceProvider);
     }
 
     // Ensure this method is not inlined, so that no WPF assemblies are loaded
