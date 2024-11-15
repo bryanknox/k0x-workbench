@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using System;
 using System.IO;
-using System.Linq;
 
 namespace WpfBlazor;
 
