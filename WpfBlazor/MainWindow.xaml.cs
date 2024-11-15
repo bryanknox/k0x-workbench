@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Wpf;
-using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
+﻿using System.Windows;
 
 namespace WpfBlazor;
 
