@@ -1,16 +1,25 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace WpfBlazor;
 
 public class Program
 {
+    private static ILogger<Program> _logger = null!;
+
     [STAThread]
     static void Main()
     {
         IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
 
+        // Initialize logger
+        _logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
         RunWpfApp(serviceProvider);
+
+        _logger.LogInformation("Done.");
     }
 
     private static IServiceProvider SetupProgramConfigurationAndDI()
@@ -37,8 +46,12 @@ public class Program
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     static void RunWpfApp(IServiceProvider serviceProvider)
     {
+        _logger.LogInformation("Starting WPF application.");
+
         var app = new App(serviceProvider);
         app.InitializeComponent();
         app.Run();
+
+        _logger.LogInformation("WPF application has finished running.");
     }
 }
