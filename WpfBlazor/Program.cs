@@ -1,7 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace WpfBlazor;
 
