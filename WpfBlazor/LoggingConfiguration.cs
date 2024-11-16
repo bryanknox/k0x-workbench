@@ -5,17 +5,22 @@ using System.IO;
 
 namespace WpfBlazor;
 
+/// <remarks>
+/// Uses Serilog. See:
+/// https://serilog.net/
+/// https://github.com/serilog/serilog
+/// </remarks>
 internal static class LoggingConfiguration
 {
     internal static void Configure(IHostBuilder hostBuilder)
     {
-        string logDirectory = Path.Combine(
+        string logDirectoryPath = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             "logs");
-        Directory.CreateDirectory(logDirectory);
+        Directory.CreateDirectory(logDirectoryPath);
 
         string logFilePath = Path.Combine(
-            logDirectory,
+            logDirectoryPath,
             $"log_{DateTime.Now:yyyyMMdd_HHmmss}.log");
 
         Log.Logger = new LoggerConfiguration()
@@ -32,10 +37,11 @@ internal static class LoggingConfiguration
         hostBuilder.UseSerilog();
 
         // Delete log files older than 5 days
-        var logFiles = Directory.GetFiles(logDirectory, "*.log");
+        var expireDate = DateTime.Now.AddDays(-5);
+        var logFiles = Directory.GetFiles(logDirectoryPath, "*.log");
         foreach (var logFile in logFiles)
         {
-            if (File.GetCreationTime(logFile) < DateTime.Now.AddDays(-5))
+            if (File.GetCreationTime(logFile) < expireDate)
             {
                 File.Delete(logFile);
             }
