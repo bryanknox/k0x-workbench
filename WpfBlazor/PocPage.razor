@@ -1,7 +1,9 @@
 @page "/poc"
 @using System.Windows
 @using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Logging
 @inject IConfiguration Configuration
+@inject ILogger<PocPage> Logger
 
 <h1>k0x Workbench - PoC</h1>
 
@@ -24,8 +26,12 @@
 
     protected override void OnInitialized()
     {
+        Logger.LogInformation("OnInitialized start.");
+
         appSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
         CheckPathExistence();
+
+        Logger.LogInformation("OnInitialized end.");
     }
 
     private void CheckPathExistence()
