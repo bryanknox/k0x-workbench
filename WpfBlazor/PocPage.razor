@@ -26,12 +26,15 @@
 
     protected override void OnInitialized()
     {
-        Logger.LogInformation("OnInitialized start.");
+        Logger.LogTrace("OnInitialized trace.");
+        Logger.LogDebug("OnInitialized debug.");
+        Logger.LogInformation("OnInitialized information.");
+        Logger.LogWarning("OnInitialized warning.");
+        Logger.LogError("OnInitialized error.");
+        Logger.LogCritical("OnInitialized critical.");
 
         appSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
         CheckPathExistence();
-
-        Logger.LogInformation("OnInitialized end.");
     }
 
     private void CheckPathExistence()

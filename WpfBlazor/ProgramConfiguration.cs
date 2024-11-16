@@ -9,6 +9,8 @@ internal static class ProgramConfiguration
     {
         IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
 
+        LoggingConfiguration.UseLogger(hostBuilder);
+
         hostBuilder.ConfigureAppConfiguration((context, config) =>
         {
             AppSettingsConfiguration.SetupForJsonFile(config);
@@ -21,7 +23,10 @@ internal static class ProgramConfiguration
             services.AddWpfBlazorWebView();
         });
 
-        LoggingConfiguration.Configure(hostBuilder);
+        hostBuilder.ConfigureLogging((context, logging) =>
+        {
+            LoggingConfiguration.Configure(context.Configuration);
+        });
 
         IHost host = hostBuilder.Build();
 
