@@ -30,11 +30,20 @@ public class Program
         }
         catch (Exception ex)
         {
+            // NOTE: We can't use the ILogger here because the configuration failed
+            // to load, and the logger may not yet be configured.
+            // So, we use a MessageBox to show the error message.
+
             MessageBox.Show(
-                $"An error occurred:\n\n{ex.GetType()}\n\n{ex.Message}\n\nThe application cannot be started.",
-                "Error Configuring the App",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+                "An error occurred setting up and configuring the app.\n"
+                + "The application cannot be started.\n"
+                + "\n"
+                + $"{ex.GetType()}\n"
+                + "\n"
+                + $"{ex.Message}\n",
+                caption: "Error Configuring the App",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Error);
 
             // Rethrow the exception to terminate the program.
             throw;
