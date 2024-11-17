@@ -17,7 +17,7 @@
   <!--<ItemGroup>
     <Compile Include="Program.cs" />
   </ItemGroup>-->
-  
+
   <!--<ItemGroup>
     <Compile Remove="Program.cs" />
     <ApplicationDefinition Include="Program.cs" />
