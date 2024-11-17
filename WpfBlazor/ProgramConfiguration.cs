@@ -21,6 +21,8 @@ internal static class ProgramConfiguration
             services.AddWpfBlazorWebView();
         });
 
+        LoggingConfiguration.ConfigureSerilog(hostBuilder);
+
         IHost host = hostBuilder.Build();
 
         IServiceProvider serviceProvider = host.Services;
