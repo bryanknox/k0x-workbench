@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>WpfBlazor</RootNamespace>
   </PropertyGroup>
-    
+
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
     <Page Include="App.xaml" />
@@ -26,7 +26,7 @@
     <PackageReference Include="Serilog.Sinks.Console" />
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
