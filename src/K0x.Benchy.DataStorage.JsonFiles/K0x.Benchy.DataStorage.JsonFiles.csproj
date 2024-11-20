@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Folder Include="FileModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\K0x.Benchy.DataStorage.Abstractions\K0x.Benchy.DataStorage.Abstractions.csproj" />
+  </ItemGroup>
+</Project>
