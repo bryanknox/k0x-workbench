@@ -5,7 +5,7 @@ namespace K0x.Benchy.DataStorage.JsonFiles.Services;
 
 public class BenchyJsonFileDataLoader : IBenchyDataLoader
 {
-    public Task<IList<Bench>> LoadBenchesAsync()
+    public Task<Bench> LoadBenchAsync()
     {
         throw new NotImplementedException();
     }
