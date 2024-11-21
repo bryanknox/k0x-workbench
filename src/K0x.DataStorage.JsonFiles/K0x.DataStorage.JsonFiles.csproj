@@ -1,7 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\K0x.DataStorage.JsonFiles.Abstractions\K0x.DataStorage.JsonFiles.Abstractions.csproj" />
-  </ItemGroup>
-
 </Project>

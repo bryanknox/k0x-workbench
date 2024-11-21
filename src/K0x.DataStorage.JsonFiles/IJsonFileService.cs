@@ -1,4 +1,4 @@
-﻿namespace K0x.DataStorage.JsonFiles.Abstractions;
+﻿namespace K0x.DataStorage.JsonFiles;
 
 public interface IJsonFileService<T>
 {

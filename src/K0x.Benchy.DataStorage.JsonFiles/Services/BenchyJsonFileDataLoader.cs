@@ -1,7 +1,7 @@
 ﻿using K0x.Benchy.DataStorage.Abstractions.Models;
 using K0x.Benchy.DataStorage.Abstractions.Services;
 using K0x.Benchy.DataStorage.JsonFiles.FileModels;
-using K0x.DataStorage.JsonFiles.Abstractions;
+using K0x.DataStorage.JsonFiles;
 
 namespace K0x.Benchy.DataStorage.JsonFiles.Services;
 

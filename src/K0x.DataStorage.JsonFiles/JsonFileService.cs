@@ -1,4 +1,4 @@
-﻿using K0x.DataStorage.JsonFiles.Abstractions;
+﻿using K0x.DataStorage.JsonFiles;
 using System.Text.Json;
 
 namespace K0x.DataStorage.JsonFiles;
