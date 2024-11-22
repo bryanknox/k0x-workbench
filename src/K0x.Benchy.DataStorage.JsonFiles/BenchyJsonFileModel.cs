@@ -1,6 +1,6 @@
 ﻿using K0x.Benchy.DataStorage.Abstractions.Models;
 
-namespace K0x.Benchy.DataStorage.JsonFiles.FileModels;
+namespace K0x.Benchy.DataStorage.JsonFiles;
 
 public record BenchyJsonFileModel
 {
