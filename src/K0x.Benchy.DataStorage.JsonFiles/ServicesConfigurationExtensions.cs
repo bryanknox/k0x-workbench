@@ -10,7 +10,7 @@ public static class ServicesConfigurationExtensions
 {
     public static void AddBenchyJsonFileDataLoader(this IServiceCollection services)
     {
-        services.AddSingleton<IJsonFileService<BenchyJsonFileModel>, JsonFileService<BenchyJsonFileModel>>();
+        services.AddSingleton<IJsonFileLoader<BenchyJsonFileModel>, JsonFileLoader<BenchyJsonFileModel>>();
 
         // A single instance of BenchyJsonFileDataLoader can provide the implementation of multiple interfaces.
         services.AddSingleton<BenchyJsonFileDataLoader>();

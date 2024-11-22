@@ -2,7 +2,7 @@
 
 namespace K0x.DataStorage.JsonFiles;
 
-public class JsonFileService<T> : IJsonFileService<T>
+public class JsonFileLoader<T> : IJsonFileLoader<T>
 {
     /// <summary>
     /// Loads data of type <typeparamref name="T"/> from the specified JSON file.
@@ -11,7 +11,7 @@ public class JsonFileService<T> : IJsonFileService<T>
     /// The path to the file to load data from.
     /// </param>
     /// <returns>
-    /// A new instance of <typeparamref name="T"/> object populated with data from the file.
+    /// A new instance of <typeparamref name="T"/> object populated with data read from the file.
     /// </returns>
     /// <exception cref="FileNotFoundException"></exception>
     /// <exception cref="JsonException"></exception>
@@ -29,25 +29,5 @@ public class JsonFileService<T> : IJsonFileService<T>
 
         // data is not null because an exception will be thrown if the JSON is invalid.
         return data!;
-    }
-
-    /// <summary>
-    /// Saves the specified data of type <typeparamref name="T"/> to the specified JSON file.
-    /// Overwrites the file if it already exists.
-    /// </summary>
-    /// <param name="data"></param>
-    /// <param name="filePath"></param>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage(
-        "Performance",
-        "CA1822:Mark members as static",
-        Justification = "Instances of this class are used in dependency injection.")]
-    public async Task SaveAsync(T data, string filePath)
-    {
-        string json = JsonSerializer.Serialize(data);
-
-        // Overwrite the file if it exists.
-        using var sw = new StreamWriter(filePath, append: false);
-
-        await sw.WriteAsync(json);
     }
 }

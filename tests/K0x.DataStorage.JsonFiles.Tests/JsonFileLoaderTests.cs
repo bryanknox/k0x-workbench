@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace K0x.DataStorage.JsonFiles.Tests;
 
-public class JsonFileServiceTests
+public class JsonFileLoaderTests
 {
     private class TestData
     {
@@ -11,13 +11,16 @@ public class JsonFileServiceTests
         public required string Name { get; set; }
     }
 
-    private readonly JsonFileService<TestData> _jsonFileService;
+    private readonly JsonFileLoader<TestData> _jsonFileLoader;
+
     private readonly string _tempTestFilesFolder;
 
-    public JsonFileServiceTests()
+    public JsonFileLoaderTests()
     {
-        _jsonFileService = new JsonFileService<TestData>();
-        _tempTestFilesFolder = Path.Combine(Directory.GetCurrentDirectory(), "TempTestFiles");
+        _jsonFileLoader = new JsonFileLoader<TestData>();
+        _tempTestFilesFolder = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            $"TempTestFiles_{nameof(JsonFileLoaderTests)}");
 
         // Delete and recreate the temp folder.
         //
@@ -43,7 +46,7 @@ public class JsonFileServiceTests
         await File.WriteAllTextAsync(filePath, json);
 
         // Act
-        var result = await _jsonFileService.LoadAsync(filePath);
+        var result = await _jsonFileLoader.LoadAsync(filePath);
 
         // Assert
         result.Should().BeEquivalentTo(testData);
@@ -56,7 +59,7 @@ public class JsonFileServiceTests
         var filePath = Path.Combine(_tempTestFilesFolder, "nonexistent.json");
 
         // Act
-        Func<Task> act = async () => await _jsonFileService.LoadAsync(filePath);
+        Func<Task> act = async () => await _jsonFileLoader.LoadAsync(filePath);
 
         // Assert
         await act.Should().ThrowAsync<FileNotFoundException>();
@@ -76,25 +79,9 @@ public class JsonFileServiceTests
         await File.WriteAllTextAsync(filePath, invalidJson);
 
         // Act
-        Func<Task> act = async () => await _jsonFileService.LoadAsync(filePath);
+        Func<Task> act = async () => await _jsonFileLoader.LoadAsync(filePath);
 
         // Assert
         await act.Should().ThrowAsync<JsonException>();
-    }
-
-    [Fact]
-    public async Task SaveAsync_ShouldWriteDataToFile()
-    {
-        // Arrange
-        var filePath = Path.Combine(_tempTestFilesFolder, "output.json");
-        var testData = new TestData { Id = 1, Name = "Test" };
-
-        // Act
-        await _jsonFileService.SaveAsync(testData, filePath);
-
-        // Assert
-        var json = await File.ReadAllTextAsync(filePath);
-        var result = JsonSerializer.Deserialize<TestData>(json);
-        result.Should().BeEquivalentTo(testData);
     }
 }
