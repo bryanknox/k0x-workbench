@@ -13,12 +13,8 @@ public class JsonFileService<T> : IJsonFileService<T>
     /// <returns>
     /// A new instance of <typeparamref name="T"/> object populated with data from the file.
     /// </returns>
-    /// <exception cref="InvalidDataException">
-    /// If the file contains no data.
-    /// </exception>
-    /// <exception cref="JsonException">
-    /// If the file contains invalid JSON.
-    /// </exception>
+    /// <exception cref="FileNotFoundException"></exception>
+    /// <exception cref="JsonException"></exception>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
         "Performance",
         "CA1822:Mark members as static",
@@ -29,17 +25,18 @@ public class JsonFileService<T> : IJsonFileService<T>
 
         string json = await sr.ReadToEndAsync();
 
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            throw new InvalidDataException($"File contains no data. FilePath: {filePath}");
-        }
-
         T? data = JsonSerializer.Deserialize<T>(json);
 
         // data is not null because an exception will be thrown if the JSON is invalid.
-        return data!; 
+        return data!;
     }
 
+    /// <summary>
+    /// Saves the specified data of type <typeparamref name="T"/> to the specified JSON file.
+    /// Overwrites the file if it already exists.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="filePath"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
         "Performance",
         "CA1822:Mark members as static",
@@ -48,7 +45,8 @@ public class JsonFileService<T> : IJsonFileService<T>
     {
         string json = JsonSerializer.Serialize(data);
 
-        using var sw = new StreamWriter(filePath);
+        // Overwrite the file if it exists.
+        using var sw = new StreamWriter(filePath, append: false);
 
         await sw.WriteAsync(json);
     }

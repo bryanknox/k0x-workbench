@@ -43,23 +43,37 @@ public class JsonFileServiceTests
         result.Should().BeEquivalentTo(testData);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("\t")]
-    [InlineData("\n")]
-    public async Task LoadAsync_ShouldThrowInvalidDataException_WhenFileContainsNoData(string emptyData)
+    [Fact]
+    public async Task LoadAsync_ShouldThrowFileNotFoundException_WhenFileDoesNotExist()
     {
         // Arrange
-        var filePath = Path.Combine(_tempTestFilesFolder, "empty.json");
-        await File.WriteAllTextAsync(filePath, emptyData);
+        var filePath = Path.Combine(_tempTestFilesFolder, "nonexistent.json");
 
         // Act
         Func<Task> act = async () => await _jsonFileService.LoadAsync(filePath);
 
         // Assert
-        await act.Should().ThrowAsync<InvalidDataException>()
-            .WithMessage($"File contains no data. FilePath: {filePath}");
+        await act.Should().ThrowAsync<FileNotFoundException>();
+    }
+
+    [Theory]
+    [InlineData("{ invalid json }")]
+    [InlineData("just text")]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\n")]
+    public async Task LoadAsync_ShouldThrowJsonException_WhenFileContainsInvalidJson(string invalidJson)
+    {
+        // Arrange
+        var filePath = Path.Combine(_tempTestFilesFolder, "invalid.json");
+        await File.WriteAllTextAsync(filePath, invalidJson);
+
+        // Act
+        Func<Task> act = async () => await _jsonFileService.LoadAsync(filePath);
+
+        // Assert
+        await act.Should().ThrowAsync<JsonException>();
     }
 
     [Fact]
@@ -76,20 +90,5 @@ public class JsonFileServiceTests
         var json = await File.ReadAllTextAsync(filePath);
         var result = JsonSerializer.Deserialize<TestData>(json);
         result.Should().BeEquivalentTo(testData);
-    }
-
-    [Fact]
-    public async Task LoadAsync_ShouldThrowJsonException_WhenFileContainsInvalidJson()
-    {
-        // Arrange
-        var filePath = Path.Combine(_tempTestFilesFolder, "invalid.json");
-        var invalidJson = "{ invalid json }";
-        await File.WriteAllTextAsync(filePath, invalidJson);
-
-        // Act
-        Func<Task> act = async () => await _jsonFileService.LoadAsync(filePath);
-
-        // Assert
-        await act.Should().ThrowAsync<JsonException>();
     }
 }
