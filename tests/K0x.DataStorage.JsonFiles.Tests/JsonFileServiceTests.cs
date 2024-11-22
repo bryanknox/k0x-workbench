@@ -19,7 +19,13 @@ public class JsonFileServiceTests
         _jsonFileService = new JsonFileService<TestData>();
         _tempTestFilesFolder = Path.Combine(Directory.GetCurrentDirectory(), "TempTestFiles");
 
-        // Delete and recreate the temp folder
+        // Delete and recreate the temp folder.
+        //
+        // Dev Note:
+        // We do the cleanup before running each test method
+        // to ensure that the test folder is empty before each test.
+        // Any files created during the test are available for debugging
+        // until the next test run.
         if (Directory.Exists(_tempTestFilesFolder))
         {
             Directory.Delete(_tempTestFilesFolder, true);
