@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{61700B53
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.DataStorage.JsonFiles.Tests", "tests\K0x.DataStorage.JsonFiles.Tests\K0x.DataStorage.JsonFiles.Tests.csproj", "{F941293C-8D37-42D4-8314-66BC9F9770B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Benchy.DataStorage.JsonFiles.Tests", "tests\K0x.Benchy.DataStorage.JsonFiles.Tests\K0x.Benchy.DataStorage.JsonFiles.Tests.csproj", "{8C2F484D-69B4-4052-B89E-B8BC994C9673}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{F941293C-8D37-42D4-8314-66BC9F9770B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F941293C-8D37-42D4-8314-66BC9F9770B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F941293C-8D37-42D4-8314-66BC9F9770B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2F484D-69B4-4052-B89E-B8BC994C9673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2F484D-69B4-4052-B89E-B8BC994C9673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2F484D-69B4-4052-B89E-B8BC994C9673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2F484D-69B4-4052-B89E-B8BC994C9673}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{4A6B94CB-A56A-4F21-961A-CF51088B5A88} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 		{26B2754D-03E4-4A27-8C46-CF9AB760DB12} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 		{F941293C-8D37-42D4-8314-66BC9F9770B4} = {61700B53-9C37-4B60-A52D-33E51FD89B8F}
+		{8C2F484D-69B4-4052-B89E-B8BC994C9673} = {61700B53-9C37-4B60-A52D-33E51FD89B8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B3FD197-BB31-4CE1-BD11-17B5A691F56A}

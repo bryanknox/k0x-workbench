@@ -1,9 +1,9 @@
 using FluentAssertions;
 using System.Text.Json;
 
-namespace K0x.DataStorage.JsonFiles.Tests;
+namespace K0x.DataStorage.JsonFiles.Tests.JsonFileSaverTests;
 
-public class JsonFileSaverTests
+public class SaveAsyncTests
 {
     private class TestData
     {
@@ -12,14 +12,14 @@ public class JsonFileSaverTests
     }
 
     private readonly JsonFileSaver<TestData> _jsonFileService;
-    private readonly string _tempTestFilesFolder;
+    private readonly string _tempTestFilesFolderPath;
 
-    public JsonFileSaverTests()
+    public SaveAsyncTests()
     {
         _jsonFileService = new JsonFileSaver<TestData>();
-        _tempTestFilesFolder = Path.Combine(
+        _tempTestFilesFolderPath = Path.Combine(
             Directory.GetCurrentDirectory(),
-            $"TempTestFiles_{nameof(JsonFileSaverTests)}");
+            $"TempTestFiles_{nameof(SaveAsyncTests)}");
 
         // Delete and recreate the temp folder.
         //
@@ -28,18 +28,18 @@ public class JsonFileSaverTests
         // to ensure that the test folder is empty before each test.
         // Any files created during the test are available for debugging
         // until the next test run.
-        if (Directory.Exists(_tempTestFilesFolder))
+        if (Directory.Exists(_tempTestFilesFolderPath))
         {
-            Directory.Delete(_tempTestFilesFolder, true);
+            Directory.Delete(_tempTestFilesFolderPath, true);
         }
-        Directory.CreateDirectory(_tempTestFilesFolder);
+        Directory.CreateDirectory(_tempTestFilesFolderPath);
     }
 
     [Fact]
     public async Task SaveAsync_ShouldWriteDataToFile()
     {
         // Arrange
-        var filePath = Path.Combine(_tempTestFilesFolder, "output.json");
+        var filePath = Path.Combine(_tempTestFilesFolderPath, "output.json");
         var testData = new TestData { Id = 1, Name = "Test" };
 
         // Act
