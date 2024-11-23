@@ -13,9 +13,9 @@ public class BenchyJsonFileLoader : IBenchyFileLoader
         _jsonFileLoader = jsonFileLoader;
     }
 
-    public async Task<Bench> LoadBenchAsync(string jsonFilePath)
+    public async Task<Bench> LoadAsync(string filePath)
     {
-        var benchyJsonFileModel = await _jsonFileLoader.LoadAsync(jsonFilePath);
+        var benchyJsonFileModel = await _jsonFileLoader.LoadAsync(filePath);
 
         return benchyJsonFileModel.Bench;
     }

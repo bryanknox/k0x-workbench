@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using K0x.Benchy.DataStorage.JsonFiles;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace WpfBlazor;
@@ -19,6 +20,8 @@ internal static class ProgramConfiguration
             // NOTE: IConfiguration is registered above by CreateDefaultBuilder().
 
             services.AddWpfBlazorWebView();
+
+            services.AddBenchyJsonFileLoader();
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);

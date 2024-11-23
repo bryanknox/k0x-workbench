@@ -1,7 +1,9 @@
 @page "/poc"
 @using System.Windows
+@using K0x.Benchy.DataStorage.Abstractions
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Logging
+@inject IBenchyFileLoader BenchyFileLoader
 @inject IConfiguration Configuration
 @inject ILogger<PocPage> Logger
 

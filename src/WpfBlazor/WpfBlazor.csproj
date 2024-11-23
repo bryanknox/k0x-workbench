@@ -31,4 +31,8 @@
     <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\K0x.Benchy.DataStorage.JsonFiles\K0x.Benchy.DataStorage.JsonFiles.csproj" />
+  </ItemGroup>
+
 </Project>
