@@ -1,9 +1,11 @@
 @page "/poc"
 @using System.Windows
 @using K0x.Benchy.DataStorage.Abstractions
+@using K0x.Benchy.DataStorage.Abstractions.Models
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Logging
 @inject IBenchyFileLoader BenchyFileLoader
+@inject IBenchyFileSaver BenchyFileSaver
 @inject IConfiguration Configuration
 @inject ILogger<PocPage> Logger
 
@@ -17,6 +19,14 @@
 
 <button class="btn btn-primary" @onclick="OpenDirectory">Open Directory</button>
 
+@if (bench != null)
+{
+    <p>Bench: @bench.Label</p>
+}
+else {
+    <p>Bench: null</p>
+}
+
 @code {
 
     private string appSetting1 = string.Empty;
@@ -26,8 +36,12 @@
 
     private bool? isPathExist = null;
 
-    protected override void OnInitialized()
+    private Bench? bench;
+
+    protected override async Task OnInitializedAsync()
     {
+        Logger.LogTrace("OnInitialized START.");
+
         Logger.LogTrace("OnInitialized trace.");
         Logger.LogDebug("OnInitialized debug.");
         Logger.LogInformation("OnInitialized information.");
@@ -37,6 +51,13 @@
 
         appSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
         CheckPathExistence();
+
+        await CreateBenchFileIfNotExistAsync();
+
+        bench = await LoadPocBenchAsync();
+        Logger.LogDebug($"bench: {bench}");
+
+        Logger.LogTrace("OnInitialized END.");
     }
 
     private void CheckPathExistence()
@@ -54,6 +75,40 @@
                     UseShellExecute = true
                 };
             System.Diagnostics.Process.Start(psi);
+        }
+    }
+
+    private async Task CreateBenchFileIfNotExistAsync()
+    {
+        try
+        {
+            var isExist = System.IO.File.Exists("poc-bench.json");
+            if (!isExist)
+            {
+                var bench = new Bench
+                    {
+                        Label = "PoC Bench",
+                    };
+                await BenchyFileSaver.SaveAsync(bench, "poc-bench.json");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "CreateBenchFileIfNotExistAsync Error.");
+        }
+    }
+
+    private async Task<Bench?> LoadPocBenchAsync()
+    {
+        try
+        {
+            var bench = await BenchyFileLoader.LoadAsync("poc-bench.json");
+            return bench;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "LoadPocBenchAsync Error.");
+            return null;
         }
     }
 }
