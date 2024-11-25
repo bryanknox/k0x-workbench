@@ -15,7 +15,8 @@ namespace K0x.Benchy.DataStorage.JsonFiles
 
         public async Task SaveAsync(Bench bench, string filePath)
         {
-            var fileModel = new BenchyJsonFileModel {
+            var fileModel = new BenchyJsonFileModel
+            {
                 Bench = bench
             };
 
