@@ -1,0 +1,14 @@
+@using K0x.Benchy.DataStorage.Abstractions.Models
+@namespace WpfBlazor.Components
+
+<h3>Bench: @Bench.Label</h3>
+
+@foreach (var tray in Bench.Trays)
+{
+    <TrayComponent Tray="tray" />
+}
+
+@code {
+    [Parameter]
+    public Bench Bench { get; set; } = default!;
+}

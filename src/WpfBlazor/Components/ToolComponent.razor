@@ -1,0 +1,45 @@
+@using K0x.Benchy.DataStorage.Abstractions.Models
+@using Microsoft.Extensions.Logging
+@using System.Windows
+@namespace WpfBlazor.Components
+@inject ILogger<ToolComponent> Logger
+
+<div>
+    <strong>Tool Label:</strong> @Tool.Label <br />
+    <strong>Command:</strong> @Tool.Command <br />
+    <strong>Working Directory:</strong> @(Tool.WorkingDirectory ?? "null")<br />
+
+    <button class="btn btn-primary" @onclick="Execute">@Tool.Label</button>
+</div>
+
+@code {
+    [Parameter]
+    public Tool Tool { get; set; } = default!;
+
+    private void Execute(MouseEventArgs e)
+    {
+        var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = Tool.Command,
+                WorkingDirectory = Tool.WorkingDirectory,
+                UseShellExecute = true,
+            };
+        try {
+            System.Diagnostics.Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"Error executing tool: {Tool.Label}");
+
+            MessageBox.Show(
+                $"Error executing tool: { Tool.Label}\n"
+                + $"{ex.GetType()}\n"
+                + "\n"
+                + $"{ex.Message}\n",
+                caption: $"Error executing tool: {Tool.Label}",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Error);
+
+        } 
+    }
+}
