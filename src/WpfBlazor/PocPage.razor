@@ -4,6 +4,7 @@
 @using K0x.Benchy.DataStorage.Abstractions.Models
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Logging
+@using WpfBlazor.Components
 @inject IBenchyFileLoader BenchyFileLoader
 @inject IBenchyFileSaver BenchyFileSaver
 @inject IConfiguration Configuration
@@ -21,7 +22,7 @@
 
 @if (bench != null)
 {
-    <p>Bench: @bench.Label</p>
+    <BenchComponent Bench="bench" />
 }
 else {
     <p>Bench: null</p>
@@ -86,9 +87,30 @@ else {
             if (!isExist)
             {
                 var bench = new Bench
+                {
+                        Label = "PoC k0x-workbench Bench",
+                    Trays = new List<Tray>
                     {
-                        Label = "PoC Bench",
-                    };
+                        new Tray
+                        {
+                            Label = "Workspace",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "File Explorer", Command = "C:/_BkGit/bryanknox/k0x-workbench" },
+                                new Tool { Label = "Tool 1.2", Command = "cmd2" }
+                            }
+                        },
+                        new Tray
+                        {
+                            Label = "Tray 2",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "Tool 2.1", Command = "cmd3" },
+                                new Tool { Label = "Tool 2.2", Command = "cmd4" }
+                            }
+                        }
+                    }
+                };
                 await BenchyFileSaver.SaveAsync(bench, "poc-bench.json");
             }
         }
