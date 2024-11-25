@@ -1,0 +1,14 @@
+@using K0x.Benchy.DataStorage.Abstractions.Models
+@namespace WpfBlazor.Components
+
+<h4>Tray: @Tray.Label</h4>
+
+@foreach (var tool in Tray.Tools)
+{
+    <ToolComponent Tool="tool" />
+}
+
+@code {
+    [Parameter]
+    public Tray Tray { get; set; } = default!;
+}

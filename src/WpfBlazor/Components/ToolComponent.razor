@@ -1,0 +1,13 @@
+@using K0x.Benchy.DataStorage.Abstractions.Models
+@namespace WpfBlazor.Components
+
+<div>
+    <strong>Tool Label:</strong> @Tool.Label <br />
+    <strong>Command:</strong> @Tool.Command <br />
+    <strong>Working Directory:</strong> @Tool.WorkingDirectory
+</div>
+
+@code {
+    [Parameter]
+    public Tool Tool { get; set; } = default!;
+}
