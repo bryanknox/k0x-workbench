@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -57,10 +58,29 @@ public class Program
     {
         _logger.LogInformation("Starting WPF application.");
 
-        var app = new App(serviceProvider);
-        app.InitializeComponent();
-        app.Run();
+        try
+        {
+            var app = new App(serviceProvider);
+            app.InitializeComponent();
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "RunWpfApp unhandled exception.");
 
+            MessageBox.Show(
+                "An unhandled exeception occurred in the WPF-Blazor app.\n"
+                + "\n"
+                + $"{ex.GetType()}\n"
+                + "\n"
+                + $"{ex.Message}\n",
+                caption: "Error in WPF-Blazor App",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Error);
+
+            // Rethrow the exception to terminate the program.
+            throw;
+        }
         _logger.LogInformation("WPF application has finished running.");
     }
 }
