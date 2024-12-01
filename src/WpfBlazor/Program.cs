@@ -15,7 +15,7 @@ public class Program
     {
         IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
 
-        // Initialize logger
+        // Get the logger for use in within this class.
         _logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
         RunWpfApp(serviceProvider);
@@ -23,7 +23,7 @@ public class Program
         _logger.LogInformation("Done.");
     }
 
-    private static IServiceProvider SetupProgramConfigurationAndDI()
+    static IServiceProvider SetupProgramConfigurationAndDI()
     {
         try
         {
