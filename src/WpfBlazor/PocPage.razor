@@ -126,7 +126,7 @@ else {
     {
         try
         {
-            var bench = await BenchyFileLoader.LoadAsync("poc-bench.json");
+            var bench = await BenchyFileLoader.LoadAsync();
             return bench;
         }
         catch (Exception ex)

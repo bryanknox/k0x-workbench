@@ -11,11 +11,13 @@ public class Program
     private static ILogger<Program> _logger = null!;
 
     [STAThread]
-    static void Main()
+    static void Main(string[] args)
     {
-        IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
+        string benchJsonFilePath = args.Length > 0 ? args[0] : "poc-bench.json";
 
-        // Get the logger for use in within this class.
+        IServiceProvider serviceProvider = SetupProgramConfigurationAndDI(benchJsonFilePath);
+
+        // Get the logger for use within this class.
         _logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
         RunWpfApp(serviceProvider);
@@ -23,11 +25,11 @@ public class Program
         _logger.LogInformation("Done.");
     }
 
-    static IServiceProvider SetupProgramConfigurationAndDI()
+    static IServiceProvider SetupProgramConfigurationAndDI(string benchJsonFilePath)
     {
         try
         {
-            return ProgramConfiguration.Setup();
+            return ProgramConfiguration.Setup(benchJsonFilePath);
         }
         catch (Exception ex)
         {

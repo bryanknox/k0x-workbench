@@ -36,10 +36,12 @@ public class LoadAsyncTests
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ReturnsAsync(benchyJsonFileModel);
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(mockJsonFileLoader.Object);
+        var benchyJsonFileLoader = new BenchyJsonFileLoader(
+            mockJsonFileLoader.Object,
+            "testFilePath.json");
 
         // Act
-        var result = await benchyJsonFileLoader.LoadAsync("testFilePath.json");
+        var result = await benchyJsonFileLoader.LoadAsync();
 
         // Assert
         result.Should().BeEquivalentTo(expectedBench);
@@ -55,10 +57,12 @@ public class LoadAsyncTests
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ThrowsAsync(new Exception(expectedExceptionMessage));
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(mockJsonFileLoader.Object);
+        var benchyJsonFileLoader = new BenchyJsonFileLoader(
+            mockJsonFileLoader.Object,
+            "testFilePath.json");
 
         // Act
-        Func<Task> act = async () => await benchyJsonFileLoader.LoadAsync("testFilePath.json");
+        Func<Task> act = async () => await benchyJsonFileLoader.LoadAsync();
 
         // Assert
         await act.Should().ThrowAsync<Exception>().WithMessage(expectedExceptionMessage);
