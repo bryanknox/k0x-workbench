@@ -68,9 +68,9 @@ public class Program
                     }
                 };
 
-                var benchyFileSaver = serviceProvider.GetRequiredService<IBenchyFileSaver>();
+                var benchFileSaver = serviceProvider.GetRequiredService<IBenchFileSaver>();
 
-                await benchyFileSaver.SaveAsync(bench, "poc-bench.json");
+                await benchFileSaver.SaveAsync(bench, "poc-bench.json");
             }
         }
         catch (Exception ex)
@@ -94,7 +94,7 @@ public class Program
                 .GetAwaiter()
                 .GetResult();
 
-            var jsonFileLoader = serviceProvider.GetRequiredService<IJsonFileLoader<BenchyJsonFileModel>>();
+            var jsonFileLoader = serviceProvider.GetRequiredService<IJsonFileLoader<BenchJsonFileModel>>();
             var benchJsonFileModel = jsonFileLoader.LoadAsync(path)
                 .GetAwaiter()
                 .GetResult();

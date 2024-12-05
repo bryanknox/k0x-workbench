@@ -21,7 +21,7 @@ internal static class ProgramConfiguration
 
             services.AddWpfBlazorWebView();
 
-            services.AddBenchyJsonFiles();
+            services.AddBenchJsonFiles();
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);

@@ -4,14 +4,14 @@ using K0x.DataStorage.JsonFiles;
 
 namespace K0x.Benchy.DataStorage.JsonFiles;
 
-public class BenchyJsonFileLoader : IBenchyFileLoader
+public class BenchJsonFileLoader : IBenchFileLoader
 {
-    private readonly IJsonFileLoader<BenchyJsonFileModel> _jsonFileLoader;
+    private readonly IJsonFileLoader<BenchJsonFileModel> _jsonFileLoader;
 
     private readonly string _filePath;
 
-    public BenchyJsonFileLoader(
-        IJsonFileLoader<BenchyJsonFileModel> jsonFileLoader,
+    public BenchJsonFileLoader(
+        IJsonFileLoader<BenchJsonFileModel> jsonFileLoader,
         string filePath)
     {
         _jsonFileLoader = jsonFileLoader;
@@ -20,8 +20,8 @@ public class BenchyJsonFileLoader : IBenchyFileLoader
 
     public async Task<Bench> LoadAsync()
     {
-        var benchyJsonFileModel = await _jsonFileLoader.LoadAsync(_filePath);
+        var benchJsonFileModel = await _jsonFileLoader.LoadAsync(_filePath);
 
-        return benchyJsonFileModel.Bench;
+        return benchJsonFileModel.Bench;
     }
 }

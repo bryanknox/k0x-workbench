@@ -2,7 +2,7 @@
 
 namespace K0x.Benchy.DataStorage.JsonFiles;
 
-public record BenchyJsonFileModel
+public record BenchJsonFileModel
 {
     public required Bench Bench { get; init; }
 }

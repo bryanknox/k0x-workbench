@@ -4,18 +4,18 @@ using K0x.DataStorage.JsonFiles;
 
 namespace K0x.Benchy.DataStorage.JsonFiles
 {
-    public class BenchyJsonFileSaver : IBenchyFileSaver
+    public class BenchJsonFileSaver : IBenchFileSaver
     {
-        private readonly IJsonFileSaver<BenchyJsonFileModel> _jsonFileSaver;
+        private readonly IJsonFileSaver<BenchJsonFileModel> _jsonFileSaver;
 
-        public BenchyJsonFileSaver(IJsonFileSaver<BenchyJsonFileModel> jsonFileSaver)
+        public BenchJsonFileSaver(IJsonFileSaver<BenchJsonFileModel> jsonFileSaver)
         {
             _jsonFileSaver = jsonFileSaver;
         }
 
         public async Task SaveAsync(Bench bench, string filePath)
         {
-            var fileModel = new BenchyJsonFileModel
+            var fileModel = new BenchJsonFileModel
             {
                 Bench = bench
             };

@@ -6,14 +6,14 @@ namespace K0x.Benchy.DataStorage.JsonFiles.Tests.BenchyJsonFileSaverTests;
 
 public class SaveAsyncTests
 {
-    private readonly Mock<IJsonFileSaver<BenchyJsonFileModel>> _mockJsonFileSaver;
-    private readonly BenchyJsonFileSaver _benchyJsonFileSaver;
+    private readonly Mock<IJsonFileSaver<BenchJsonFileModel>> _mockJsonFileSaver;
+    private readonly BenchJsonFileSaver _benchJsonFileSaver;
 
     public SaveAsyncTests()
     {
-        _mockJsonFileSaver = new Mock<IJsonFileSaver<BenchyJsonFileModel>>();
+        _mockJsonFileSaver = new Mock<IJsonFileSaver<BenchJsonFileModel>>();
 
-        _benchyJsonFileSaver = new BenchyJsonFileSaver(_mockJsonFileSaver.Object);
+        _benchJsonFileSaver = new BenchJsonFileSaver(_mockJsonFileSaver.Object);
     }
 
     [Fact]
@@ -39,11 +39,11 @@ public class SaveAsyncTests
         };
 
         // Act
-        await _benchyJsonFileSaver.SaveAsync(bench, filePath);
+        await _benchJsonFileSaver.SaveAsync(bench, filePath);
 
         // Assert
         _mockJsonFileSaver.Verify(
-            saver => saver.SaveAsync(It.Is<BenchyJsonFileModel>(model => model.Bench == bench), filePath),
+            saver => saver.SaveAsync(It.Is<BenchJsonFileModel>(model => model.Bench == bench), filePath),
             Times.Once);
     }
 }

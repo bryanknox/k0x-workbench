@@ -11,7 +11,7 @@ public class LoadAsyncTests
     public async Task LoadAsync_ShouldReturnBench_WhenFileIsLoadedSuccessfully()
     {
         // Arrange
-        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchyJsonFileModel>>();
+        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
         var expectedBench = new Bench
         {
             Label = "Test Bench",
@@ -32,16 +32,16 @@ public class LoadAsyncTests
                 }
             }
         };
-        var benchyJsonFileModel = new BenchyJsonFileModel { Bench = expectedBench };
+        var benchJsonFileModel = new BenchJsonFileModel { Bench = expectedBench };
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
-            .ReturnsAsync(benchyJsonFileModel);
+            .ReturnsAsync(benchJsonFileModel);
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(
+        var benchJsonFileLoader = new BenchJsonFileLoader(
             mockJsonFileLoader.Object,
             "testFilePath.json");
 
         // Act
-        var result = await benchyJsonFileLoader.LoadAsync();
+        var result = await benchJsonFileLoader.LoadAsync();
 
         // Assert
         result.Should().BeEquivalentTo(expectedBench);
@@ -53,16 +53,16 @@ public class LoadAsyncTests
         // Arrange
         const string expectedExceptionMessage = "Mock exception - File loading failed";
 
-        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchyJsonFileModel>>();
+        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ThrowsAsync(new Exception(expectedExceptionMessage));
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(
+        var benchJsonFileLoader = new BenchJsonFileLoader(
             mockJsonFileLoader.Object,
             "testFilePath.json");
 
         // Act
-        Func<Task> act = async () => await benchyJsonFileLoader.LoadAsync();
+        Func<Task> act = async () => await benchJsonFileLoader.LoadAsync();
 
         // Assert
         await act.Should().ThrowAsync<Exception>().WithMessage(expectedExceptionMessage);

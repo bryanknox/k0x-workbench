@@ -2,8 +2,8 @@
 
 namespace K0x.Benchy.DataStorage.Abstractions
 {
-    public interface IBenchyFileLoader
+    public interface IBenchFileSaver
     {
-        Task<Bench> LoadAsync();
+        Task SaveAsync(Bench bench, string filePath);
     }
 }
