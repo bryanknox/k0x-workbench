@@ -1,4 +1,4 @@
-﻿namespace K0x.Benchy.DataStorage.Abstractions.Models;
+﻿namespace K0x.Workbench.DataStorage.Abstractions.Models;
 
 public record Bench
 {

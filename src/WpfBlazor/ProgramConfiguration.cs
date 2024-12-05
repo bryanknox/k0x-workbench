@@ -1,4 +1,4 @@
-﻿using K0x.Benchy.DataStorage.JsonFiles;
+﻿using K0x.Workbench.DataStorage.JsonFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -21,7 +21,7 @@ internal static class ProgramConfiguration
 
             services.AddWpfBlazorWebView();
 
-            services.AddBenchyJsonFiles();
+            services.AddBenchJsonFiles();
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);

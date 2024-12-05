@@ -1,9 +1,9 @@
 using FluentAssertions;
-using K0x.Benchy.DataStorage.Abstractions.Models;
+using K0x.Workbench.DataStorage.Abstractions.Models;
 using K0x.DataStorage.JsonFiles;
 using Moq;
 
-namespace K0x.Benchy.DataStorage.JsonFiles.Tests.BenchyJsonFileLoaderTests;
+namespace K0x.Workbench.DataStorage.JsonFiles.Tests.BenchJsonFileLoaderTests;
 
 public class LoadAsyncTests
 {
@@ -11,7 +11,7 @@ public class LoadAsyncTests
     public async Task LoadAsync_ShouldReturnBench_WhenFileIsLoadedSuccessfully()
     {
         // Arrange
-        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchyJsonFileModel>>();
+        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
         var expectedBench = new Bench
         {
             Label = "Test Bench",
@@ -32,14 +32,16 @@ public class LoadAsyncTests
                 }
             }
         };
-        var benchyJsonFileModel = new BenchyJsonFileModel { Bench = expectedBench };
+        var benchJsonFileModel = new BenchJsonFileModel { Bench = expectedBench };
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
-            .ReturnsAsync(benchyJsonFileModel);
+            .ReturnsAsync(benchJsonFileModel);
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(mockJsonFileLoader.Object);
+        var benchJsonFileLoader = new BenchJsonFileLoader(
+            mockJsonFileLoader.Object,
+            "testFilePath.json");
 
         // Act
-        var result = await benchyJsonFileLoader.LoadAsync("testFilePath.json");
+        var result = await benchJsonFileLoader.LoadAsync();
 
         // Assert
         result.Should().BeEquivalentTo(expectedBench);
@@ -51,14 +53,16 @@ public class LoadAsyncTests
         // Arrange
         const string expectedExceptionMessage = "Mock exception - File loading failed";
 
-        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchyJsonFileModel>>();
+        var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ThrowsAsync(new Exception(expectedExceptionMessage));
 
-        var benchyJsonFileLoader = new BenchyJsonFileLoader(mockJsonFileLoader.Object);
+        var benchJsonFileLoader = new BenchJsonFileLoader(
+            mockJsonFileLoader.Object,
+            "testFilePath.json");
 
         // Act
-        Func<Task> act = async () => await benchyJsonFileLoader.LoadAsync("testFilePath.json");
+        Func<Task> act = async () => await benchJsonFileLoader.LoadAsync();
 
         // Assert
         await act.Should().ThrowAsync<Exception>().WithMessage(expectedExceptionMessage);

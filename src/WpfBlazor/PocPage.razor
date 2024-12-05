@@ -1,12 +1,11 @@
 @page "/poc"
 @using System.Windows
-@using K0x.Benchy.DataStorage.Abstractions
-@using K0x.Benchy.DataStorage.Abstractions.Models
+@using K0x.Workbench.DataStorage.Abstractions
+@using K0x.Workbench.DataStorage.Abstractions.Models
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Logging
 @using WpfBlazor.Components
-@inject IBenchyFileLoader BenchyFileLoader
-@inject IBenchyFileSaver BenchyFileSaver
+@inject IBenchProvider BenchProvider
 @inject IConfiguration Configuration
 @inject ILogger<PocPage> Logger
 
@@ -22,7 +21,7 @@
 
 @if (bench != null)
 {
-    <BenchComponent Bench="bench" />
+    <BenchComponent Bench=bench />
 }
 else {
     <p>Bench: null</p>
@@ -39,7 +38,7 @@ else {
 
     private Bench? bench;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         Logger.LogTrace("OnInitialized START.");
 
@@ -53,9 +52,7 @@ else {
         appSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
         CheckPathExistence();
 
-        await CreateBenchFileIfNotExistAsync();
-
-        bench = await LoadPocBenchAsync();
+        bench = GetBenchOrThrow();
         Logger.LogDebug($"bench: {bench}");
 
         Logger.LogTrace("OnInitialized END.");
@@ -79,58 +76,19 @@ else {
         }
     }
 
-    private async Task CreateBenchFileIfNotExistAsync()
+    private Bench GetBenchOrThrow()
     {
-        try
+        if (BenchProvider.Bench is null)
         {
-            var isExist = System.IO.File.Exists("poc-bench.json");
-            if (!isExist)
-            {
-                var bench = new Bench
-                {
-                        Label = "PoC k0x-workbench Bench",
-                    Trays = new List<Tray>
-                    {
-                        new Tray
-                        {
-                            Label = "Workspace",
-                            Tools = new List<Tool>
-                            {
-                                new Tool { Label = "File Explorer", Command = "C:/_BkGit/bryanknox/k0x-workbench" },
-                                new Tool { Label = "Tool 1.2", Command = "cmd2" }
-                            }
-                        },
-                        new Tray
-                        {
-                            Label = "Tray 2",
-                            Tools = new List<Tool>
-                            {
-                                new Tool { Label = "Tool 2.1", Command = "cmd3" },
-                                new Tool { Label = "Tool 2.2", Command = "cmd4" }
-                            }
-                        }
-                    }
-                };
-                await BenchyFileSaver.SaveAsync(bench, "poc-bench.json");
-            }
+            Logger.LogError("BenchProvider.Bench is null.");
+            throw new InvalidOperationException(
+                "BenchProvider.Bench is null."
+                + " This is an implementation error."
+                + " BenchProvider.Bench should be initialized"
+                + $" before the {nameof(PocPage)} is created."
+            );
         }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "CreateBenchFileIfNotExistAsync Error.");
-        }
-    }
 
-    private async Task<Bench?> LoadPocBenchAsync()
-    {
-        try
-        {
-            var bench = await BenchyFileLoader.LoadAsync("poc-bench.json");
-            return bench;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "LoadPocBenchAsync Error.");
-            return null;
-        }
+        return BenchProvider.Bench;
     }
 }
