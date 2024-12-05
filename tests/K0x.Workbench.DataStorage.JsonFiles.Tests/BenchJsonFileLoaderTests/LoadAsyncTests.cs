@@ -1,9 +1,9 @@
 using FluentAssertions;
-using K0x.Benchy.DataStorage.Abstractions.Models;
+using K0x.Workbench.DataStorage.Abstractions.Models;
 using K0x.DataStorage.JsonFiles;
 using Moq;
 
-namespace K0x.Benchy.DataStorage.JsonFiles.Tests.BenchyJsonFileLoaderTests;
+namespace K0x.Workbench.DataStorage.JsonFiles.Tests.BenchJsonFileLoaderTests;
 
 public class LoadAsyncTests
 {

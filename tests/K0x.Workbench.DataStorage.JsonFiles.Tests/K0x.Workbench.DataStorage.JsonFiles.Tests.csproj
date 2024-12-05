@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\K0x.Benchy.DataStorage.JsonFiles\K0x.Benchy.DataStorage.JsonFiles.csproj" />
+    <ProjectReference Include="..\..\src\K0x.Workbench.DataStorage.JsonFiles\K0x.Workbench.DataStorage.JsonFiles.csproj" />
   </ItemGroup>
 
   <ItemGroup>

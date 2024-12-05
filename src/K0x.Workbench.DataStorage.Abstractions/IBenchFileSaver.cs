@@ -1,6 +1,6 @@
-﻿using K0x.Benchy.DataStorage.Abstractions.Models;
+﻿using K0x.Workbench.DataStorage.Abstractions.Models;
 
-namespace K0x.Benchy.DataStorage.Abstractions
+namespace K0x.Workbench.DataStorage.Abstractions
 {
     public interface IBenchFileSaver
     {

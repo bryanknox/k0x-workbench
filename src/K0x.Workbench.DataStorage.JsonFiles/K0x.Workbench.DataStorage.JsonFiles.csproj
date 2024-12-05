@@ -3,7 +3,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\K0x.Benchy.DataStorage.Abstractions\K0x.Benchy.DataStorage.Abstractions.csproj" />
+    <ProjectReference Include="..\K0x.Workbench.DataStorage.Abstractions\K0x.Workbench.DataStorage.Abstractions.csproj" />
     <ProjectReference Include="..\K0x.DataStorage.JsonFiles\K0x.DataStorage.JsonFiles.csproj" />
   </ItemGroup>
 </Project>

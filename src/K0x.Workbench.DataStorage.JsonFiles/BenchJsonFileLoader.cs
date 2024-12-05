@@ -1,8 +1,8 @@
-﻿using K0x.Benchy.DataStorage.Abstractions;
-using K0x.Benchy.DataStorage.Abstractions.Models;
+﻿using K0x.Workbench.DataStorage.Abstractions;
+using K0x.Workbench.DataStorage.Abstractions.Models;
 using K0x.DataStorage.JsonFiles;
 
-namespace K0x.Benchy.DataStorage.JsonFiles;
+namespace K0x.Workbench.DataStorage.JsonFiles;
 
 public class BenchJsonFileLoader : IBenchFileLoader
 {

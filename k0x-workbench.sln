@@ -20,15 +20,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBlazor", "src\WpfBlazor\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.DataStorage.JsonFiles", "src\K0x.DataStorage.JsonFiles\K0x.DataStorage.JsonFiles.csproj", "{E1F69249-32FA-4284-A631-B7E5F7572CBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Benchy.DataStorage.JsonFiles", "src\K0x.Benchy.DataStorage.JsonFiles\K0x.Benchy.DataStorage.JsonFiles.csproj", "{4A6B94CB-A56A-4F21-961A-CF51088B5A88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.DataStorage.JsonFiles", "src\K0x.Workbench.DataStorage.JsonFiles\K0x.Workbench.DataStorage.JsonFiles.csproj", "{4A6B94CB-A56A-4F21-961A-CF51088B5A88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Benchy.DataStorage.Abstractions", "src\K0x.Benchy.DataStorage.Abstractions\K0x.Benchy.DataStorage.Abstractions.csproj", "{26B2754D-03E4-4A27-8C46-CF9AB760DB12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.DataStorage.Abstractions", "src\K0x.Workbench.DataStorage.Abstractions\K0x.Workbench.DataStorage.Abstractions.csproj", "{26B2754D-03E4-4A27-8C46-CF9AB760DB12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{61700B53-9C37-4B60-A52D-33E51FD89B8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.DataStorage.JsonFiles.Tests", "tests\K0x.DataStorage.JsonFiles.Tests\K0x.DataStorage.JsonFiles.Tests.csproj", "{F941293C-8D37-42D4-8314-66BC9F9770B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Benchy.DataStorage.JsonFiles.Tests", "tests\K0x.Benchy.DataStorage.JsonFiles.Tests\K0x.Benchy.DataStorage.JsonFiles.Tests.csproj", "{8C2F484D-69B4-4052-B89E-B8BC994C9673}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.DataStorage.JsonFiles.Tests", "tests\K0x.Workbench.DataStorage.JsonFiles.Tests\K0x.Workbench.DataStorage.JsonFiles.Tests.csproj", "{8C2F484D-69B4-4052-B89E-B8BC994C9673}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

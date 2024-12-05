@@ -1,8 +1,8 @@
-using K0x.Benchy.DataStorage.Abstractions.Models;
+using K0x.Workbench.DataStorage.Abstractions.Models;
 using K0x.DataStorage.JsonFiles;
 using Moq;
 
-namespace K0x.Benchy.DataStorage.JsonFiles.Tests.BenchyJsonFileSaverTests;
+namespace K0x.Workbench.DataStorage.JsonFiles.Tests.BenchJsonFileSaverTests;
 
 public class SaveAsyncTests
 {

@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\K0x.Benchy.DataStorage.JsonFiles\K0x.Benchy.DataStorage.JsonFiles.csproj" />
+    <ProjectReference Include="..\K0x.Workbench.DataStorage.JsonFiles\K0x.Workbench.DataStorage.JsonFiles.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
-﻿using K0x.Benchy.DataStorage.Abstractions;
+﻿using K0x.Workbench.DataStorage.Abstractions;
 using K0x.DataStorage.JsonFiles;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace K0x.Benchy.DataStorage.JsonFiles;
+namespace K0x.Workbench.DataStorage.JsonFiles;
 
 public static class ServicesConfigurationExtensions
 {
