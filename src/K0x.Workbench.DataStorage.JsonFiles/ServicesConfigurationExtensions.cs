@@ -8,6 +8,8 @@ public static class ServicesConfigurationExtensions
 {
     public static void AddBenchJsonFiles(this IServiceCollection services)
     {
+        services.AddSingleton<IBenchFilePathProvider, BenchFilePathProvider>();
+
         services.AddSingleton<IBenchProvider, BenchProvider>();
 
         services.AddScoped<IJsonFileLoader<BenchJsonFileModel>, JsonFileLoader<BenchJsonFileModel>>();

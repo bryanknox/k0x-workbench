@@ -1,10 +1,9 @@
-﻿using K0x.Workbench.DataStorage.Abstractions;
+﻿using K0x.DataStorage.JsonFiles;
+using K0x.Workbench.DataStorage.Abstractions;
 using K0x.Workbench.DataStorage.Abstractions.Models;
 using K0x.Workbench.DataStorage.JsonFiles;
-using K0x.DataStorage.JsonFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog.Core;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -19,18 +18,60 @@ public class Program
     [STAThread]
     static void Main(string[] args)
     {
-        string? benchJsonFilePath = args.Length > 0 ? args[0] : null;
-
         IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
 
         // Get the logger for use within this class.
         _logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
-        LoadBenchFromJsonFile(serviceProvider, benchJsonFilePath);
+        InitBenchFilePathProviderFromArgs(serviceProvider, args);
 
         RunWpfApp(serviceProvider);
 
         _logger.LogInformation("Done.");
+    }
+
+    static IServiceProvider SetupProgramConfigurationAndDI()
+    {
+        try
+        {
+            return ProgramConfiguration.Setup();
+        }
+        catch (Exception ex)
+        {
+            // NOTE: We can't use the ILogger here because the configuration failed
+            // to load, and the logger may not yet be configured.
+            // So, we use a MessageBox to show the error message.
+
+            MessageBox.Show(
+                "An error occurred setting up and configuring the app.\n"
+                + "The application cannot be started.\n"
+                + "\n"
+                + $"{ex.GetType()}\n"
+                + "\n"
+                + $"{ex.Message}\n",
+                caption: "Error Configuring the App",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Error);
+
+            // Rethrow the exception to terminate the program.
+            throw;
+        }
+    }
+
+    static void InitBenchFilePathProviderFromArgs(IServiceProvider serviceProvider, string[] args)
+    {
+        // Get the file path or use the default.
+        string benchJsonFilePath = "poc-bench.json";
+        if (args.Length > 0 && !string.IsNullOrWhiteSpace(args[0]))
+        {
+            benchJsonFilePath = args[0];
+        }
+
+        // The IBenchFilePathProvider in DI is a singleton.
+        // We set its FilePath here so that it is available to the rest of the app.
+        var benchFilePathProvider = serviceProvider.GetRequiredService<IBenchFilePathProvider>();
+
+        benchFilePathProvider.FilePath = benchJsonFilePath;
     }
 
     static async Task CreateBenchFileIfNotExistAsync(
@@ -117,34 +158,6 @@ public class Program
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
 
-            throw;
-        }
-    }
-
-    static IServiceProvider SetupProgramConfigurationAndDI()
-    {
-        try
-        {
-            return ProgramConfiguration.Setup();
-        }
-        catch (Exception ex)
-        {
-            // NOTE: We can't use the ILogger here because the configuration failed
-            // to load, and the logger may not yet be configured.
-            // So, we use a MessageBox to show the error message.
-
-            MessageBox.Show(
-                "An error occurred setting up and configuring the app.\n"
-                + "The application cannot be started.\n"
-                + "\n"
-                + $"{ex.GetType()}\n"
-                + "\n"
-                + $"{ex.Message}\n",
-                caption: "Error Configuring the App",
-                button: MessageBoxButton.OK,
-                icon: MessageBoxImage.Error);
-
-            // Rethrow the exception to terminate the program.
             throw;
         }
     }
