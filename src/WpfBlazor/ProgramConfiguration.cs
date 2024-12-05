@@ -6,7 +6,7 @@ namespace WpfBlazor;
 
 internal static class ProgramConfiguration
 {
-    internal static IServiceProvider Setup(string benchJsonFilePath)
+    internal static IServiceProvider Setup()
     {
         IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
 
@@ -21,7 +21,7 @@ internal static class ProgramConfiguration
 
             services.AddWpfBlazorWebView();
 
-            services.AddBenchyJsonFiles(benchJsonFilePath);
+            services.AddBenchyJsonFiles();
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);

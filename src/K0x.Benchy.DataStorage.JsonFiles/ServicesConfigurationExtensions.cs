@@ -6,15 +6,13 @@ namespace K0x.Benchy.DataStorage.JsonFiles;
 
 public static class ServicesConfigurationExtensions
 {
-    public static void AddBenchyJsonFiles(this IServiceCollection services, string benchJsonFilePath)
+    public static void AddBenchyJsonFiles(this IServiceCollection services)
     {
+        services.AddSingleton<IBenchProvider, BenchProvider>();
+
         services.AddScoped<IJsonFileLoader<BenchyJsonFileModel>, JsonFileLoader<BenchyJsonFileModel>>();
 
-        services.AddSingleton<IBenchyFileLoader>(provider =>
-        {
-            var jsonFileLoader = provider.GetRequiredService<IJsonFileLoader<BenchyJsonFileModel>>();
-            return new BenchyJsonFileLoader(jsonFileLoader, benchJsonFilePath);
-        });
+        services.AddSingleton<IBenchyFileLoader, BenchyJsonFileLoader>();
 
         services.AddScoped<IJsonFileSaver<BenchyJsonFileModel>, JsonFileSaver<BenchyJsonFileModel>>();
         services.AddScoped<IBenchyFileSaver, BenchyJsonFileSaver>();

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using K0x.Benchy.DataStorage.Abstractions;
+using K0x.Benchy.DataStorage.Abstractions.Models;
+using K0x.Benchy.DataStorage.JsonFiles;
+using K0x.DataStorage.JsonFiles;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Core;
 using System.Runtime.CompilerServices;
@@ -13,23 +17,113 @@ public class Program
     [STAThread]
     static void Main(string[] args)
     {
-        string benchJsonFilePath = args.Length > 0 ? args[0] : "poc-bench.json";
+        string? benchJsonFilePath = args.Length > 0 ? args[0] : null;
 
-        IServiceProvider serviceProvider = SetupProgramConfigurationAndDI(benchJsonFilePath);
+        IServiceProvider serviceProvider = SetupProgramConfigurationAndDI();
 
         // Get the logger for use within this class.
         _logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+
+        LoadBenchFromJsonFile(serviceProvider, benchJsonFilePath);
 
         RunWpfApp(serviceProvider);
 
         _logger.LogInformation("Done.");
     }
 
-    static IServiceProvider SetupProgramConfigurationAndDI(string benchJsonFilePath)
+    static async Task CreateBenchFileIfNotExistAsync(
+        IServiceProvider serviceProvider,
+        string jsonFilePath)
     {
         try
         {
-            return ProgramConfiguration.Setup(benchJsonFilePath);
+            var isExist = System.IO.File.Exists(jsonFilePath);
+            if (!isExist)
+            {
+                var bench = new Bench
+                {
+                    Label = "PoC k0x-workbench Bench",
+                    Trays = new List<Tray>
+                    {
+                        new Tray
+                        {
+                            Label = "Workspace",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "File Explorer", Command = "C:/_BkGit/bryanknox/k0x-workbench" },
+                                new Tool { Label = "Tool 1.2", Command = "cmd2" }
+                            }
+                        },
+                        new Tray
+                        {
+                            Label = "Tray 2",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "Tool 2.1", Command = "cmd3" },
+                                new Tool { Label = "Tool 2.2", Command = "cmd4" }
+                            }
+                        }
+                    }
+                };
+
+                var benchyFileSaver = serviceProvider.GetRequiredService<IBenchyFileSaver>();
+
+                await benchyFileSaver.SaveAsync(bench, "poc-bench.json");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "CreateBenchFileIfNotExistAsync Error.");
+            throw;
+        }
+    }
+
+    static void LoadBenchFromJsonFile(
+        IServiceProvider serviceProvider,
+        string? benchJsonFilePath)
+    {
+        try
+        {
+            string path = !string.IsNullOrWhiteSpace(benchJsonFilePath)
+                ? benchJsonFilePath
+                : "poc-bench.json";
+
+            CreateBenchFileIfNotExistAsync(serviceProvider, path)
+                .GetAwaiter()
+                .GetResult();
+
+            var jsonFileLoader = serviceProvider.GetRequiredService<IJsonFileLoader<BenchyJsonFileModel>>();
+            var benchJsonFileModel = jsonFileLoader.LoadAsync(path)
+                .GetAwaiter()
+                .GetResult();
+
+            var benchProvider = serviceProvider.GetRequiredService<IBenchProvider>();
+            benchProvider.Bench = benchJsonFileModel.Bench;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error loading the bench from JSON file.");
+
+            MessageBox.Show(
+                "An error occurred loading the bench from JSON file.\n"
+                + "The application cannot be started.\n"
+                + "\n"
+                + $"{ex.GetType()}\n"
+                + "\n"
+                + $"{ex.Message}\n",
+                caption: "Error loading the bench from JSON file.",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Error);
+
+            throw;
+        }
+    }
+
+    static IServiceProvider SetupProgramConfigurationAndDI()
+    {
+        try
+        {
+            return ProgramConfiguration.Setup();
         }
         catch (Exception ex)
         {
