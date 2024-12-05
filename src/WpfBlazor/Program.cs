@@ -14,6 +14,8 @@ public class Program
 {
     private static ILogger<Program> _logger = null!;
 
+    // The Main method cannot be async for WPF applications.
+    // So, we use synchronous methods and block on async methods.
     [STAThread]
     static void Main(string[] args)
     {
