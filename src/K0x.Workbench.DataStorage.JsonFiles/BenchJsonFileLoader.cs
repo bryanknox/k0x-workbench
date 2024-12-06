@@ -8,19 +8,14 @@ public class BenchJsonFileLoader : IBenchFileLoader
 {
     private readonly IJsonFileLoader<BenchJsonFileModel> _jsonFileLoader;
 
-    private readonly string _filePath;
-
-    public BenchJsonFileLoader(
-        IJsonFileLoader<BenchJsonFileModel> jsonFileLoader,
-        string filePath)
+    public BenchJsonFileLoader(IJsonFileLoader<BenchJsonFileModel> jsonFileLoader)
     {
         _jsonFileLoader = jsonFileLoader;
-        _filePath = filePath;
     }
 
-    public async Task<Bench> LoadAsync()
+    public async Task<Bench> LoadAsync(string filePath)
     {
-        var benchJsonFileModel = await _jsonFileLoader.LoadAsync(_filePath);
+        var benchJsonFileModel = await _jsonFileLoader.LoadAsync(filePath);
 
         return benchJsonFileModel.Bench;
     }

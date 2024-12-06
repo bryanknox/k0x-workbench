@@ -3,10 +3,11 @@
 
 <h3>Bench: @Bench.Label</h3>
 
-@foreach (var tray in Bench.Trays)
+@foreach (var kit in Bench.Kits)
 {
-    <TrayComponent Tray="tray" />
+    <KitView Kit="kit" />
 }
+
 
 @code {
     [Parameter]

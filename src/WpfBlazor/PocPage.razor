@@ -8,13 +8,7 @@
 
 <h1>k0x Workbench - PoC</h1>
 
-<p>appSetting1: @AppSetting1</p>
-
-<p>Path: @Path</p>
-
-<p>isPathExist: @IsPathExist</p>
-
-<button class="btn btn-primary" @onclick="OpenDirectory">Open Directory</button>
+<p>Bench File Path: @(BenchFilePathProvider.FilePath ?? "null")</p>
 
 @if (Bench != null)
 {

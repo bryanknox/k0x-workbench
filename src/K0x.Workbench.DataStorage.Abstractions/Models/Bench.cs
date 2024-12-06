@@ -3,5 +3,5 @@
 public record Bench
 {
     public required string Label { get; init; }
-    public IList<Tray> Trays { get; init; } = new List<Tray>();
+    public IList<Kit> Kits { get; init; } = new List<Kit>();
 }

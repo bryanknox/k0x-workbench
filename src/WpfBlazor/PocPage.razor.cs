@@ -1,13 +1,8 @@
-using K0x.DataStorage.JsonFiles;
 using K0x.Workbench.DataStorage.Abstractions;
 using K0x.Workbench.DataStorage.Abstractions.Models;
-using K0x.Workbench.DataStorage.JsonFiles;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.IO;
 using System.Windows;
 
 namespace WpfBlazor;
@@ -15,90 +10,40 @@ namespace WpfBlazor;
 public partial class PocPage : ComponentBase
 {
     [Inject] private IBenchFilePathProvider BenchFilePathProvider { get; set; } = default!;
+    [Inject] private IBenchFileLoader BenchFileLoader { get; set; } = default!;
+    [Inject] private IBenchFileSaver BenchFileSaver { get; set; } = default!;
     [Inject] private IConfiguration Configuration { get; set; } = default!;
     [Inject] private ILogger<PocPage> Logger { get; set; } = default!;
 
-    protected string AppSetting1 { get; set; } = string.Empty;
-    protected string Path { get; set; } = "C:/Users/bryan/OneDrive/BK Shortcuts";
-    protected bool? IsPathExist { get; set; } = null;
     protected Bench? Bench { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Logger.LogTrace("OnInitialized START.");
 
-        Logger.LogTrace("OnInitialized trace.");
-        Logger.LogDebug("OnInitialized debug.");
-        Logger.LogInformation("OnInitialized information.");
-        Logger.LogWarning("OnInitialized warning.");
-        Logger.LogError("OnInitialized error.");
-        Logger.LogCritical("OnInitialized critical.");
+        // AppSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
 
-        AppSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
-        CheckPathExistence();
-
-        Bench = LoadBenchOrThrow();
-        Logger.LogDebug($"bench: {Bench}");
+        await LoadBenchFromJsonFileAsync();
 
         Logger.LogTrace("OnInitialized END.");
     }
 
-    private void CheckPathExistence()
-    {
-        IsPathExist = Directory.Exists(Path);
-    }
-
-    private void OpenDirectory()
-    {
-        if (IsPathExist == true)
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = Path,
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
-    }
-
-    private Bench LoadBenchOrThrow()
-    {
-        if (BenchProvider.Bench is null)
-        {
-            Logger.LogError("BenchProvider.Bench is null.");
-            throw new InvalidOperationException(
-                "BenchProvider.Bench is null."
-                + " This is an implementation error."
-                + " BenchProvider.Bench should be initialized"
-                + $" before the {nameof(PocPage)} is created."
-            );
-        }
-
-        return BenchProvider.Bench;
-    }
-
-
-    private void LoadBenchFromJsonFile()
+    private async Task LoadBenchFromJsonFileAsync()
     {
         try
         {
-            CreateBenchFileIfNotExistAsync()
-                .GetAwaiter()
-                .GetResult();
+            await CreateBenchFileIfNotExistAsync(BenchFilePathProvider.FilePath);
 
-
-            var benchJsonFileModel = jsonFileLoader.LoadAsync(BenchFilePathProvider.FilePath)
-                .GetAwaiter()
-                .GetResult();
-
-            Bench = benchJsonFileModel.Bench;
+            Bench = await BenchFileLoader.LoadAsync(BenchFilePathProvider.FilePath);
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error loading the bench from JSON file.");
+            Logger.LogError(ex, $"{nameof(LoadBenchFromJsonFileAsync)} Error");
 
             MessageBox.Show(
                 "An error occurred loading the bench from JSON file.\n"
+                + $"Path: {BenchFilePathProvider.FilePath}\n"
+                + "\n"
                 + "The application cannot be started.\n"
                 + "\n"
                 + $"{ex.GetType()}\n"
@@ -110,5 +55,49 @@ public partial class PocPage : ComponentBase
 
             throw;
         }
+    }
+
+    private async Task CreateBenchFileIfNotExistAsync(string jsonFilePath)
+    {
+        try
+        {
+            var isExist = System.IO.File.Exists(jsonFilePath);
+            if (!isExist)
+            {
+                var bench = new Bench
+                {
+                    Label = "PoC k0x-workbench Bench",
+                    Kits = new List<Kit>
+                    {
+                        new Kit
+                        {
+                            Label = "Workspace",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "File Explorer", Command = "C:/_BkGit/bryanknox/k0x-workbench" },
+                                new Tool { Label = "Tool 1.2", Command = "cmd2" }
+                            }
+                        },
+                        new Kit
+                        {
+                            Label = "Kit 2",
+                            Tools = new List<Tool>
+                            {
+                                new Tool { Label = "Tool 2.1", Command = "cmd3" },
+                                new Tool { Label = "Tool 2.2", Command = "cmd4" }
+                            }
+                        }
+                    }
+                };
+
+                await BenchFileSaver.SaveAsync(bench, "poc-bench.json");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"{nameof(CreateBenchFileIfNotExistAsync)} Error.");
+            throw;
+        }
+
     }
 }
