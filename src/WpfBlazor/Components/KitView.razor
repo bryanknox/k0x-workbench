@@ -1,0 +1,14 @@
+@using K0x.Workbench.DataStorage.Abstractions.Models
+@namespace WpfBlazor.Components
+
+<h4>Kit: @Kit.Label</h4>
+
+@foreach (var tool in Kit.Tools)
+{
+    <ToolView Tool="tool" />
+}
+
+@code {
+    [Parameter]
+    public Kit Kit { get; set; } = default!;
+}

@@ -5,90 +5,16 @@
 @using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Logging
 @using WpfBlazor.Components
-@inject IBenchProvider BenchProvider
-@inject IConfiguration Configuration
-@inject ILogger<PocPage> Logger
 
 <h1>k0x Workbench - PoC</h1>
 
-<p>appSetting1: @appSetting1</p>
+<p>Bench File Path: @(BenchFilePathProvider.FilePath ?? "null")</p>
 
-<p>Path: @path</p>
-
-<p>isPathExist: @isPathExist</p>
-
-<button class="btn btn-primary" @onclick="OpenDirectory">Open Directory</button>
-
-@if (bench != null)
+@if (Bench != null)
 {
-    <BenchComponent Bench=bench />
+    <BenchView Bench=Bench />
 }
-else {
+else
+{
     <p>Bench: null</p>
-}
-
-@code {
-
-    private string appSetting1 = string.Empty;
-
-    //private string path = "C:/_BkGit/bryanknox/k0x-workbench";
-    private string path = "C:/Users/bryan/OneDrive/BK Shortcuts";
-
-    private bool? isPathExist = null;
-
-    private Bench? bench;
-
-    protected override void OnInitialized()
-    {
-        Logger.LogTrace("OnInitialized START.");
-
-        Logger.LogTrace("OnInitialized trace.");
-        Logger.LogDebug("OnInitialized debug.");
-        Logger.LogInformation("OnInitialized information.");
-        Logger.LogWarning("OnInitialized warning.");
-        Logger.LogError("OnInitialized error.");
-        Logger.LogCritical("OnInitialized critical.");
-
-        appSetting1 = Configuration["AppSettings:Setting1"] ?? "Setting1 Not Found";
-        CheckPathExistence();
-
-        bench = GetBenchOrThrow();
-        Logger.LogDebug($"bench: {bench}");
-
-        Logger.LogTrace("OnInitialized END.");
-    }
-
-    private void CheckPathExistence()
-    {
-        isPathExist = System.IO.Directory.Exists(path);
-    }
-
-    private void OpenDirectory()
-    {
-        if (isPathExist == true)
-        {
-            var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = true
-                };
-            System.Diagnostics.Process.Start(psi);
-        }
-    }
-
-    private Bench GetBenchOrThrow()
-    {
-        if (BenchProvider.Bench is null)
-        {
-            Logger.LogError("BenchProvider.Bench is null.");
-            throw new InvalidOperationException(
-                "BenchProvider.Bench is null."
-                + " This is an implementation error."
-                + " BenchProvider.Bench should be initialized"
-                + $" before the {nameof(PocPage)} is created."
-            );
-        }
-
-        return BenchProvider.Bench;
-    }
 }

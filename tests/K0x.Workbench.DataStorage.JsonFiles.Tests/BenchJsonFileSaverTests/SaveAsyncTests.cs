@@ -24,11 +24,11 @@ public class SaveAsyncTests
         var bench = new Bench
         {
             Label = "Test Bench",
-            Trays = new List<Tray>
+            Kit = new List<Kit>
             {
-                new Tray
+                new Kit
                 {
-                    Label = "Tray 1",
+                    Label = "Kit 1",
                     Tools = new List<Tool>
                     {
                         new Tool { Label = "Tool 1", Command = "cmd1" },

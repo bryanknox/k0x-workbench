@@ -15,11 +15,11 @@ public class LoadAsyncTests
         var expectedBench = new Bench
         {
             Label = "Test Bench",
-            Trays = new List<Tray>
+            Kit = new List<Kit>
             {
-                new Tray
+                new Kit
                 {
-                    Label = "Test Tray",
+                    Label = "Test Kit",
                     Tools = new List<Tool>
                     {
                         new Tool
@@ -36,12 +36,10 @@ public class LoadAsyncTests
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ReturnsAsync(benchJsonFileModel);
 
-        var benchJsonFileLoader = new BenchJsonFileLoader(
-            mockJsonFileLoader.Object,
-            "testFilePath.json");
+        var benchJsonFileLoader = new BenchJsonFileLoader(mockJsonFileLoader.Object);
 
         // Act
-        var result = await benchJsonFileLoader.LoadAsync();
+        var result = await benchJsonFileLoader.LoadAsync("testFilePath.json");
 
         // Assert
         result.Should().BeEquivalentTo(expectedBench);
@@ -57,12 +55,10 @@ public class LoadAsyncTests
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ThrowsAsync(new Exception(expectedExceptionMessage));
 
-        var benchJsonFileLoader = new BenchJsonFileLoader(
-            mockJsonFileLoader.Object,
-            "testFilePath.json");
+        var benchJsonFileLoader = new BenchJsonFileLoader(mockJsonFileLoader.Object);
 
         // Act
-        Func<Task> act = async () => await benchJsonFileLoader.LoadAsync();
+        Func<Task> act = async () => await benchJsonFileLoader.LoadAsync("testFilePath.json");
 
         // Assert
         await act.Should().ThrowAsync<Exception>().WithMessage(expectedExceptionMessage);
