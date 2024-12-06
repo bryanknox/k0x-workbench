@@ -5,11 +5,12 @@
 @inject ILogger<ToolView> Logger
 
 <div>
-    <strong>Tool Label:</strong> @Tool.Label <br />
-    <strong>Command:</strong> @Tool.Command <br />
-    <strong>Working Directory:</strong> @(Tool.WorkingDirectory ?? "null")<br />
-
     <button class="btn btn-primary" @onclick="Execute">@Tool.Label</button>
+    <p> @Tool.Command </p>
+    @if (Tool.WorkingDirectory is not null)
+    {
+        <p>Working Directory:</p> @(Tool.WorkingDirectory ?? "null")
+    }
 </div>
 
 @code {
