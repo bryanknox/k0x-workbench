@@ -24,7 +24,7 @@ public class SaveAsyncTests
         var bench = new Bench
         {
             Label = "Test Bench",
-            Kit = new List<Kit>
+            Kits = new List<Kit>
             {
                 new Kit
                 {

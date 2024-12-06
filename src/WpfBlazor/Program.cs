@@ -61,7 +61,7 @@ public class Program
     static void InitBenchFilePathProviderFromArgs(IServiceProvider serviceProvider, string[] args)
     {
         // Get the file path or use the default.
-        string benchJsonFilePath = "poc-bench.json";
+        string? benchJsonFilePath = null;
         if (args.Length > 0 && !string.IsNullOrWhiteSpace(args[0]))
         {
             benchJsonFilePath = args[0];

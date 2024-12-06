@@ -10,6 +10,12 @@
 
 <p>Bench File Path: @(BenchFilePathProvider.FilePath ?? "null")</p>
 
+<button class="btn btn-primary" @onclick="NewSampleBenchFileAsnyc">New Sample Bench File...</button>
+
+<button class="btn btn-primary" @onclick="OpenBenchFileAsnyc">Open...</button>
+
+<button class="btn btn-primary" @onclick="SaveAsBenchFileAsnyc">Save As...</button>
+
 @if (Bench != null)
 {
     <BenchView Bench=Bench />

@@ -15,7 +15,7 @@ public class LoadAsyncTests
         var expectedBench = new Bench
         {
             Label = "Test Bench",
-            Kit = new List<Kit>
+            Kits = new List<Kit>
             {
                 new Kit
                 {
