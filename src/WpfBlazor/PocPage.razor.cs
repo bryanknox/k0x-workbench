@@ -95,7 +95,7 @@ public partial class PocPage : ComponentBase
 
         if (result is true)
         {
-            await SaveBenchFileAsync(Bench, dialog.FileName);
+            await SaveBenchFileAsync(Bench, dialog.FileName!);
 
             BenchFilePathProvider.FilePath = dialog.FileName;
         }
