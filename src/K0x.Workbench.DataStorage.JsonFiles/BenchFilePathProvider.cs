@@ -4,5 +4,5 @@ namespace K0x.Workbench.DataStorage.JsonFiles;
 
 public class BenchFilePathProvider : IBenchFilePathProvider
 {
-    public string FilePath { get; set; } = string.Empty;
+    public string? FilePath { get; set; }
 }

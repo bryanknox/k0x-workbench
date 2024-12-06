@@ -2,5 +2,5 @@
 
 public interface IBenchFilePathProvider
 {
-    string FilePath { get; set; }
+    string? FilePath { get; set; }
 }
