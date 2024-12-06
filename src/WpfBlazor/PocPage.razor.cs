@@ -33,7 +33,7 @@ public partial class PocPage : ComponentBase
     private async Task OpenBenchFileAsnyc(MouseEventArgs e)
     {
         Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-        dialog.FileName = "K0x Bench Sample 1"; // Default file name
+        dialog.FileName = BenchFilePathProvider.FilePath; // Default file name to current file path.
         dialog.DefaultExt = ".json"; // Default file extension
         dialog.Filter = "JSON documents (.json)|*.json"; // Filter files by extension
 
@@ -51,10 +51,10 @@ public partial class PocPage : ComponentBase
             }
         }
     }
-    private async Task NewSampleBenchFileAsnyc(MouseEventArgs e)
+    private async Task NewBenchFileAsnyc(MouseEventArgs e)
     {
         var dialog = new Microsoft.Win32.SaveFileDialog();
-        dialog.FileName = "K0x Bench Sample 1"; // Default file name
+        dialog.FileName = "Sample_1__K0xBench"; // Default file name
         dialog.DefaultExt = ".json"; // Default file extension
         dialog.Filter = "JSON documents (.json)|*.json"; // Filter files by extension
 
@@ -64,11 +64,11 @@ public partial class PocPage : ComponentBase
         {
             BenchFilePathProvider.FilePath = dialog.FileName;
 
-            Bench sampleBench = CreateSampleBench();
+            Bench = null;
+
+            Bench sampleBench = CreateSampleBench(dialog.FileName);
 
             await SaveBenchFileAsync(sampleBench, dialog.FileName);
-
-            BenchFilePathProvider.FilePath = dialog.FileName;
 
             Bench = sampleBench;
         }
@@ -128,32 +128,38 @@ public partial class PocPage : ComponentBase
         }
     }
 
-    private static Bench CreateSampleBench()
+    private static Bench CreateSampleBench(string jsonFilePath)
     {
+        string absoluteFilePath = System.IO.Path.GetFullPath(jsonFilePath);
+        string folderPath = System.IO.Path.GetDirectoryName(absoluteFilePath)
+            ?? string.Empty;
+        string fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(absoluteFilePath);
+
         return new Bench
         {
-            Label = "K0x-workbench Sample Bench",
+            Label = fileNameWithoutExtension,
             Kits = new List<Kit>
+            {
+                new Kit
                 {
-                    new Kit
+                    Label = "Kit 1",
+                    Tools = new List<Tool>
                     {
-                        Label = "Workspace Kit",
-                        Tools = new List<Tool>
-                        {
-                            new Tool { Label = "File Explorer", Command = "C:/_BkGit/bryanknox/k0x-workbench" },
-                            new Tool { Label = "Tool 1.2", Command = "cmd2" }
-                        }
-                    },
-                    new Kit
+                        new Tool { Label = "File Explorer", Command = folderPath },
+                        new Tool { Label = "Edit File", Command = absoluteFilePath },
+                    }
+                },
+                new Kit
+                {
+                    Label = "Kit 2",
+                    Tools = new List<Tool>
                     {
-                        Label = "Kit 2",
-                        Tools = new List<Tool>
-                        {
-                            new Tool { Label = "Tool 2.1", Command = "cmd3" },
-                            new Tool { Label = "Tool 2.2", Command = "cmd4" }
-                        }
+                        new Tool { Label = "Notepad", Command = "notepad.exe" },
+                        new Tool { Label = "Windows Terminal", Command = "wt" },
+                        new Tool { Label = "VS Code", Command = "code" }
                     }
                 }
+            }
         };
     }
 
