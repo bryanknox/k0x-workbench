@@ -7,7 +7,12 @@
 <div>
     <button class="btn btn-primary" @onclick="Execute">@Tool.Label</button>
     <p> @Tool.Command </p>
-    @if (Tool.WorkingDirectory is not null)
+    @if (string.IsNullOrEmpty(Tool.Arguments) is false)
+    {
+        <p>Arguments:</p> @(Tool.Arguments ?? "null")
+    }
+
+    @if (string.IsNullOrEmpty(Tool.WorkingDirectory) is false)
     {
         <p>Working Directory:</p> @(Tool.WorkingDirectory ?? "null")
     }
@@ -22,7 +27,9 @@
         var psi = new System.Diagnostics.ProcessStartInfo
             {
                 FileName = Tool.Command,
+                Arguments = Tool.Arguments,
                 WorkingDirectory = Tool.WorkingDirectory,
+                ErrorDialog = true,
                 UseShellExecute = true,
             };
         try {
