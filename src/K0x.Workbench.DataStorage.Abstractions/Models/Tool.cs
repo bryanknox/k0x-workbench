@@ -4,5 +4,6 @@ public record Tool
 {
     public string Label { get; init; } = string.Empty;
     public required string Command { get; init; }
-    public string? WorkingDirectory { get; init; } = null;
+    public string? Arguments { get; init; }
+    public string? WorkingDirectory { get; init; }
 }
