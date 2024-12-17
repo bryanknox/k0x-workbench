@@ -2,7 +2,21 @@
     text-decoration: underline;
 }
 
+div {
+    margin-bottom: 10px;
+}
+
 p {
+    font-size: smaller;
+    color: gray;
+}
+
+.indent {
+    margin-left: 20px; /* Adjust the value as needed */
+}
+
+.text-line {
+    display: block;
     font-size: smaller;
     color: gray;
 }

@@ -6,15 +6,15 @@
 
 <div>
     <a href="#" @onclick="Execute">@Tool.Label</a>
-    <p>@Tool.Command</p>
+    <span class="text-line">@Tool.Command</span>
     @if (!string.IsNullOrEmpty(Tool.Arguments))
     {
-        <p>@Tool.Arguments</p>
+        <span class="text-line indent">@Tool.Arguments</span>
     }
 
     @if (!string.IsNullOrEmpty(Tool.WorkingDirectory))
     {
-        <p>Working Directory: @Tool.WorkingDirectory</p>
+        <span class="text-line">Working Directory: @Tool.WorkingDirectory</span>
     }
 </div>
 
