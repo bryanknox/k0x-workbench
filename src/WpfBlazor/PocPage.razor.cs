@@ -41,7 +41,7 @@ public partial class PocPage : ComponentBase
 
         if (result is true)
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(dialog.FileName);
+            Bench? bench = await LoadBenchFromJsonFileAsync(dialog.FileName!);
 
             if (bench is not null)
             {
