@@ -5,16 +5,16 @@
 @inject ILogger<ToolView> Logger
 
 <div>
-    <button class="btn btn-primary" @onclick="Execute">@Tool.Label</button>
-    <p> @Tool.Command </p>
-    @if (string.IsNullOrEmpty(Tool.Arguments) is false)
+    <a href="#" @onclick="Execute">@Tool.Label</a>
+    <p>@Tool.Command</p>
+    @if (!string.IsNullOrEmpty(Tool.Arguments))
     {
-        <p>Arguments:</p> @(Tool.Arguments ?? "null")
+        <p>@Tool.Arguments</p>
     }
 
-    @if (string.IsNullOrEmpty(Tool.WorkingDirectory) is false)
+    @if (!string.IsNullOrEmpty(Tool.WorkingDirectory))
     {
-        <p>Working Directory:</p> @(Tool.WorkingDirectory ?? "null")
+        <p>Working Directory: @Tool.WorkingDirectory</p>
     }
 </div>
 
@@ -25,14 +25,15 @@
     private void Execute(MouseEventArgs e)
     {
         var psi = new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = Tool.Command,
-                Arguments = Tool.Arguments,
-                WorkingDirectory = Tool.WorkingDirectory,
-                ErrorDialog = true,
-                UseShellExecute = true,
-            };
-        try {
+        {
+            FileName = Tool.Command,
+            Arguments = Tool.Arguments,
+            WorkingDirectory = Tool.WorkingDirectory,
+            ErrorDialog = true,
+            UseShellExecute = true,
+        };
+        try
+        {
             System.Diagnostics.Process.Start(psi);
         }
         catch (Exception ex)
@@ -40,14 +41,13 @@
             Logger.LogError(ex, $"Error executing tool: {Tool.Label}");
 
             MessageBox.Show(
-                $"Error executing tool: { Tool.Label}\n"
+                $"Error executing tool: {Tool.Label}\n"
                 + $"{ex.GetType()}\n"
                 + "\n"
                 + $"{ex.Message}\n",
                 caption: $"Error executing tool: {Tool.Label}",
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
-
         }
     }
 }
