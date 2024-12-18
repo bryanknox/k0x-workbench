@@ -1,3 +1,14 @@
-﻿body {
-    margin: 10px;
+﻿.bench-path {
+    display: block;
+    font-size: smaller;
+    color: gray;
+}
+
+.btn-small {
+    padding: 2px 5px; /* Adjusted padding to make the outline tighter */
+    font-size: 0.875rem;
+}
+
+.container {
+    margin: 5px;
 }

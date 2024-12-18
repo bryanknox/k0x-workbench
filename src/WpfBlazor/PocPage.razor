@@ -6,19 +6,23 @@
 @using Microsoft.Extensions.Logging
 @using WpfBlazor.Components
 
-<p>Bench File Path: @(BenchFilePathProvider.FilePath ?? "null")</p>
+<div class="container">
 
-<button class="btn btn-primary" @onclick="NewBenchFileAsnyc">New...</button>
+    <span class="bench-path">Bench file path: @(BenchFilePathProvider.FilePath ?? "null")</span>
 
-<button class="btn btn-primary" @onclick="OpenBenchFileAsnyc">Open...</button>
+    <button class="btn btn-primary btn-small" @onclick="NewBenchFileAsnyc">New...</button>
 
-<button class="btn btn-primary" @onclick="SaveAsBenchFileAsnyc">Save As...</button>
+    <button class="btn btn-primary btn-small" @onclick="OpenBenchFileAsnyc">Open...</button>
 
-@if (Bench != null)
-{
-    <BenchView Bench=Bench />
-}
-else
-{
-    <p>Bench: null</p>
-}
+    <button class="btn btn-primary btn-small" @onclick="SaveAsBenchFileAsnyc">Save As...</button>
+
+    @if (Bench != null)
+    {
+        <BenchView Bench=Bench />
+    }
+    else
+    {
+        <p>Bench: null</p>
+    }
+
+</div>

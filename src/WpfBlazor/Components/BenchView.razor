@@ -1,12 +1,16 @@
 @using K0x.Workbench.DataStorage.Abstractions.Models
 @namespace WpfBlazor.Components
 
-<h2>@Bench.Label</h2>
+<div>
 
-@foreach (var kit in Bench.Kits)
-{
-    <KitView Kit="kit" />
-}
+    <h3>@Bench.Label</h3>
+
+    @foreach (var kit in Bench.Kits)
+    {
+        <KitView Kit="kit" />
+    }
+
+</div>
 
 
 @code {
