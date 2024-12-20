@@ -12,3 +12,10 @@
 .container {
     margin: 5px;
 }
+
+.edit-icon {
+    cursor: pointer;
+    margin-left: 2px;
+    color: blue;
+    position: relative;
+}

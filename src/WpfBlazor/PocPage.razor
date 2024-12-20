@@ -1,28 +1,32 @@
 @page "/poc"
-@using System.Windows
-@using K0x.Workbench.DataStorage.Abstractions
-@using K0x.Workbench.DataStorage.Abstractions.Models
-@using Microsoft.Extensions.Configuration
-@using Microsoft.Extensions.Logging
 @using WpfBlazor.Components
 
 <div class="container">
 
-    <span class="bench-path">Bench file path: @(BenchFilePathProvider.FilePath ?? "null")</span>
+    <div>
+        <span class="bench-path">
+            Bench file path: @(BenchFilePathProvider.FilePath ?? "null")
+            <i class="bi bi-pencil edit-icon" @onclick="EditBenchFile" title="Edit Bench file ..."></i>
+        </span>
+    </div>
 
-    <button class="btn btn-primary btn-small" @onclick="NewBenchFileAsnyc">New...</button>
+    <div>
+        <button class="btn btn-primary btn-small" @onclick="NewBenchFileAsnyc">New...</button>
 
-    <button class="btn btn-primary btn-small" @onclick="OpenBenchFileAsnyc">Open...</button>
+        <button class="btn btn-primary btn-small" @onclick="OpenBenchFileAsnyc">Open...</button>
 
-    <button class="btn btn-primary btn-small" @onclick="SaveAsBenchFileAsnyc">Save As...</button>
+        <button class="btn btn-primary btn-small" @onclick="SaveAsBenchFileAsnyc">Save As...</button>
+    </div>
 
-    @if (Bench != null)
-    {
-        <BenchView Bench=Bench />
-    }
-    else
-    {
-        <p>Bench: null</p>
-    }
+    <div>
+        @if (Bench != null)
+        {
+            <BenchView Bench=Bench />
+        }
+        else
+        {
+            <p>Bench: null</p>
+        }
+    </div>
 
 </div>

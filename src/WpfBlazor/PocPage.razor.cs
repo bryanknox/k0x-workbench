@@ -186,4 +186,32 @@ public partial class PocPage : ComponentBase
         }
     }
 
+    private void EditBenchFile(MouseEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = BenchFilePathProvider.FilePath,
+                UseShellExecute = true
+            };
+            try
+            {
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error opening file for editing: {BenchFilePathProvider.FilePath}");
+
+                MessageBox.Show(
+                    $"Error opening file for editing: {BenchFilePathProvider.FilePath}\n"
+                    + $"{ex.GetType()}\n"
+                    + "\n"
+                    + $"{ex.Message}\n",
+                    caption: "Error opening file for editing",
+                    button: MessageBoxButton.OK,
+                    icon: MessageBoxImage.Error);
+            }
+        }
+    }
 }
