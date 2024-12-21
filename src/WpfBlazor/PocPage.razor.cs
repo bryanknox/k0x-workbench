@@ -30,7 +30,7 @@ public partial class PocPage : ComponentBase
         Logger.LogTrace("OnInitialized END.");
     }
 
-    private async Task OpenBenchFileAsnyc(MouseEventArgs e)
+    private async Task OpenBenchFileAsync(MouseEventArgs e)
     {
         Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
         dialog.FileName = BenchFilePathProvider.FilePath; // Default file name to current file path.
@@ -51,7 +51,8 @@ public partial class PocPage : ComponentBase
             }
         }
     }
-    private async Task NewBenchFileAsnyc(MouseEventArgs e)
+
+    private async Task NewBenchFileAsync(MouseEventArgs e)
     {
         var dialog = new Microsoft.Win32.SaveFileDialog();
         dialog.FileName = "Sample_1__K0xBench"; // Default file name
@@ -74,7 +75,7 @@ public partial class PocPage : ComponentBase
         }
     }
 
-    private async Task SaveAsBenchFileAsnyc(MouseEventArgs e)
+    private async Task SaveAsBenchFileAsync(MouseEventArgs e)
     {
         if (Bench is null)
         {
@@ -98,6 +99,48 @@ public partial class PocPage : ComponentBase
             await SaveBenchFileAsync(Bench, dialog.FileName!);
 
             BenchFilePathProvider.FilePath = dialog.FileName;
+        }
+    }
+
+    private void EditBenchFile(MouseEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = BenchFilePathProvider.FilePath,
+                UseShellExecute = true
+            };
+            try
+            {
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error opening file for editing: {BenchFilePathProvider.FilePath}");
+
+                MessageBox.Show(
+                    $"Error opening file for editing: {BenchFilePathProvider.FilePath}\n"
+                    + $"{ex.GetType()}\n"
+                    + "\n"
+                    + $"{ex.Message}\n",
+                    caption: "Error opening file for editing",
+                    button: MessageBoxButton.OK,
+                    icon: MessageBoxImage.Error);
+            }
+        }
+    }
+
+    private async Task ReloadBenchFileAsync(MouseEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
+        {
+            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+
+            if (bench is not null)
+            {
+                Bench = bench;
+            }
         }
     }
 
@@ -183,35 +226,6 @@ public partial class PocPage : ComponentBase
                 caption: "Error saving the bench to JSON file.",
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
-        }
-    }
-
-    private void EditBenchFile(MouseEventArgs e)
-    {
-        if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
-        {
-            var psi = new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = BenchFilePathProvider.FilePath,
-                UseShellExecute = true
-            };
-            try
-            {
-                System.Diagnostics.Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, $"Error opening file for editing: {BenchFilePathProvider.FilePath}");
-
-                MessageBox.Show(
-                    $"Error opening file for editing: {BenchFilePathProvider.FilePath}\n"
-                    + $"{ex.GetType()}\n"
-                    + "\n"
-                    + $"{ex.Message}\n",
-                    caption: "Error opening file for editing",
-                    button: MessageBoxButton.OK,
-                    icon: MessageBoxImage.Error);
-            }
         }
     }
 }
