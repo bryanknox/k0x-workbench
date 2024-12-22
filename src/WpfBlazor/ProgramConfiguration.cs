@@ -1,6 +1,7 @@
 ﻿using K0x.Workbench.DataStorage.JsonFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
@@ -19,9 +20,13 @@ internal static class ProgramConfiguration
         {
             // NOTE: IConfiguration is registered above by CreateDefaultBuilder().
 
+            services.AddBenchJsonFiles();
+
+            services.AddAppTitleService();
+
             services.AddWpfBlazorWebView();
 
-            services.AddBenchJsonFiles();
+            services.AddTransient<MainWindow>();
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);

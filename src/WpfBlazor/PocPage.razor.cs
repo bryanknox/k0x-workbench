@@ -5,16 +5,24 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Windows;
+using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
 public partial class PocPage : ComponentBase
 {
-    [Inject] private IBenchFilePathProvider BenchFilePathProvider { get; set; } = default!;
-    [Inject] private IBenchFileLoader BenchFileLoader { get; set; } = default!;
-    [Inject] private IBenchFileSaver BenchFileSaver { get; set; } = default!;
-    [Inject] private IConfiguration Configuration { get; set; } = default!;
-    [Inject] private ILogger<PocPage> Logger { get; set; } = default!;
+    [Inject]
+    private IBenchFilePathProvider BenchFilePathProvider { get; set; } = default!;
+    [Inject]
+    private IBenchFileLoader BenchFileLoader { get; set; } = default!;
+    [Inject]
+    private IBenchFileSaver BenchFileSaver { get; set; } = default!;
+    [Inject]
+    private IConfiguration Configuration { get; set; } = default!;
+    [Inject]
+    private ILogger<PocPage> Logger { get; set; } = default!;
+    [Inject]
+    private IAppTitleSetService TitleSetService { get; set; } = default!;
 
     protected Bench? Bench { get; set; }
 
@@ -24,7 +32,9 @@ public partial class PocPage : ComponentBase
 
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
-            Bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+
+            UpdateBenchAndInfo(bench, BenchFilePathProvider.FilePath);
         }
 
         Logger.LogTrace("OnInitialized END.");
@@ -43,11 +53,10 @@ public partial class PocPage : ComponentBase
         {
             Bench? bench = await LoadBenchFromJsonFileAsync(dialog.FileName!);
 
+            // Only update if successful. Keep the current bench if not.
             if (bench is not null)
             {
-                BenchFilePathProvider.FilePath = dialog.FileName;
-
-                Bench = bench;
+                UpdateBenchAndInfo(bench, dialog.FileName);
             }
         }
     }
@@ -137,9 +146,10 @@ public partial class PocPage : ComponentBase
         {
             Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
+            // Only update if successful. Keep the current bench if not.
             if (bench is not null)
             {
-                Bench = bench;
+                UpdateBenchAndInfo(bench, BenchFilePathProvider.FilePath);
             }
         }
     }
@@ -227,5 +237,12 @@ public partial class PocPage : ComponentBase
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
         }
+    }
+
+    private void UpdateBenchAndInfo(Bench? bench, string filePath)
+    {
+        Bench = bench;
+        BenchFilePathProvider.FilePath = filePath;
+        TitleSetService.SetTitle(bench?.Label);
     }
 }

@@ -1,11 +1,9 @@
-﻿using K0x.DataStorage.JsonFiles;
-using K0x.Workbench.DataStorage.Abstractions;
-using K0x.Workbench.DataStorage.Abstractions.Models;
-using K0x.Workbench.DataStorage.JsonFiles;
+﻿using K0x.Workbench.DataStorage.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
@@ -85,14 +83,20 @@ public class Program
         {
             var app = new App(serviceProvider);
             app.InitializeComponent();
-            app.Run();
+
+            // Resolve MainWindow with dependencies
+            var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+
+            int exitCode = app.Run(mainWindow);
+
+            _logger.LogInformation("WPF application has finished running with exit code {ExitCode}.", exitCode);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "RunWpfApp unhandled exception.");
 
             MessageBox.Show(
-                "An unhandled exeception occurred in the WPF-Blazor app.\n"
+                "An unhandled exception occurred in the WPF-Blazor app.\n"
                 + "\n"
                 + $"{ex.GetType()}\n"
                 + "\n"
