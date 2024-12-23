@@ -9,7 +9,7 @@ using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
-public partial class PocPage : ComponentBase
+public partial class MainPage : ComponentBase
 {
     [Inject]
     private IBenchFilePathProvider BenchFilePathProvider { get; set; } = default!;
@@ -20,7 +20,7 @@ public partial class PocPage : ComponentBase
     [Inject]
     private IConfiguration Configuration { get; set; } = default!;
     [Inject]
-    private ILogger<PocPage> Logger { get; set; } = default!;
+    private ILogger<MainPage> Logger { get; set; } = default!;
     [Inject]
     private IAppTitleSetService TitleSetService { get; set; } = default!;
 

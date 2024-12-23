@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
