@@ -1,25 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
   <PropertyGroup>
     <AssemblyName>K0xWorkbench</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>WpfBlazor</RootNamespace>
     <Copyright>Copyright © Bryan Knox 2024</Copyright>
     <Description>A workbench for developers</Description>
   </PropertyGroup>
-
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
     <Page Include="App.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" />
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
     <PackageReference Include="Serilog" />
@@ -29,14 +27,11 @@
     <PackageReference Include="Serilog.Sinks.Console" />
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\css\bootstrap-icons\" />
     <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\K0x.Workbench.DataStorage.JsonFiles\K0x.Workbench.DataStorage.JsonFiles.csproj" />
   </ItemGroup>
-
 </Project>

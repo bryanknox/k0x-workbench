@@ -239,7 +239,7 @@ public partial class MainPage : ComponentBase
         }
     }
 
-    private void UpdateBenchAndInfo(Bench? bench, string filePath)
+    private void UpdateBenchAndInfo(Bench? bench, string? filePath)
     {
         Bench = bench;
         BenchFilePathProvider.FilePath = filePath;
