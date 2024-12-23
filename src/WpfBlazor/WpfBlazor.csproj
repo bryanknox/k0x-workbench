@@ -6,6 +6,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>WpfBlazor</RootNamespace>
+    <Copyright>Copyright © Bryan Knox 2024</Copyright>
+    <Description>A workbench for developers</Description>
   </PropertyGroup>
 
   <ItemGroup>
