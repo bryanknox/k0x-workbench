@@ -4,16 +4,6 @@
 <div class="container">
 
     <div>
-        <span class="bench-path">
-            Bench file: @(BenchFilePathProvider.FilePath ?? "null")
-            <i class="bi bi-pencil action-icon" @onclick="EditBenchFile" title="Edit Bench file"></i>
-            <i class="bi bi-arrow-repeat action-icon" @onclick="ReloadBenchFileAsync" title="Reload Bench file"></i>
-        </span>
-    </div>
-
-    <hr class="horizontal-separator" />
-
-    <div>
         <button class="btn btn-primary btn-small" @onclick="NewBenchFileAsync">New...</button>
 
         <button class="btn btn-primary btn-small" @onclick="OpenBenchFileAsync">Open...</button>
@@ -22,6 +12,14 @@
     </div>
 
     <hr class="horizontal-separator" />
+
+    <div>
+        <span class="bench-path">
+            Bench file: @(BenchFilePathProvider.FilePath ?? "null")
+            <i class="bi bi-pencil action-icon" @onclick="EditBenchFile" title="Edit Bench file"></i>
+            <i class="bi bi-arrow-repeat action-icon" @onclick="ReloadBenchFileAsync" title="Reload Bench file"></i>
+        </span>
+    </div>
 
     <div>
         @if (Bench != null)
