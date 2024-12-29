@@ -9,8 +9,10 @@
 # - Deletes the output folder if it already exists.
 #--------------------------------------------------------------------
 Write-Host
-Write-Host "K0x-Workbench WPF-Blazor Publish Project"
+Write-Host "Publish Project - K0x-Workbench WPF-Blazor App"
 Write-Host
+
+# Configuration.
 
 $relativeAppProjectPath = "../src/WpfBlazor/WpfBlazor.csproj"
 
@@ -23,15 +25,15 @@ $csprojFilePath = [System.IO.Path]::GetFullPath( (Join-Path $thisScriptFolder $r
 
 $publishFolderPath = [System.IO.Path]::GetFullPath( (Join-Path $thisScriptFolder $relativePublishOutputPath) )
 
-Write-Host "csprojFilePath: $csprojFilePath"
+Write-Host "csprojFilePath   : $csprojFilePath"
 Write-Host
 Write-Host "publishFolderPath: $publishFolderPath"
 Write-Host
 
 # Delete the publish folder if it already exists
 if (Test-Path $publishFolderPath) {
+    Write-Host "Deleting existing publish folder."
     Remove-Item -Recurse -Force $publishFolderPath
-    Write-Host "Deleted existing publish folder: $publishFolderPath"
 }
 
 dotnet publish $csprojFilePath `

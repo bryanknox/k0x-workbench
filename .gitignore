@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+.k0xDeployable/
 .k0xPublished/
 
 # User-specific files
