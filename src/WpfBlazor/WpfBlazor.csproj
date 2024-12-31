@@ -7,10 +7,16 @@
     <RootNamespace>WpfBlazor</RootNamespace>
     <Copyright>Copyright © Bryan Knox 2024</Copyright>
     <Description>A workbench for developers</Description>
+    <ApplicationIcon>K0x.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
     <Page Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="K0x.ico" />
+    <Content Include="K0x.ico" />
+    <Resource Include="K0x.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" />
