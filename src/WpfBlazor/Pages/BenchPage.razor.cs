@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 using System.Windows;
 using WpfBlazor.InternalServices;
 
-namespace WpfBlazor;
+namespace WpfBlazor.Pages;
 
-public partial class MainPage : ComponentBase
+public partial class BenchPage : ComponentBase
 {
     [Inject]
     private IBenchFilePathProvider BenchFilePathProvider { get; set; } = default!;
@@ -20,7 +20,7 @@ public partial class MainPage : ComponentBase
     [Inject]
     private IConfiguration Configuration { get; set; } = default!;
     [Inject]
-    private ILogger<MainPage> Logger { get; set; } = default!;
+    private ILogger<BenchPage> Logger { get; set; } = default!;
     [Inject]
     private IAppTitleSetService TitleSetService { get; set; } = default!;
 
