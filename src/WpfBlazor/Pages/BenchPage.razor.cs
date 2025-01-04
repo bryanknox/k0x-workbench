@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Windows;
 using WpfBlazor.InternalServices;
 
-namespace WpfBlazor;
+namespace WpfBlazor.Pages;
 
 public partial class BenchPage : ComponentBase
 {
