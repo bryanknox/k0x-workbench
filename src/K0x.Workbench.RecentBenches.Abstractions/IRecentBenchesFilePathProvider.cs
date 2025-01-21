@@ -2,5 +2,5 @@
 
 public interface IRecentBenchesFilePathProvider
 {
-    Task<string> GetFilePathAsync();
+    string GetFilePathOrThrow();
 }

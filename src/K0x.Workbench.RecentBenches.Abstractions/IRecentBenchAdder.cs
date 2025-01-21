@@ -2,5 +2,5 @@
 
 public interface IRecentBenchAdder
 {
-    Task AddRecentBenchAsync(string filePath, string benchLabel);
+    Task AddRecentBenchAsync(string brenchFilePath, string benchLabel);
 }
