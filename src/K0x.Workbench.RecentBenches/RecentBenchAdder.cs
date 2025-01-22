@@ -6,17 +6,20 @@ namespace K0x.Workbench.RecentBenches;
 public class RecentBenchAdder : IRecentBenchAdder
 {
     private readonly IRecentBenchesFilePathProvider _recentBenchesFilePathProvider;
-    private readonly RecentBenchesJsonFileLoader _recentBenchesFileLoader;
-    private readonly RecentBenchesJsonFileSaver _recentBenchesFileSaver;
+    private readonly IRecentBenchesJsonFileLoader _recentBenchesFileLoader;
+    private readonly IRecentBenchesJsonFileSaver _recentBenchesFileSaver;
+    private readonly TimeProvider _timeProvider;
 
     public RecentBenchAdder(
         IRecentBenchesFilePathProvider recentBenchesFilePathProvider,
-        RecentBenchesJsonFileLoader recentBenchesFileLoader,
-        RecentBenchesJsonFileSaver recentBenchesFileSaver)
+        IRecentBenchesJsonFileLoader recentBenchesFileLoader,
+        IRecentBenchesJsonFileSaver recentBenchesFileSaver,
+        TimeProvider timeProvider)
     {
         _recentBenchesFilePathProvider = recentBenchesFilePathProvider;
         _recentBenchesFileLoader = recentBenchesFileLoader;
         _recentBenchesFileSaver = recentBenchesFileSaver;
+        _timeProvider = timeProvider;
     }
 
     public async Task AddRecentBenchAsync(string benchFilePath, string benchLabel)
@@ -45,7 +48,7 @@ public class RecentBenchAdder : IRecentBenchAdder
         {
             FilePath = benchFilePath,
             BenchLabel = benchLabel,
-            LastOpened = DateTimeOffset.Now // TODO: Use testable time provider
+            LastOpened = _timeProvider.GetLocalNow()
         });
     }
 }

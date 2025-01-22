@@ -27,6 +27,8 @@ internal static class ProgramConfiguration
             services.AddWpfBlazorWebView();
 
             services.AddTransient<MainWindow>();
+
+            services.AddSingleton(TimeProvider.System);
         });
 
         LoggingConfiguration.ConfigureSerilog(hostBuilder);
