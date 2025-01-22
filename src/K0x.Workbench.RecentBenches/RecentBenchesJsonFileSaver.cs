@@ -3,7 +3,7 @@ using K0x.Workbench.RecentBenches.Abstractions.Models;
 
 namespace K0x.Workbench.RecentBenches;
 
-public class RecentBenchesJsonFileSaver
+public class RecentBenchesJsonFileSaver : IRecentBenchesJsonFileSaver
 {
     private readonly IJsonFileSaver<RecentBenchesFileModel> _jsonFileSaver;
 
