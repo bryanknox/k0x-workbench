@@ -2,9 +2,9 @@
 
 A Windows desktop application for quick access to context specific tools and information.
 
-- Create a **workbench** working in a context, like a project.
+- Create a **workbench** for working in a context, like a project.
 - Add **tools** to quickly launch apps, run scripts, or open a documents or websites.
-- Group tools into **toolkits** organized around scenarios or categories.
+- Group tools into **toolkits** organized around tasks, scenarios, or categories.
 
 ## Example Workbench
 
