@@ -18,7 +18,8 @@ public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 
         if (string.IsNullOrWhiteSpace(filePath))
         {
-            throw new InvalidOperationException("RecentBenchesFilePath is not set in appsettings.json.");
+            throw new RecentBenchesFileException(
+                "RecentBenchesFilePath is not set in appsettings.json.");
         }
         return filePath;
     }
