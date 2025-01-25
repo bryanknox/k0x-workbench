@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!--cSpell:disable -->
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
