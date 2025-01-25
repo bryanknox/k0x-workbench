@@ -4,5 +4,8 @@ dictionaryDefinitions: []
 dictionaries: []
 words:
   - appsettings
+  - buildtransitive
+  - contentfiles
+  - xunit
 ignoreWords: []
 import: []

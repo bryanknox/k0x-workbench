@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		cspell.config.yaml = cspell.config.yaml
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
@@ -36,6 +37,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.RecentBenches.Abstractions", "src\K0x.Workbench.RecentBenches.Abstractions\K0x.Workbench.RecentBenches.Abstractions.csproj", "{70F71401-65F7-45A0-B430-ABED88FB4D2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.RecentBenches", "src\K0x.Workbench.RecentBenches\K0x.Workbench.RecentBenches.csproj", "{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.RecentBenches.Tests", "tests\K0x.Workbench.RecentBenches.Tests\K0x.Workbench.RecentBenches.Tests.csproj", "{F852CD56-9FB0-44C0-A314-D2CA81FDE461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +80,10 @@ Global
 		{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +97,7 @@ Global
 		{8C2F484D-69B4-4052-B89E-B8BC994C9673} = {61700B53-9C37-4B60-A52D-33E51FD89B8F}
 		{70F71401-65F7-45A0-B430-ABED88FB4D2F} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 		{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
+		{F852CD56-9FB0-44C0-A314-D2CA81FDE461} = {61700B53-9C37-4B60-A52D-33E51FD89B8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B3FD197-BB31-4CE1-BD11-17B5A691F56A}
