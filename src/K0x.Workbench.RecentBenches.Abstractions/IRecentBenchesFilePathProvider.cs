@@ -2,5 +2,5 @@
 
 public interface IRecentBenchesFilePathProvider
 {
-    string GetFilePathOrThrow();
+    string GetFilePath();
 }

@@ -7,6 +7,7 @@ public static class ServicesConfigurationExtensions
 {
     public static void AddRecentBenchesJsonFiles(this IServiceCollection services)
     {
+        services.AddScoped<IAppExeFolderPathProvider, AppExeFolderPathProvider>();        
         services.AddScoped<IRecentBenchAdder, RecentBenchAdder>();
         services.AddScoped<IRecentBenchesFilePathProvider, RecentBenchesFilePathProvider>();
         services.AddScoped<IRecentBenchesJsonFileLoader, RecentBenchesJsonFileLoader>();

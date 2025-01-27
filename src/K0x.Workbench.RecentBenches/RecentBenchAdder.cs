@@ -29,7 +29,7 @@ public class RecentBenchAdder : IRecentBenchAdder
         // and we don't want to overwrite the potentical changes made
         // there.
 
-        string recentBenchesFilePath = _recentBenchesFilePathProvider.GetFilePathOrThrow();
+        string recentBenchesFilePath = _recentBenchesFilePathProvider.GetFilePath();
 
         List<RecentBench> recentBenches = await _recentBenchesFileLoader.LoadAsync(recentBenchesFilePath);
 

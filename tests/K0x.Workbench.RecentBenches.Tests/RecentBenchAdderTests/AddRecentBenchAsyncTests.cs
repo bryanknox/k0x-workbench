@@ -18,7 +18,7 @@ public class AddRecentBenchAsyncTests
         var fileSaverMock = new Mock<IRecentBenchesJsonFileSaver>();
         var fakeTimeProvider = new FakeTimeProvider();
 
-        filePathProviderMock.Setup(p => p.GetFilePathOrThrow())
+        filePathProviderMock.Setup(p => p.GetFilePath())
             .Returns("testPath");
         fileLoaderMock.Setup(l => l.LoadAsync(It.IsAny<string>()))
             .ReturnsAsync(new List<RecentBench>());
