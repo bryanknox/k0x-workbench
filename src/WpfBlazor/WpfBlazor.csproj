@@ -40,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\K0x.Workbench.DataStorage.JsonFiles\K0x.Workbench.DataStorage.JsonFiles.csproj" />
+    <ProjectReference Include="..\K0x.Workbench.RecentBenches\K0x.Workbench.RecentBenches.csproj" />
   </ItemGroup>
 </Project>

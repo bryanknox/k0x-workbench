@@ -1,5 +1,6 @@
 using K0x.Workbench.DataStorage.Abstractions;
 using K0x.Workbench.DataStorage.Abstractions.Models;
+using K0x.Workbench.RecentBenches.Abstractions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,8 @@ public partial class BenchPage : ComponentBase
     [Inject]
     private ILogger<BenchPage> Logger { get; set; } = default!;
     [Inject]
+    private IRecentBenchAdder RecentBenchAdder { get; set; } = default!;
+    [Inject]
     private IAppTitleSetService TitleSetService { get; set; } = default!;
 
     protected Bench? Bench { get; set; }
@@ -34,7 +37,7 @@ public partial class BenchPage : ComponentBase
         {
             Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
-            UpdateBenchAndInfo(bench, BenchFilePathProvider.FilePath);
+            await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
         }
 
         Logger.LogTrace("OnInitialized END.");
@@ -56,7 +59,7 @@ public partial class BenchPage : ComponentBase
             // Only update if successful. Keep the current bench if not.
             if (bench is not null)
             {
-                UpdateBenchAndInfo(bench, dialog.FileName);
+                await UpdateBenchAndInfoAsync(bench, dialog.FileName);
             }
         }
     }
@@ -72,15 +75,13 @@ public partial class BenchPage : ComponentBase
 
         if (result is true)
         {
-            BenchFilePathProvider.FilePath = dialog.FileName;
-
             Bench = null;
 
             Bench sampleBench = CreateSampleBench(dialog.FileName);
 
             await SaveBenchFileAsync(sampleBench, dialog.FileName);
 
-            Bench = sampleBench;
+            await UpdateBenchAndInfoAsync(sampleBench, dialog.FileName);
         }
     }
 
@@ -107,7 +108,7 @@ public partial class BenchPage : ComponentBase
         {
             await SaveBenchFileAsync(Bench, dialog.FileName!);
 
-            BenchFilePathProvider.FilePath = dialog.FileName;
+            await UpdateBenchAndInfoAsync(Bench, dialog.FileName);
         }
     }
 
@@ -149,7 +150,7 @@ public partial class BenchPage : ComponentBase
             // Only update if successful. Keep the current bench if not.
             if (bench is not null)
             {
-                UpdateBenchAndInfo(bench, BenchFilePathProvider.FilePath);
+                await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
             }
         }
     }
@@ -239,10 +240,16 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private void UpdateBenchAndInfo(Bench? bench, string? filePath)
+    private async Task UpdateBenchAndInfoAsync(Bench? bench, string? filePath)
     {
         Bench = bench;
         BenchFilePathProvider.FilePath = filePath;
         TitleSetService.SetTitle(bench?.Label);
+
+        if (bench != null
+            && !string.IsNullOrWhiteSpace(filePath))
+        {
+            await RecentBenchAdder.AddRecentBenchAsync(filePath, bench.Label);
+        }
     }
 }

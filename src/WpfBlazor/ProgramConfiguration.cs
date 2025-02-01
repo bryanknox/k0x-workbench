@@ -1,4 +1,5 @@
 ﻿using K0x.Workbench.DataStorage.JsonFiles;
+using K0x.Workbench.RecentBenches;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WpfBlazor.InternalServices;
@@ -23,6 +24,8 @@ internal static class ProgramConfiguration
             services.AddBenchJsonFiles();
 
             services.AddAppTitleService();
+
+            services.AddRecentBenchesJsonFiles();
 
             services.AddWpfBlazorWebView();
 
