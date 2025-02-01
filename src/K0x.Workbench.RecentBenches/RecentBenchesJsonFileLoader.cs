@@ -14,6 +14,11 @@ public class RecentBenchesJsonFileLoader : IRecentBenchesJsonFileLoader
 
     public async Task<List<RecentBench>> LoadAsync(string filePath)
     {
+        if (!File.Exists(filePath))
+        {
+            return new List<RecentBench>();
+        }
+
         RecentBenchesFileModel fileModel = await _jsonFileLoader.LoadAsync(filePath);
 
         return fileModel.RecentBenches.ToList();
