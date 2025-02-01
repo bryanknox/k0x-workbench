@@ -12,9 +12,7 @@ public class LoadAsyncTests
     public async Task Should_Load_RecentBenches()
     {
         // Arrange
-
         var expectedLastOpened = DateTimeOffset.Now;
-;
         var jsonFileLoaderMock = new Mock<IJsonFileLoader<RecentBenchesFileModel>>();
         var fileModel = new RecentBenchesFileModel
         {
