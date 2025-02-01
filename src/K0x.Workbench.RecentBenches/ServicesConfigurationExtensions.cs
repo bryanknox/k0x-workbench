@@ -1,6 +1,7 @@
 ﻿using K0x.DataStorage.JsonFiles;
 using K0x.Workbench.RecentBenches.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO.Abstractions;
 
 namespace K0x.Workbench.RecentBenches;
 
@@ -16,6 +17,8 @@ public static class ServicesConfigurationExtensions
         services.AddScoped<IRecentBenchesJsonFileLoader, RecentBenchesJsonFileLoader>();
         services.AddScoped<IRecentBenchesJsonFileSaver, RecentBenchesJsonFileSaver>();
 
+        // Third-party services
+        services.AddScoped<IFileSystem, FileSystem>(); // From TestableIO.System.IO.Abstractions.Wrappers NuGet.
         services.AddSingleton(TimeProvider.System);
     }
 }
