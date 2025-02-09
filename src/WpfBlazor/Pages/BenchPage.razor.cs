@@ -31,7 +31,7 @@ public partial class BenchPage : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        Logger.LogTrace("OnInitialized START.");
+        Logger.LogTrace("OnInitializedAsync START.");
 
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
@@ -40,7 +40,7 @@ public partial class BenchPage : ComponentBase
             await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
         }
 
-        Logger.LogTrace("OnInitialized END.");
+        Logger.LogTrace("OnInitializedAsync END.");
     }
 
     private async Task OpenBenchFileAsync(MouseEventArgs e)
