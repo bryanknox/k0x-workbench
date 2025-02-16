@@ -5,7 +5,7 @@
 @inject ILogger<ToolView> Logger
 
 <div>
-    <a href="#" @onclick="Execute">@Tool.Label</a>
+    <a href="#" @onclick="Execute" @onclick:preventDefault>@Tool.Label</a>
     <span class="text-line">@Tool.Command</span>
     @if (!string.IsNullOrEmpty(Tool.Arguments))
     {
