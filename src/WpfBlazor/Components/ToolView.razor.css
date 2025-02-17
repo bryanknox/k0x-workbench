@@ -11,8 +11,12 @@ p {
     color: gray;
 }
 
-.indent {
-    margin-left: 20px; /* Adjust the value as needed */
+.indent1 {
+    margin-left: 25px; /* Adjust the value as needed */
+}
+
+.indent2 {
+    margin-left: 45px; /* Should be > indent1 */
 }
 
 .text-line {

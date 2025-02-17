@@ -5,22 +5,36 @@
 @inject ILogger<ToolView> Logger
 
 <div>
-    <a href="#" @onclick="Execute" @onclick:preventDefault>@Tool.Label</a>
-    <span class="text-line">@Tool.Command</span>
-    @if (!string.IsNullOrEmpty(Tool.Arguments))
-    {
-        <span class="text-line indent">@Tool.Arguments</span>
-    }
 
-    @if (!string.IsNullOrEmpty(Tool.WorkingDirectory))
+    <span class="bi @expanderIconClass"
+        aria-hidden="true"
+        style="cursor:pointer"
+        @onclick="() => IsExpanded = !IsExpanded">&nbsp;</span>
+
+    <a href="#" @onclick="Execute" @onclick:preventDefault>@Tool.Label</a>
+
+    @if (IsExpanded)
     {
-        <span class="text-line">Working Directory: @Tool.WorkingDirectory</span>
+        <span class="text-line indent1">@Tool.Command</span>
+        @if (!string.IsNullOrEmpty(Tool.Arguments))
+        {
+            <span class="text-line indent2">@Tool.Arguments</span>
+        }
+
+        @if (!string.IsNullOrEmpty(Tool.WorkingDirectory))
+        {
+            <span class="text-line indent1">Working Directory: @Tool.WorkingDirectory</span>
+        }
     }
 </div>
 
 @code {
     [Parameter]
     public Tool Tool { get; set; } = default!;
+
+    private bool IsExpanded { get; set; } = false;
+
+    private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
 
     private void Execute(MouseEventArgs e)
     {
