@@ -1,4 +1,39 @@
-﻿@page "/recent"
+@page "/recent"
 @using WpfBlazor.Components
 
-<h3>RecentPage</h3>
+<h3>Recent Benches</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+else if (RecentBenches.Count == 0)
+{
+    <p>No recent benches available</p>
+}
+else
+{
+
+    <hr class="horizontal-separator" />
+
+    <div>
+        <span class="bench-path">
+            Recent Benches file: @(RecentBenchesFilePathProvider.GetFilePath() ?? "null")
+            <i class="bi bi-pencil action-icon" @onclick="OnEditRecentBenchesFileClick" title="Edit Recent Benches file"></i>
+            <i class="bi bi-arrow-repeat action-icon" @onclick="OnReloadRecentBenchesClick" title="Reload Recent Benches file"></i>
+        </span>
+    </div>
+
+    <div>
+        <ul>
+            @foreach (var bench in RecentBenches)
+            {
+                <RecentBenchView RecentBench="bench" />
+            }
+        </ul>
+    </div>
+}
