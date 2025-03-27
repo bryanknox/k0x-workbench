@@ -60,7 +60,7 @@ public partial class RecentPage : ComponentBase
         }
     }
 
-    private async Task ReloadRecentBenches()
+    private async Task OnReloadRecentBenchesClick()
     {
         await LoadRecentBenchesAsync();
     }
@@ -70,8 +70,8 @@ public partial class RecentPage : ComponentBase
         BenchFilePathProvider.FilePath = bench.FilePath;
         NavigationManager.NavigateTo("/bench");
     }
-        
-   private void EditRecentBenchesFile(MouseEventArgs e)
+
+   private void OnEditRecentBenchesFileClick(MouseEventArgs e)
     {
         string? recentBenchesFilePath = RecentBenchesFilePathProvider.GetFilePath();
         if (!string.IsNullOrEmpty(recentBenchesFilePath))

@@ -3,7 +3,7 @@
 @using Microsoft.Extensions.Logging
 @using System.Windows
 @namespace WpfBlazor.Components
-@inject ILogger<ToolView> Logger
+@inject ILogger<RecentBenchView> Logger
 @inject NavigationManager NavigationManager
 @inject IBenchFilePathProvider BenchFilePathProvider
 
@@ -13,7 +13,7 @@
         style="cursor:pointer"
         @onclick="() => IsExpanded = !IsExpanded">&nbsp;</span>
 
-    <a href="#" @onclick="Execute" @onclick:preventDefault>@RecentBench.BenchLabel</a>
+    <a href="#" @onclick="OnRecentBenchClick" @onclick:preventDefault>@RecentBench.BenchLabel</a>
 
     @if (IsExpanded)
     {
@@ -31,8 +31,9 @@
 
     private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
 
-    private void Execute(MouseEventArgs e)
+    private void OnRecentBenchClick(MouseEventArgs e)
     {
+        Logger.LogInformation("OnRecentBenchClick: {RecentBench}", RecentBench);
         BenchFilePathProvider.FilePath = RecentBench.FilePath;
         NavigationManager.NavigateTo("/bench");
     }
