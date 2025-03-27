@@ -1,5 +1,6 @@
 ﻿using K0x.Workbench.RecentBenches.Abstractions;
 using K0x.Workbench.RecentBenches.Abstractions.Models;
+using K0x.Workbench.RecentBenches.Internal;
 
 namespace K0x.Workbench.RecentBenches;
 

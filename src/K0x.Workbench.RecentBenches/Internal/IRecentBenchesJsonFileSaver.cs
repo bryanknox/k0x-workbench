@@ -1,6 +1,6 @@
 using K0x.Workbench.RecentBenches.Abstractions.Models;
 
-namespace K0x.Workbench.RecentBenches;
+namespace K0x.Workbench.RecentBenches.Internal;
 
 public interface IRecentBenchesJsonFileSaver
 {

@@ -2,7 +2,7 @@
 using K0x.Workbench.RecentBenches.Abstractions.Models;
 using System.IO.Abstractions;
 
-namespace K0x.Workbench.RecentBenches;
+namespace K0x.Workbench.RecentBenches.Internal;
 
 public class RecentBenchesJsonFileLoader : IRecentBenchesJsonFileLoader
 {
