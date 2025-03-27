@@ -1,4 +1,34 @@
-﻿@page "/recent"
+@page "/recent"
 @using WpfBlazor.Components
+@inject IRecentBenchesLoader RecentBenchesLoader
+@inject ILogger<RecentPage> Logger
+@inject IBenchFilePathProvider BenchFilePathProvider
+@inject NavigationManager NavigationManager
 
-<h3>RecentPage</h3>
+<h3>Recent Benches</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+else if (RecentBenches.Count == 0)
+{
+    <p>No recent benches available</p>
+}
+else
+{
+    <ul>
+        @foreach (var bench in RecentBenches)
+        {
+            <li @onclick="() => OnRecentBenchClick(bench)">
+                @bench.BenchLabel (@bench.LastOpened)
+            </li>
+        }
+    </ul>
+}
+
+<button class="btn btn-primary" @onclick="RefreshRecentBenches">Refresh</button>
