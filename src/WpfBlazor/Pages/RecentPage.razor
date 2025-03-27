@@ -20,9 +20,7 @@ else
     <ul>
         @foreach (var bench in RecentBenches)
         {
-            <li @onclick="() => OnRecentBenchClick(bench)">
-                @bench.BenchLabel (@bench.LastOpened)
-            </li>
+            <RecentBenchView RecentBench="bench" />
         }
     </ul>
 }

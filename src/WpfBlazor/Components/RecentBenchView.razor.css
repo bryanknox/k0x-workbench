@@ -1,0 +1,26 @@
+a {
+    text-decoration: underline;
+}
+
+div {
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: smaller;
+    color: gray;
+}
+
+.indent1 {
+    margin-left: 25px; /* Adjust the value as needed */
+}
+
+.indent2 {
+    margin-left: 45px; /* Should be > indent1 */
+}
+
+.text-line {
+    display: block;
+    font-size: smaller;
+    color: gray;
+}

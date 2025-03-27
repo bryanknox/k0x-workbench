@@ -1,0 +1,39 @@
+@using K0x.Workbench.DataStorage.Abstractions
+@using K0x.Workbench.RecentBenches.Abstractions.Models
+@using Microsoft.Extensions.Logging
+@using System.Windows
+@namespace WpfBlazor.Components
+@inject ILogger<ToolView> Logger
+@inject NavigationManager NavigationManager
+@inject IBenchFilePathProvider BenchFilePathProvider
+
+<div>
+    <span class="bi @expanderIconClass"
+        aria-hidden="true"
+        style="cursor:pointer"
+        @onclick="() => IsExpanded = !IsExpanded">&nbsp;</span>
+
+    <a href="#" @onclick="Execute" @onclick:preventDefault>@RecentBench.BenchLabel</a>
+
+    @if (IsExpanded)
+    {
+        <span class="text-line indent1">@RecentBench.FilePath</span>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public RecentBench RecentBench { get; set; } = default!;
+
+    private bool IsExpanded { get; set; } = true;
+
+    private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
+
+    private void Execute(MouseEventArgs e)
+    {
+        BenchFilePathProvider.FilePath = RecentBench.FilePath;
+        NavigationManager.NavigateTo("/bench");
+    }
+}
