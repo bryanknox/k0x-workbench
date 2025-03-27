@@ -1,7 +1,7 @@
 ﻿using K0x.Workbench.RecentBenches.Abstractions;
 using Microsoft.Extensions.Configuration;
 
-namespace K0x.Workbench.RecentBenches;
+namespace K0x.Workbench.RecentBenches.Internal;
 
 public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 {

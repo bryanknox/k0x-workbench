@@ -1,9 +1,10 @@
 using K0x.DataStorage.JsonFiles;
 using K0x.Workbench.RecentBenches.Abstractions.Models;
+using K0x.Workbench.RecentBenches.Internal;
 using Moq;
 using Xunit;
 
-namespace K0x.Workbench.RecentBenches.Tests.RecentBenchesJsonFileSaverTests;
+namespace K0x.Workbench.RecentBenches.Tests.Internal.RecentBenchesJsonFileSaverTests;
 
 public class SaveAsyncTests
 {

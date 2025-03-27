@@ -1,8 +1,8 @@
 using FluentAssertions;
+using K0x.Workbench.RecentBenches.Internal;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
-using K0x.Workbench.RecentBenches.Abstractions;
 
 namespace K0x.Workbench.RecentBenches.Tests.RecentBenchesFilePathProviderTests;
 

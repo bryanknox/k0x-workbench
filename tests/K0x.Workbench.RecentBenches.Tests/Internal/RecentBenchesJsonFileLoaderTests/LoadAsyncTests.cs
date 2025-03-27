@@ -1,11 +1,12 @@
 using FluentAssertions;
 using K0x.DataStorage.JsonFiles;
 using K0x.Workbench.RecentBenches.Abstractions.Models;
+using K0x.Workbench.RecentBenches.Internal;
 using Moq;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
-namespace K0x.Workbench.RecentBenches.Tests.RecentBenchesJsonFileLoaderTests;
+namespace K0x.Workbench.RecentBenches.Tests.Internal.RecentBenchesJsonFileLoaderTests;
 
 public class LoadAsyncTests
 {
