@@ -17,6 +17,7 @@ public static class ServicesConfigurationExtensions
         services.AddScoped<IRecentBenchesFilePathProvider, RecentBenchesFilePathProvider>();
         services.AddScoped<IRecentBenchesJsonFileLoader, RecentBenchesJsonFileLoader>();
         services.AddScoped<IRecentBenchesJsonFileSaver, RecentBenchesJsonFileSaver>();
+        services.AddScoped<IRecentBenchesLoader, RecentBenchesLoader>();
 
         // Third-party services
         services.AddScoped<IFileSystem, FileSystem>(); // From TestableIO.System.IO.Abstractions.Wrappers NuGet.
