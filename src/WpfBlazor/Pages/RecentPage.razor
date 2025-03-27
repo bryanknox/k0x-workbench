@@ -17,12 +17,23 @@ else if (RecentBenches.Count == 0)
 }
 else
 {
-    <ul>
-        @foreach (var bench in RecentBenches)
-        {
-            <RecentBenchView RecentBench="bench" />
-        }
-    </ul>
-}
 
-<button class="btn btn-primary" @onclick="RefreshRecentBenches">Refresh</button>
+    <hr class="horizontal-separator" />
+
+    <div>
+        <span class="bench-path">
+            Recent Benches file: @(RecentBenchesFilePathProvider.GetFilePath() ?? "null")
+            <i class="bi bi-pencil action-icon" @onclick="EditRecentBenchesFile" title="Edit Recent Benches file"></i>
+            <i class="bi bi-arrow-repeat action-icon" @onclick="ReloadRecentBenches" title="Reload Recent Benches file"></i>
+        </span>
+    </div>
+
+    <div>
+        <ul>
+            @foreach (var bench in RecentBenches)
+            {
+                <RecentBenchView RecentBench="bench" />
+            }
+        </ul>
+    </div>
+}

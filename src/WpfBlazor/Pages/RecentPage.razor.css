@@ -1,0 +1,27 @@
+﻿.action-icon {
+    cursor: pointer;
+    margin-left: 2px;
+    color: blue;
+    position: relative;
+}
+
+.bench-path {
+    display: block;
+    font-size: smaller;
+    color: gray;
+}
+
+.btn-small {
+    padding: 2px 5px; /* Adjusted padding to make the outline tighter */
+    font-size: 0.875rem;
+}
+
+.container {
+    margin: 5px;
+}
+
+.horizontal-separator {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
