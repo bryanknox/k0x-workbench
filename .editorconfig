@@ -15,6 +15,12 @@ indent_style = space
 indent_size = 2
 tab_width = 2
 
+# YAML files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+tab_width = 2
+
 ################################################
 # C# files
 [*.cs]
