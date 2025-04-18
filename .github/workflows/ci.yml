@@ -24,13 +24,13 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: ✓ Check code format
-        run: |
-          dotnet format whitespace --verify-no-changes -v:diag --exclude ~/.nuget
-          dotnet format style --verify-no-changes -v:diag --exclude ~/.nuget
-
       - name: 🔄 Restore dependencies
         run: dotnet restore
+
+      - name: ✓ Check code format
+        run: |
+          dotnet format whitespace --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
+          dotnet format style --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
 
       - name: 🙏 Build solution
         run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
