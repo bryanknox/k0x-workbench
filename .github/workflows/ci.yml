@@ -38,11 +38,3 @@ jobs:
       - name: 🧪 Run tests
         run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build
 
-      - name: 📦 Publish application
-        run: dotnet publish --configuration ${{ env.CONFIGURATION }} --output ./publish --no-build
-
-      - name: ⬆️ Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: wpf-build
-          path: ./publish
