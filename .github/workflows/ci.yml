@@ -1,0 +1,40 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: ["*"]
+
+jobs:
+
+  build:
+    name: Build and Test
+
+    # WPF applications require Windows for builds.
+    runs-on: windows-latest
+
+    env:
+      CONFIGURATION: Release
+
+    steps:
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: 🔄 dotnet restore
+        run: dotnet restore
+
+      - name: ✓ dotnet format
+        run: |
+          dotnet format whitespace --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
+          dotnet format style --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
+
+      - name: 🙏 dotnet build
+        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+
+      - name: 🧪 dotnet test
+        run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build
+
