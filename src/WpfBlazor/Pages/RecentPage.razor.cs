@@ -71,7 +71,7 @@ public partial class RecentPage : ComponentBase
         NavigationManager.NavigateTo("/bench");
     }
 
-   private void OnEditRecentBenchesFileClick(MouseEventArgs e)
+    private void OnEditRecentBenchesFileClick(MouseEventArgs e)
     {
         string? recentBenchesFilePath = RecentBenchesFilePathProvider.GetFilePath();
         if (!string.IsNullOrEmpty(recentBenchesFilePath))

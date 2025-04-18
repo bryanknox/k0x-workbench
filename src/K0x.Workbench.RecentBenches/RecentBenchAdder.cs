@@ -33,7 +33,7 @@ public class RecentBenchAdder : IRecentBenchAdder
         string recentBenchesFilePath = _recentBenchesFilePathProvider.GetFilePath();
 
         List<RecentBench> recentBenches = await _recentBenchesFileLoader.LoadAsync(recentBenchesFilePath);
-                
+
         Upsert(recentBenches, benchFilePath, benchLabel);
 
         await _recentBenchesFileSaver.SaveAsync(recentBenches, recentBenchesFilePath);
@@ -42,7 +42,8 @@ public class RecentBenchAdder : IRecentBenchAdder
     private void Upsert(List<RecentBench> recentBenches, string benchFilePath, string benchLabel)
     {
         RecentBench? existingBench = recentBenches.FirstOrDefault(b => b.FilePath == benchFilePath);
-        if (existingBench != null) {
+        if (existingBench != null)
+        {
             recentBenches.Remove(existingBench);
         }
         recentBenches.Add(new RecentBench
