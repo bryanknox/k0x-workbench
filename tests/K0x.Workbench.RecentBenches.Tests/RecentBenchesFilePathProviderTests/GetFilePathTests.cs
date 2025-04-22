@@ -20,29 +20,9 @@ public class GetFilePathTests
     }
 
     [Fact]
-    public void Should_Return_Configured_FilePath()
+    public void Should_Return_FilePath()
     {
         // Arrange
-        _configurationMock.Setup(c => c[RecentBenchesConstants.FilePathSettingName])
-            .Returns("testPath");
-
-        // Act
-        var result = _provider.GetFilePath();
-
-        // Assert
-        result.Should().Be("testPath");
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")] // whitespace
-    public void Should_Return_Default_FilePath_When_Configured_FilePath_Is_Invalid(
-        string? configuredFilePath)
-    {
-        // Arrange
-        _configurationMock.Setup(c => c[RecentBenchesConstants.FilePathSettingName])
-            .Returns(configuredFilePath);
         _appExeFolderPathProviderMock.Setup(p => p.GetAppExeFolderPath())
             .Returns("defaultFolder");
 

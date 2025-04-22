@@ -19,13 +19,9 @@ public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 
     public string GetFilePath()
     {
-        string? filePath = _configuration[RecentBenchesConstants.FilePathSettingName];
+        string folderPath = _appExeFolderPathProvider.GetAppExeFolderPath();
+        string filePath = Path.Combine(folderPath, RecentBenchesConstants.DefaultFileName);
 
-        if (string.IsNullOrWhiteSpace(filePath))
-        {
-            string folderPath = _appExeFolderPathProvider.GetAppExeFolderPath();
-            filePath = Path.Combine(folderPath, RecentBenchesConstants.DefaultFileName);
-        }
         return filePath;
     }
 }
