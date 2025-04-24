@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\K0x.DataStorage.JsonFiles\K0x.DataStorage.JsonFiles.csproj" />
+    <ProjectReference Include="..\K0x.Workbench.Files.Abstractions\K0x.Workbench.Files.Abstractions.csproj" />
     <ProjectReference Include="..\K0x.Workbench.RecentBenches.Abstractions\K0x.Workbench.RecentBenches.Abstractions.csproj" />
   </ItemGroup>
 

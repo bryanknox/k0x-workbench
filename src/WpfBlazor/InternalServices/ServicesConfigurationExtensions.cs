@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using K0x.Workbench.Files.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WpfBlazor.InternalServices;
 
@@ -10,5 +11,10 @@ public static class ServicesConfigurationExtensions
         services.AddSingleton<AppTitleService>();
         services.AddSingleton<IAppTitleGetService>(s => s.GetRequiredService<AppTitleService>());
         services.AddSingleton<IAppTitleSetService>(s => s.GetRequiredService<AppTitleService>());
+    }
+
+    public static void AddLocalAppDataFolderPathProvider(this IServiceCollection services)
+    {
+        services.AddScoped<ILocalAppDataFolderPathProvider, LocalAppDataFolderPathProvider>();
     }
 }
