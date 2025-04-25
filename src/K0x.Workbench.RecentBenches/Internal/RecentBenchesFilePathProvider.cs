@@ -1,31 +1,25 @@
-﻿using K0x.Workbench.RecentBenches.Abstractions;
+﻿using K0x.Workbench.Files.Abstractions;
+using K0x.Workbench.RecentBenches.Abstractions;
 using Microsoft.Extensions.Configuration;
 
 namespace K0x.Workbench.RecentBenches.Internal;
 
 public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 {
-    private readonly IConfiguration _configuration;
-    private readonly IAppExeFolderPathProvider _appExeFolderPathProvider;
+    private readonly ILocalAppDataFolderPathProvider _folderPathProvider;
 
     public RecentBenchesFilePathProvider(
-        IAppExeFolderPathProvider appExeFolderPathProvider,
-        IConfiguration configuration
+        ILocalAppDataFolderPathProvider recentBenchesFolderPathProvider
     )
     {
-        _appExeFolderPathProvider = appExeFolderPathProvider;
-        _configuration = configuration;
+        _folderPathProvider = recentBenchesFolderPathProvider;
     }
 
     public string GetFilePath()
     {
-        string? filePath = _configuration[RecentBenchesConstants.FilePathSettingName];
+        string folderPath = _folderPathProvider.GetLocalAppDataFolderPath();
+        string filePath = Path.Combine(folderPath, RecentBenchesConstants.DefaultFileName);
 
-        if (string.IsNullOrWhiteSpace(filePath))
-        {
-            string folderPath = _appExeFolderPathProvider.GetAppExeFolderPath();
-            filePath = Path.Combine(folderPath, RecentBenchesConstants.DefaultFileName);
-        }
         return filePath;
     }
 }

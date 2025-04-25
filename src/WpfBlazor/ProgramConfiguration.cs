@@ -25,6 +25,8 @@ internal static class ProgramConfiguration
 
             services.AddAppTitleService();
 
+            services.AddLocalAppDataFolderPathProvider();
+
             services.AddRecentBenchesJsonFiles();
 
             services.AddWpfBlazorWebView();

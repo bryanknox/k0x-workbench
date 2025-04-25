@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.RecentBenches
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.RecentBenches.Tests", "tests\K0x.Workbench.RecentBenches.Tests\K0x.Workbench.RecentBenches.Tests.csproj", "{F852CD56-9FB0-44C0-A314-D2CA81FDE461}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K0x.Workbench.Files.Abstractions", "src\K0x.Workbench.Files.Abstractions\K0x.Workbench.Files.Abstractions.csproj", "{26E4B133-CC19-49D8-B4A3-03796B35B987}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F852CD56-9FB0-44C0-A314-D2CA81FDE461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26E4B133-CC19-49D8-B4A3-03796B35B987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E4B133-CC19-49D8-B4A3-03796B35B987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E4B133-CC19-49D8-B4A3-03796B35B987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E4B133-CC19-49D8-B4A3-03796B35B987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{70F71401-65F7-45A0-B430-ABED88FB4D2F} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 		{9ABD6CE6-6351-4122-BE1C-0F7FF6724D19} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 		{F852CD56-9FB0-44C0-A314-D2CA81FDE461} = {61700B53-9C37-4B60-A52D-33E51FD89B8F}
+		{26E4B133-CC19-49D8-B4A3-03796B35B987} = {78580EF7-A758-4CE3-858B-FB98318E1CAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B3FD197-BB31-4CE1-BD11-17B5A691F56A}

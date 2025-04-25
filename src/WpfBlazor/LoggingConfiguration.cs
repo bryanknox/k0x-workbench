@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.IO;
+using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
@@ -24,8 +25,11 @@ internal static class LoggingConfiguration
 
     private static void Configure(IConfiguration configuration)
     {
+        string localAppDataFolderPath = new LocalAppDataFolderPathProvider()
+            .GetLocalAppDataFolderPath();
+
         string logDirectoryPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
+            localAppDataFolderPath,
             "logs");
         Directory.CreateDirectory(logDirectoryPath);
 
