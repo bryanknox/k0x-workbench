@@ -8,12 +8,12 @@
 
   <Identity
     Name="d3d49e2c-d59e-4156-8ccc-2ee30b269adb"
-    Publisher="CN=bryan"
+    Publisher="CN=Bryan Knox, OU=me, O=Knoxbits, L=Long Beach, S=CA, C=US"
     Version="1.0.0.0" />
 
   <Properties>
     <DisplayName>WpfBlazor.Packaging</DisplayName>
-    <PublisherDisplayName>bryan</PublisherDisplayName>
+    <PublisherDisplayName>Bryan Knox</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
