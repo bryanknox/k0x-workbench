@@ -7,18 +7,17 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="d3d49e2c-d59e-4156-8ccc-2ee30b269adb"
+    Name="com.knoxbits.k0xworkbench-269adb"
     Publisher="CN=Bryan Knox, OU=me, O=Knoxbits, L=Long Beach, S=CA, C=US"
-    Version="1.0.0.0" />
+    Version="1.0.1.0" />
 
   <Properties>
-    <DisplayName>WpfBlazor.Packaging</DisplayName>
+    <DisplayName>K0x Workbench</DisplayName>
     <PublisherDisplayName>Bryan Knox</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
     <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14393.0" MaxVersionTested="10.0.14393.0" />
   </Dependencies>
 
@@ -31,8 +30,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="WpfBlazor.Packaging"
-        Description="WpfBlazor.Packaging"
+        DisplayName="K0x Workbench"
+        Description="Fast access to tools and kits"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
