@@ -44,3 +44,14 @@ suitable for development and testing MSIX application packages.
     ```
     RemoveImportedCert.ps1
     ```
+
+## Limitations of Self-signed certificates
+> <sup>From: https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#create-a-self-signed-certificate</sup><br>
+**Note:** When you create and use a self-signed certificate only users who install and trust your certificate can run your application. This is easy to implement for testing but it may prevent additional users from installing your application. When you are ready to publish your application we recommend that you use a certificate issued by a trusted source. This system of centralized trust helps to ensure that the application ecosystem has levels of verification to protect users from malicious actors.
+
+## Security Considerations
+
+> <sup>From: https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#security-considerations</sup><br>
+> By adding a certificate to local machine certificate stores, you affect the certificate trust of all users on the computer. It is recommended that you remove those certificates when they are no longer necessary to prevent them from being used to compromise system trust.
+>
+
