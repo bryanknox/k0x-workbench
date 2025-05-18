@@ -7,6 +7,7 @@ on:
     paths:
       - 'src/**'
       - 'tests/**'
+      - '.github/workflows/ci.yml'
 
 # Ensure that only one run per branch (github.ref) and workflow.
 # Cancel any previous runs that are still in progress for the same group.
