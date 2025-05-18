@@ -3,7 +3,7 @@
 namespace WpfBlazor;
 
 /// <summary>
-/// Interaction logic for App.xaml
+/// Interaction logic (code-behind) for App.xaml
 /// </summary>
 public partial class App : Application
 {

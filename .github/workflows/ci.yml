@@ -1,21 +1,32 @@
 name: ci
+
 on:
-  pull_request:
+  workflow_dispatch:
   push:
     branches: ["*"]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/ci.yml'
+
+# Ensure that only one run per branch (github.ref) and workflow.
+# Cancel any previous runs that are still in progress for the same group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CONFIGURATION: Release
 
 jobs:
 
-  build:
+  build_and_test:
     name: Build and Test
 
-    # WPF applications require Windows for builds.
     runs-on: windows-latest
 
-    env:
-      CONFIGURATION: Release
-
     steps:
+
       - name: 🤘 Checkout repository
         uses: actions/checkout@v3
 
@@ -24,17 +35,48 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      # We remove the MSIX packaging project from the solution
+      # so that CI is focused on building and testing the apps,
+      # libraries, and tests projects.
+      # This will not affect building and publishing the
+      # MSIX packaging project which we do in separate workflows.
+      - name: Remove MSIX packaging project from solution for testing libraries
+        shell: pwsh
+        run: |
+          dotnet sln remove `
+            "Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj"
+
       - name: 🔄 dotnet restore
-        run: dotnet restore
+        shell: pwsh
+        run: |
+          dotnet restore
 
       - name: ✓ dotnet format
+        shell: pwsh
         run: |
-          dotnet format whitespace --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
-          dotnet format style --verify-no-changes --no-restore -v:diag --exclude ~/.nuget
+          Write-Host "✓ Formatting whitespace"
+          dotnet format whitespace `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
+          Write-Host "✓ Formatting Code Style"
+          dotnet format style `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
 
       - name: 🙏 dotnet build
-        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+        shell: pwsh
+        run: |
+          dotnet build `
+            --configuration $env:CONFIGURATION `
+            --no-restore
 
       - name: 🧪 dotnet test
-        run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build
-
+        shell: pwsh
+        run: |
+          dotnet test `
+            --configuration $env:CONFIGURATION `
+            --no-build
