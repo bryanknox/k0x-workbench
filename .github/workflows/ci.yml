@@ -32,50 +32,48 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: 🔄 dotnet restore (WpfBlazor only)
+      # We remove the MSIX packaging project from the solution
+      # so that CI is focused on building and testing the apps,
+      # libraries, and tests projects.
+      # This will not affect building and publishing the
+      # MSIX packaging project which we do in separate workflows.
+      - name: Remove MAUI app project from solution for testing libraries
         shell: pwsh
         run: |
-          dotnet restore `
-            src/WpfBlazor/WpfBlazor.csproj
+          dotnet sln remove `
+            "Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj"
 
-      - name: 🙏 dotnet build (WpfBlazor only)
+
+      - name: 🔄 dotnet restore
+        shell: pwsh
+        run: |
+          dotnet restore
+
+      - name: ✓ dotnet format
+        run: |
+          Write-Host "✓ Formatting whitespace"
+          dotnet format whitespace `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
+          Write-Host "✓ Formatting Style"
+          dotnet format style `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
+
+      - name: 🙏 dotnet build
         shell: pwsh
         run: |
           dotnet build `
-            src/WpfBlazor/WpfBlazor.csproj `
             --configuration $env:CONFIGURATION `
             --no-restore
 
-      - name: 🔄 dotnet restore (each .csproj in tests)
+      - name: 🧪 dotnet test
         shell: pwsh
         run: |
-          Get-ChildItem -Path tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              Write-Host "🔄 Restoring $($_.FullName)"
-              dotnet restore `
-                $_.FullName
-            }
-
-      - name: 🙏 dotnet build (each .csproj in tests)
-        shell: pwsh
-        run: |
-          Get-ChildItem -Path tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              Write-Host "🙏 Building $($_.FullName)"
-              dotnet build `
-                $_.FullName `
-                --configuration $env:CONFIGURATION `
-                --no-restore
-            }
-
-      - name: 🧪 dotnet test (each .csproj in tests)
-        shell: pwsh
-        run: |
-          Get-ChildItem -Path tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              Write-Host "🧪 Running tests for $($_.FullName)"
-              dotnet test `
-                $_.FullName `
-                --configuration $env:CONFIGURATION `
-                --no-build
-            }
+          dotnet test `
+            --configuration $env:CONFIGURATION `
+            --no-build
