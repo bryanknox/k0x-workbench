@@ -6,6 +6,7 @@ words:
   - appsettings
   - buildtransitive
   - contentfiles
+  - pwsh
   - xunit
 ignoreWords: []
 import: []
