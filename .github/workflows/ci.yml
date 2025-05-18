@@ -49,7 +49,6 @@ jobs:
           dotnet sln remove `
             "Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj"
 
-
       - name: 🔄 dotnet restore
         shell: pwsh
         run: |

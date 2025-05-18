@@ -12,7 +12,7 @@ public partial class App : Application
     // for dependency injection.
     public IServiceProvider ServiceProvider { get; }
 
-//make build fail.    public App(IServiceProvider serviceProvider)
+    public App(IServiceProvider serviceProvider)
     {
         ServiceProvider = serviceProvider;
     }
