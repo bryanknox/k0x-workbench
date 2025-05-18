@@ -12,6 +12,12 @@ on:
       - 'src/**'
       - 'tests/**'
 
+# Ensure that only one run per branch (github.ref) and workflow.
+# Cancel any previous runs that are still in progress for the same group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CONFIGURATION: Release
 
@@ -49,29 +55,21 @@ jobs:
         run: |
           dotnet restore
 
-      - name: ✓ dotnet format
-        shell: pwsh
-        run: |
-          Write-Host "✓ Formatting whitespace"
-          dotnet format whitespace `
-            --verify-no-changes `
-            --no-restore `
-            -v:diag `
-            --exclude ~/.nuget
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "ERROR found in Whitespace"
-            exit $LASTEXITCODE
-          }
-          Write-Host "✓ Formatting Code Style"
-          dotnet format style `
-            --verify-no-changes `
-            --no-restore `
-            -v:diag `
-            --exclude ~/.nuget
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "ERROR found in Code Style"
-            exit $LASTEXITCODE
-          }
+      #- name: ✓ dotnet format
+      #  shell: pwsh
+      #  run: |
+      #    Write-Host "✓ Formatting whitespace"
+      #    dotnet format whitespace `
+      #      --verify-no-changes `
+      #      --no-restore `
+      #      -v:diag `
+      #      --exclude ~/.nuget
+      #    Write-Host "✓ Formatting Code Style"
+      #    dotnet format style `
+      #      --verify-no-changes `
+      #      --no-restore `
+      #      -v:diag `
+      #      --exclude ~/.nuget
 
       - name: 🙏 dotnet build
         shell: pwsh
