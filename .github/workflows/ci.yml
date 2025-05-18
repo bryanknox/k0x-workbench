@@ -43,7 +43,7 @@ jobs:
       # libraries, and tests projects.
       # This will not affect building and publishing the
       # MSIX packaging project which we do in separate workflows.
-      - name: Remove MAUI app project from solution for testing libraries
+      - name: Remove MSIX packaging project from solution for testing libraries
         shell: pwsh
         run: |
           dotnet sln remove `
@@ -55,21 +55,21 @@ jobs:
         run: |
           dotnet restore
 
-      #- name: ✓ dotnet format
-      #  shell: pwsh
-      #  run: |
-      #    Write-Host "✓ Formatting whitespace"
-      #    dotnet format whitespace `
-      #      --verify-no-changes `
-      #      --no-restore `
-      #      -v:diag `
-      #      --exclude ~/.nuget
-      #    Write-Host "✓ Formatting Code Style"
-      #    dotnet format style `
-      #      --verify-no-changes `
-      #      --no-restore `
-      #      -v:diag `
-      #      --exclude ~/.nuget
+      - name: ✓ dotnet format
+        shell: pwsh
+        run: |
+          Write-Host "✓ Formatting whitespace"
+          dotnet format whitespace `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
+          Write-Host "✓ Formatting Code Style"
+          dotnet format style `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag `
+            --exclude ~/.nuget
 
       - name: 🙏 dotnet build
         shell: pwsh
