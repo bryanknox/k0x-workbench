@@ -36,7 +36,7 @@ jobs:
         run: |
           Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet restore \
+              dotnet restore `
                 $_.FullName
             }
 
@@ -45,20 +45,20 @@ jobs:
         run: |
           Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet format whitespace \
-                --verify-no-changes \
-                --no-restore \
-                -v:diag \
-                --exclude ~/.nuget \
+              dotnet format whitespace `
+                --verify-no-changes `
+                --no-restore `
+                -v:diag `
+                --exclude ~/.nuget `
                 $_.FullName
             }
           Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet format style \
-                --verify-no-changes \
-                --no-restore \
-                -v:diag \
-                --exclude ~/.nuget \
+              dotnet format style `
+                --verify-no-changes `
+                --no-restore `
+                -v:diag `
+                --exclude ~/.nuget `
                 $_.FullName
             }
 
@@ -67,9 +67,9 @@ jobs:
         run: |
           Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet build \
-                $_.FullName \
-                --configuration $env:CONFIGURATION \
+              dotnet build `
+                $_.FullName `
+                --configuration $env:CONFIGURATION `
                 --no-restore
             }
 
@@ -78,9 +78,9 @@ jobs:
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet test \
-                $_.FullName \
-                --configuration $env:CONFIGURATION \
+              dotnet test `
+                $_.FullName `
+                --configuration $env:CONFIGURATION `
                 --no-build
             }
 
