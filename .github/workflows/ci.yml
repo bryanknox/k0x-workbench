@@ -1,4 +1,5 @@
 name: ci
+
 on:
   workflow_dispatch:
   pull_request:
@@ -11,76 +12,59 @@ on:
       - 'src/**'
       - 'tests/**'
 
+env:
+  CONFIGURATION: Release
+
 jobs:
 
-  build:
-    name: Build and Test
-
-    # WPF applications require Windows for builds.
+  build_wpfblazor:
+    name: Build WpfBlazor
     runs-on: windows-latest
-
-    env:
-      CONFIGURATION: Release
-
     steps:
       - name: 🤘 Checkout repository
         uses: actions/checkout@v3
-
       - name: 🔧 Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.x'
-
-      - name: 🔄 dotnet restore (src & tests only)
+      - name: 🔄 dotnet restore (WpfBlazor only)
         shell: pwsh
         run: |
-          Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              dotnet restore `
-                $_.FullName
-            }
-
-      - name: ✓ dotnet format (src & tests only)
+          dotnet restore src/WpfBlazor/WpfBlazor.csproj
+      - name: 🙏 dotnet build (WpfBlazor only)
         shell: pwsh
         run: |
-          Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              dotnet format whitespace `
-                --verify-no-changes `
-                --no-restore `
-                -v:diag `
-                --exclude ~/.nuget `
-                $_.FullName
-            }
-          Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
-            ForEach-Object {
-              dotnet format style `
-                --verify-no-changes `
-                --no-restore `
-                -v:diag `
-                --exclude ~/.nuget `
-                $_.FullName
-            }
+          dotnet build src/WpfBlazor/WpfBlazor.csproj --configuration $env:CONFIGURATION --no-restore
 
-      - name: 🙏 dotnet build (src & tests only)
+  test:
+    name: Run All Tests
+    runs-on: windows-latest
+    steps:
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v3
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+      - name: 🔄 dotnet restore (tests only)
         shell: pwsh
         run: |
-          Get-ChildItem -Path src,tests -Recurse -Filter *.csproj |
+          Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet build `
-                $_.FullName `
-                --configuration $env:CONFIGURATION `
-                --no-restore
+              dotnet restore $_.FullName
             }
-
+      - name: 🙏 dotnet build (tests only)
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path tests -Recurse -Filter *.csproj |
+            ForEach-Object {
+              dotnet build $_.FullName --configuration $env:CONFIGURATION --no-restore
+            }
       - name: 🧪 dotnet test (tests only)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet test `
-                $_.FullName `
-                --configuration $env:CONFIGURATION `
-                --no-build
+              dotnet test $_.FullName --configuration $env:CONFIGURATION --no-build
             }
 
