@@ -51,7 +51,7 @@ jobs:
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              Write-Host "`n🔄 Restoring $($_.FullName)`n"
+              Write-Host "🔄 Restoring $($_.FullName)"
               dotnet restore `
                 $_.FullName
             }
@@ -61,7 +61,7 @@ jobs:
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              Write-Host "`n🙏 Building $($_.FullName)`n"
+              Write-Host "🙏 Building $($_.FullName)"
               dotnet build `
                 $_.FullName `
                 --configuration $env:CONFIGURATION `
@@ -73,7 +73,7 @@ jobs:
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              Write-Host "`n🧪 Running tests for $($_.FullName)`n"
+              Write-Host "🧪 Running tests for $($_.FullName)"
               dotnet test `
                 $_.FullName `
                 --configuration $env:CONFIGURATION `
