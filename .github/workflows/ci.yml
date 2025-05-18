@@ -30,11 +30,15 @@ jobs:
       - name: 🔄 dotnet restore (WpfBlazor only)
         shell: pwsh
         run: |
-          dotnet restore src/WpfBlazor/WpfBlazor.csproj
+          dotnet restore `
+            src/WpfBlazor/WpfBlazor.csproj
       - name: 🙏 dotnet build (WpfBlazor only)
         shell: pwsh
         run: |
-          dotnet build src/WpfBlazor/WpfBlazor.csproj --configuration $env:CONFIGURATION --no-restore
+          dotnet build `
+            src/WpfBlazor/WpfBlazor.csproj `
+            --configuration $env:CONFIGURATION `
+            --no-restore
 
   test:
     name: Run All Tests
@@ -51,20 +55,27 @@ jobs:
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet restore $_.FullName
+              dotnet restore `
+                $_.FullName
             }
       - name: 🙏 dotnet build (tests only)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet build $_.FullName --configuration $env:CONFIGURATION --no-restore
+              dotnet build `
+                $_.FullName `
+                --configuration $env:CONFIGURATION `
+                --no-restore
             }
       - name: 🧪 dotnet test (tests only)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
-              dotnet test $_.FullName --configuration $env:CONFIGURATION --no-build
+              dotnet test `
+                $_.FullName `
+                --configuration $env:CONFIGURATION `
+                --no-build
             }
 
