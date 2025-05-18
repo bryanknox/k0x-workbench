@@ -17,21 +17,27 @@ env:
 
 jobs:
 
-  build_wpfblazor:
-    name: Build WpfBlazor
+  build_and_test:
+    name: Build and Test
+
     runs-on: windows-latest
+
     steps:
+
       - name: 🤘 Checkout repository
         uses: actions/checkout@v3
+
       - name: 🔧 Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.x'
+
       - name: 🔄 dotnet restore (WpfBlazor only)
         shell: pwsh
         run: |
           dotnet restore `
             src/WpfBlazor/WpfBlazor.csproj
+
       - name: 🙏 dotnet build (WpfBlazor only)
         shell: pwsh
         run: |
@@ -40,42 +46,36 @@ jobs:
             --configuration $env:CONFIGURATION `
             --no-restore
 
-  test:
-    name: Run All Tests
-    runs-on: windows-latest
-    steps:
-      - name: 🤘 Checkout repository
-        uses: actions/checkout@v3
-      - name: 🔧 Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '9.0.x'
-      - name: 🔄 dotnet restore (tests only)
+      - name: 🔄 dotnet restore (each .csproj in tests)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
+              Write-Host "`n🔄 Restoring $($_.FullName)`n"
               dotnet restore `
                 $_.FullName
             }
-      - name: 🙏 dotnet build (tests only)
+
+      - name: 🙏 dotnet build (each .csproj in tests)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
+              Write-Host "`n🙏 Building $($_.FullName)`n"
               dotnet build `
                 $_.FullName `
                 --configuration $env:CONFIGURATION `
                 --no-restore
             }
-      - name: 🧪 dotnet test (tests only)
+
+      - name: 🧪 dotnet test (each .csproj in tests)
         shell: pwsh
         run: |
           Get-ChildItem -Path tests -Recurse -Filter *.csproj |
             ForEach-Object {
+              Write-Host "`n🧪 Running tests for $($_.FullName)`n"
               dotnet test `
                 $_.FullName `
                 --configuration $env:CONFIGURATION `
                 --no-build
             }
-
