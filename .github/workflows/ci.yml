@@ -58,14 +58,12 @@ jobs:
           dotnet format whitespace `
             --verify-no-changes `
             --no-restore `
-            -v:diag `
-            --exclude ~/.nuget
+            -v:diag
           Write-Host "✓ Formatting Code Style"
           dotnet format style `
             --verify-no-changes `
             --no-restore `
-            -v:diag `
-            --exclude ~/.nuget
+            -v:diag
 
       - name: 🙏 dotnet build
         shell: pwsh
