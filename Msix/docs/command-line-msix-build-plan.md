@@ -2,6 +2,22 @@
 
 This document outlines a detailed plan for building MSIX installers for the K0x Workbench WPF desktop application using command line tools instead of Visual Studio.
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Prerequisites](#prerequisites)
+3. [Build Approach Options](#build-approach-options)
+4. [Phase 1: Certificate Management](#phase-1-certificate-management)
+5. [Phase 2: Build the Application](#phase-2-build-the-application)
+6. [Phase 3: Manual Package Creation](#phase-3-manual-package-creation)
+7. [Phase 4: Automated Build Using WAP Project](#phase-4-automated-build-using-wap-project)
+8. [Phase 5: Complete Automation Script](#phase-5-complete-automation-script)
+9. [Phase 6: Testing and Deployment](#phase-6-testing-and-deployment)
+10. [Phase 7: CI/CD Integration](#phase-7-ci-cd-integration)
+11. [Troubleshooting](#troubleshooting)
+12. [Best Practices](#best-practices)
+13. [References](#references)
+
 ## Project Overview
 
 - **Main Project**: `src\WpfBlazor\WpfBlazor.csproj` (Full-trust WPF desktop app)
@@ -9,6 +25,107 @@ This document outlines a detailed plan for building MSIX installers for the K0x 
 - **Packaging Project**: `Msix\WpfBlazor.Packaging\WpfBlazor.Packaging.wapproj`
 - **Certificate**: Self-signed certificate for code signing
 - **Output**: MSIX packages ready for distribution
+
+## Build Approach Options
+
+This document presents **three distinct approaches** for building MSIX packages. Choose the approach that best fits your needs:
+
+### 🔄 Decision Point: Choose Your Build Strategy
+
+**When to decide**: Before starting Phase 3, you must choose between the three approaches below.
+
+| Approach | Complexity | Control Level | Automation | Best For |
+|----------|------------|---------------|------------|----------|
+| **Manual Package Creation** (Phase 3) | High | Maximum | Low | Learning, debugging, custom scenarios |
+| **WAP Project Build** (Phase 4) | Low | Medium | Medium | Standard workflows, existing VS setup |
+| **Complete Automation** (Phase 5) | Medium | High | Maximum | CI/CD, production builds |
+
+### 📋 Approach 1: Manual Package Creation (Phase 3)
+
+**Process**: Manually create package layout → Update manifest → Use MakeAppx.exe → Sign with SignTool.exe
+
+**✅ Advantages:**
+- **Maximum control** over every step of the packaging process
+- **Perfect for learning** how MSIX packaging works under the hood
+- **Excellent for debugging** packaging issues
+- **Customizable** - can modify any aspect of the process
+- **No dependency** on Visual Studio tools or WAP projects
+
+**❌ Disadvantages:**
+- **Time-consuming** and error-prone for regular builds
+- **Manual token replacement** required in manifest
+- **More complex** setup and maintenance
+- **Requires deep understanding** of MSIX internals
+- **Not suitable** for automated CI/CD pipelines
+
+**Use this approach when:**
+- Learning MSIX packaging concepts
+- Debugging packaging issues
+- Need custom packaging logic
+- Working without Visual Studio ecosystem
+
+### 📋 Approach 2: WAP Project Build (Phase 4)
+
+**Process**: Use MSBuild with existing WAP project → Automatic packaging → Built-in signing
+
+**✅ Advantages:**
+- **Leverages existing setup** (WAP project already configured)
+- **Automatic token replacement** in manifest
+- **Integrated signing** process
+- **Battle-tested** by Microsoft tooling
+- **Good balance** of control and automation
+- **Familiar** to Visual Studio users
+
+**❌ Disadvantages:**
+- **Less control** over individual packaging steps
+- **Dependency** on WAP project configuration
+- **Limited customization** without modifying project files
+- **Requires understanding** of MSBuild properties
+- **May inherit issues** from WAP project setup
+
+**Use this approach when:**
+- You have an existing WAP project (✅ you do!)
+- Want reliable, standard packaging
+- Need moderate automation
+- Working within Visual Studio ecosystem
+
+### 📋 Approach 3: Complete Automation (Phase 5)
+
+**Process**: PowerShell script → Build app → Create package → Sign → Validate
+
+**✅ Advantages:**
+- **Fully automated** end-to-end process
+- **Perfect for CI/CD** pipelines
+- **Consistent builds** every time
+- **Parameterized** for different configurations
+- **Error handling** and validation built-in
+- **Production-ready** with logging and status reporting
+
+**❌ Disadvantages:**
+- **Initial setup complexity** for the automation script
+- **Requires PowerShell knowledge** for modifications
+- **Less flexibility** for one-off customizations
+- **Debugging** requires script knowledge
+- **Dependency** on script maintenance
+
+**Use this approach when:**
+- Setting up CI/CD pipelines
+- Need consistent, repeatable builds
+- Want minimal manual intervention
+- Building for production environments
+
+### 🎯 Recommended Decision Matrix
+
+| Your Scenario | Recommended Approach | Reason |
+|---------------|---------------------|--------|
+| **First-time MSIX packaging** | Manual (Phase 3) | Learn the fundamentals |
+| **Existing VS/WAP workflow** | WAP Project (Phase 4) | Leverage existing setup |
+| **Production CI/CD** | Automation (Phase 5) | Reliability and consistency |
+| **Debugging packaging issues** | Manual (Phase 3) | Maximum visibility |
+| **Regular development builds** | WAP Project (Phase 4) | Good balance |
+| **Enterprise deployment** | Automation (Phase 5) | Scalability and control |
+
+> **💡 Pro Tip**: You can implement multiple approaches! Start with Manual for learning, use WAP for development, and Automation for production.
 
 ## Prerequisites
 
@@ -103,6 +220,14 @@ dotnet publish "src\WpfBlazor\WpfBlazor.csproj" `
 
 ## Phase 3: Manual Package Creation
 
+> **📌 Build Approach**: This is **Approach 1** - Manual Package Creation
+>
+> **Best for**: Learning MSIX internals, debugging, maximum control
+>
+> **Complexity**: High | **Control**: Maximum | **Automation**: Low
+>
+> **Alternative**: Skip to [Phase 4](#phase-4-automated-build-using-wap-project) for WAP project approach or [Phase 5](#phase-5-complete-automation-script) for full automation
+
 ### 3.1 Create Package Layout Directory
 ```powershell
 # Create temporary package layout directory
@@ -158,6 +283,14 @@ Move-Item $outputMsix $signedMsix
 
 ## Phase 4: Automated Build Using WAP Project
 
+> **📌 Build Approach**: This is **Approach 2** - WAP Project Build
+>
+> **Best for**: Standard workflows, leveraging existing Visual Studio setup
+>
+> **Complexity**: Low | **Control**: Medium | **Automation**: Medium
+>
+> **Recommended**: This approach leverages your existing `WpfBlazor.Packaging.wapproj` configuration
+
 ### 4.1 Build WAP Project Directly
 ```powershell
 # Navigate to WAP project directory
@@ -186,6 +319,14 @@ msbuild WpfBlazor.Packaging.wapproj `
 ```
 
 ## Phase 5: Complete Automation Script
+
+> **📌 Build Approach**: This is **Approach 3** - Complete Automation
+>
+> **Best for**: CI/CD pipelines, production builds, consistent automation
+>
+> **Complexity**: Medium | **Control**: High | **Automation**: Maximum
+>
+> **Production Ready**: Includes error handling, logging, and validation
 
 ### 5.1 Comprehensive Build Script
 Create `Msix\BuildMsixInstaller.ps1`:
@@ -302,6 +443,18 @@ if ([string]::IsNullOrWhiteSpace($CertPassword)) {
 & "c:\_BkGit\bryanknox\k0x-workbench\Msix\BuildMsixInstaller.ps1" -Configuration Debug -CertPassword $CertPassword
 ```
 
+### 🎯 Build Approach Summary
+
+At this point, you should have chosen and implemented one of the three build approaches:
+
+| ✅ Completed Approach | What You Should Have | Next Steps |
+|----------------------|---------------------|------------|
+| **Manual Package Creation** | Signed MSIX file in `_InstallerIgnore\` | Proceed to [Phase 6](#phase-6-testing-and-deployment) |
+| **WAP Project Build** | MSIX/Bundle in `Msix\WpfBlazor.Packaging\AppPackages\` | Proceed to [Phase 6](#phase-6-testing-and-deployment) |
+| **Complete Automation** | `BuildMsixInstaller.ps1` and `QuickBuild.ps1` scripts | Test scripts, then [Phase 7](#phase-7-ci-cd-integration) |
+
+> **💡 Remember**: You can implement multiple approaches for different scenarios (development vs. production)
+
 ## Phase 6: Testing and Deployment
 
 ### 6.1 Install Package for Testing
@@ -327,6 +480,11 @@ $extractPath = "temp-package-extract"
 ## Phase 7: CI/CD Integration
 
 ### 7.1 GitHub Actions Example
+
+> **📌 CI/CD Approach**: This example uses **Approach 3** (Complete Automation)
+>
+> For other approaches, modify the "Build MSIX" step accordingly
+
 ```yaml
 name: Build MSIX
 
@@ -347,12 +505,20 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
-    - name: Build MSIX
+    - name: Build MSIX (Automation Approach)
       run: |
         $securePassword = ConvertTo-SecureString "${{ secrets.CERT_PASSWORD }}" -AsPlainText -Force
         $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword))
         .\Msix\BuildMsixInstaller.ps1 -CertPassword $password
       shell: pwsh
+
+    # Alternative: WAP Project Approach
+    # - name: Build MSIX (WAP Project Approach)
+    #   run: |
+    #     $securePassword = ConvertTo-SecureString "${{ secrets.CERT_PASSWORD }}" -AsPlainText -Force
+    #     $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword))
+    #     msbuild "Msix\WpfBlazor.Packaging\WpfBlazor.Packaging.wapproj" /p:Configuration=Release /p:Platform=x64 /p:PackageCertificatePassword=$password
+    #   shell: pwsh
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
