@@ -11,7 +11,7 @@ on:
       create_bundle:
         description: 'Create MSIX bundle'
         required: false
-        default: 'true'
+        default: true
         type: boolean
       configuration:
         description: 'Build configuration'
@@ -33,7 +33,7 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
           --configuration "$env:BUILD_CONFIGURATION" `
           --no-restore `
           --verbosity minimal
-        
+
         if ($LASTEXITCODE -ne 0) {
           Write-Error "Failed to build WPF application"
           exit $LASTEXITCODE
@@ -97,7 +97,7 @@ jobs:
     - name: Build MSIX package
       run: |
         Write-Host "Building MSIX package..." -ForegroundColor Green
-        
+
         # Determine bundle creation setting
         $createBundle = $env:CREATE_BUNDLE -eq 'true'
         if ($createBundle) {
@@ -133,7 +133,7 @@ jobs:
     - name: Verify build outputs
       run: |
         Write-Host "Verifying build outputs..." -ForegroundColor Green
-        
+
         $outputDir = "Msix/WpfBlazor.Packaging/AppPackages"
         if (-not (Test-Path $outputDir)) {
           Write-Error "Output directory not found: $outputDir"
@@ -161,7 +161,7 @@ jobs:
           TotalSize = [math]::Round(($packages | Measure-Object -Property Length -Sum).Sum / 1MB, 2)
           Files = $packages | ForEach-Object { $_.Name }
         }
-        
+
         $packageInfo | ConvertTo-Json | Out-File -FilePath "package-info.json"
         Write-Host "Package verification completed successfully" -ForegroundColor Green
       shell: pwsh
@@ -200,16 +200,16 @@ jobs:
           Msix/WpfBlazor.Packaging/AppPackages/**/*.cer
         body: |
           ## K0x Workbench ${{ github.ref_name }}
-          
+
           ### Installation Instructions
           1. Download and install the certificate (.cer file) to "Trusted People" store
           2. Install the MSIX package (.msix or .msixbundle file)
-          
+
           ### Package Details
           - Configuration: ${{ env.BUILD_CONFIGURATION }}
           - Platform: ${{ env.BUILD_PLATFORM }}
           - Bundle: ${{ github.event.inputs.create_bundle || 'true' }}
-          
+
           ### Files in this release
           - Certificate for testing (install first)
           - MSIX package/bundle (main installer)
@@ -222,7 +222,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-    
+
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v4
@@ -239,13 +239,13 @@ jobs:
     - name: Validate MSIX package
       run: |
         Write-Host "Validating MSIX package..." -ForegroundColor Green
-        
+
         # Find the Windows SDK tools
         $sdkPaths = @(
           "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.0.22621.0\x64",
           "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.0.26100.0\x64"
         )
-        
+
         $makeAppxPath = $null
         foreach ($path in $sdkPaths) {
           $candidate = "$path\makeappx.exe"
@@ -254,19 +254,19 @@ jobs:
             break
           }
         }
-        
+
         if (-not $makeAppxPath) {
           Write-Warning "MakeAppx.exe not found, skipping package validation"
           return
         }
-        
+
         # Find MSIX packages
         $packages = Get-ChildItem -Path "packages" -Recurse -Include "*.msix", "*.msixbundle"
-        
+
         foreach ($package in $packages) {
           Write-Host "Validating: $($package.Name)" -ForegroundColor Yellow
           & $makeAppxPath verify /p $package.FullName
-          
+
           if ($LASTEXITCODE -eq 0) {
             Write-Host "✓ $($package.Name) is valid" -ForegroundColor Green
           } else {
@@ -278,16 +278,16 @@ jobs:
     - name: Test package installation (dry run)
       run: |
         Write-Host "Testing package installation (dry run)..." -ForegroundColor Green
-        
+
         # Find certificate and package
         $certFile = Get-ChildItem -Path "cert" -Recurse -Include "*.cer" | Select-Object -First 1
         $packageFile = Get-ChildItem -Path "packages" -Recurse -Include "*.msix", "*.msixbundle" | Select-Object -First 1
-        
+
         if ($certFile -and $packageFile) {
           Write-Host "Would install certificate: $($certFile.Name)" -ForegroundColor Yellow
           Write-Host "Would install package: $($packageFile.Name)" -ForegroundColor Yellow
           Write-Host "Package size: $([math]::Round($packageFile.Length / 1MB, 2)) MB" -ForegroundColor Cyan
-          
+
           # Note: We don't actually install on CI to avoid interfering with the runner
           Write-Host "✓ Installation test completed (dry run)" -ForegroundColor Green
         } else {
