@@ -36,10 +36,11 @@ The workflow file is located at `.github/workflows/msix-build.yml` and follows *
 
 ### 🚀 Automatic Triggers
 
-- **Push to main/develop branches**: Builds packages automatically
-- **Pull requests to main**: Builds and validates packages
-- **Git tags (v*)**: Creates GitHub releases with packages
 - **Manual dispatch**: Allows manual runs with custom options
+- **Not implemented**:
+  - **Push to main/develop branches**: Builds packages automatically
+  - **Pull requests to main**: Builds and validates packages
+  - **Git tags (v*)**: Creates GitHub releases with packages
 
 ### ⚙️ Configurable Options
 
