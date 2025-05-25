@@ -9,11 +9,11 @@ This document outlines a detailed plan for building MSIX installers for the K0x 
 3. [Build Approach Options](#build-approach-options)
 4. [Phase 1: Certificate Management](#phase-1-certificate-management)
 5. [Phase 2: Build the Application](#phase-2-build-the-application)
-6. [Phase 3: Manual Package Creation](#phase-3-manual-package-creation)
-7. [Phase 4: Automated Build Using WAP Project](#phase-4-automated-build-using-wap-project)
-8. [Phase 5: Complete Automation Script](#phase-5-complete-automation-script)
+6. [Phase 3: Manual Package Creation (option)](#phase-3-manual-package-creation-option)
+7. [Phase 4: Automated Build Using WAP Project (option)](#phase-4-automated-build-using-wap-project-option)
+8. [Phase 5: Complete Automation Script (option)](#phase-5-complete-automation-script-option)
 9. [Phase 6: Testing and Deployment](#phase-6-testing-and-deployment)
-10. [Phase 7: CI/CD Integration](#phase-7-ci-cd-integration)
+10. [Phase 7: CI-CD Integration](#phase-7-ci-cd-integration)
 11. [Troubleshooting](#troubleshooting)
 12. [Best Practices](#best-practices)
 13. [References](#references)
@@ -218,7 +218,7 @@ dotnet publish "src\WpfBlazor\WpfBlazor.csproj" `
     /p:PublishReadyToRun=true
 ```
 
-## Phase 3: Manual Package Creation
+## Phase 3: Manual Package Creation (option)
 
 > **📌 Build Approach**: This is **Approach 1** - Manual Package Creation
 >
@@ -281,7 +281,7 @@ $signedMsix = "c:\_BkGit\bryanknox\k0x-workbench\_InstallerIgnore\K0xWorkbench_1
 Move-Item $outputMsix $signedMsix
 ```
 
-## Phase 4: Automated Build Using WAP Project
+## Phase 4: Automated Build Using WAP Project (option)
 
 > **📌 Build Approach**: This is **Approach 2** - WAP Project Build
 >
@@ -318,7 +318,7 @@ msbuild WpfBlazor.Packaging.wapproj `
     /p:PackageCertificatePassword="YourSecurePassword"
 ```
 
-## Phase 5: Complete Automation Script
+## Phase 5: Complete Automation Script (option)
 
 > **📌 Build Approach**: This is **Approach 3** - Complete Automation
 >
@@ -477,7 +477,7 @@ $extractPath = "temp-package-extract"
 & "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.0.22621.0\x64\makeappx.exe" unpack /p $packagePath /d $extractPath /nv
 ```
 
-## Phase 7: CI/CD Integration
+## Phase 7: CI-CD Integration
 
 ### 7.1 GitHub Actions Example
 
