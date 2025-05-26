@@ -30,7 +30,17 @@ suitable for development and testing MSIX application packages.
     ExportMyCertToPfx.ps1
     ```
 
-3. Import the PFX file into the Local Machine Trusted People store.
+3. (Optional) Set the PFX file as a GitHub secret for use in CI/CD workflows.
+
+    This step is only necessary if the PFX content needs to be stored as a GitHub Secret for use by GitHub workflows.
+
+    ```
+    SetPfxInGitHubSecret.ps1
+    ```
+
+    > This script uses the GitHub CLI to set a repository secret containing the base64 encoded contents of the PFX file. This is useful for storing code signing certificates in GitHub Actions workflows.
+
+4. (Optional) Import the PFX file into the Local Machine Trusted People store.
 
    This step is only necessary if creating the MSIX app package via
    Visual Studio.
