@@ -1,11 +1,11 @@
 name: Build MSIX Package
 
 on:
-  # push:
-  #   branches: [ main, develop ]
-  #   tags: [ 'v*' ]
-  # pull_request:
-  #   branches: [ main ]
+  push:
+    branches: [ main, msix-release-workflow ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       create_bundle:
