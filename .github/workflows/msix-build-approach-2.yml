@@ -45,11 +45,6 @@ jobs:
       with:
         dotnet-version: '9.0.x'
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
-      with:
-        msbuild-architecture: x64
-
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -129,6 +124,16 @@ jobs:
         Write-Host "WPF application built successfully" -ForegroundColor Green
       shell: pwsh
 
+    - name: Restore MSIX packaging project
+      run: |
+        Write-Host "Restoring packages for MSIX packaging project..." -ForegroundColor Green
+        dotnet restore "$env:WAP_PROJECT" --verbosity minimal
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to restore NuGet packages for MSIX packaging project"
+          exit $LASTEXITCODE
+        }
+      shell: pwsh
+
     - name: Build MSIX package
       run: |
         Write-Host "Building MSIX package..." -ForegroundColor Green
@@ -143,19 +148,20 @@ jobs:
           $bundleMode = "Never"
         }
 
-        # Build the packaging project
-        msbuild "$env:WAP_PROJECT" `
-          /p:Configuration="$env:BUILD_CONFIGURATION" `
-          /p:Platform="$env:BUILD_PLATFORM" `
-          /p:RuntimeIdentifier=win-x64 `
-          /p:AppxBundle=$bundleMode `
-          /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" `
-          /p:UapAppxPackageBuildMode=CI `
-          /p:AppxPackageSigningEnabled=true `
-          /p:PackageCertificateKeyFile="$env:CERT_PATH" `
-          /p:PackageCertificatePassword="${{ secrets.CERT_PASSWORD }}" `
-          /p:AppxPackageSigningTimestampDigestAlgorithm=SHA256 `
-          /verbosity:minimal
+        # Build the packaging project using dotnet build instead of msbuild
+        dotnet build "$env:WAP_PROJECT" `
+          --configuration "$env:BUILD_CONFIGURATION" `
+          --runtime win-x64 `
+          --no-restore `
+          --verbosity minimal `
+          -p:Platform="$env:BUILD_PLATFORM" `
+          -p:AppxBundle=$bundleMode `
+          -p:AppxBundlePlatforms="$env:BUILD_PLATFORM" `
+          -p:UapAppxPackageBuildMode=CI `
+          -p:AppxPackageSigningEnabled=true `
+          -p:PackageCertificateKeyFile="$env:CERT_PATH" `
+          -p:PackageCertificatePassword="${{ secrets.CERT_PASSWORD }}" `
+          -p:AppxPackageSigningTimestampDigestAlgorithm=SHA256
 
         if ($LASTEXITCODE -ne 0) {
           Write-Error "Failed to build MSIX package"
@@ -267,6 +273,10 @@ jobs:
     runs-on: windows-latest
     needs: build
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    env:
+      BUILD_CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
+      BUILD_PLATFORM: 'x64'
 
     steps:
     - name: Download artifacts
