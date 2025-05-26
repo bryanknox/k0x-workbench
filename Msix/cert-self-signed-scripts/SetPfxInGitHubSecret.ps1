@@ -16,7 +16,7 @@ param (
     [Parameter(Mandatory = $true)]
     [string]$pfxFilePath,
 
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $false)]
     [string]$secretName = "CERT_PFX_CONTENT",
 
     [Parameter(Mandatory = $false)]
