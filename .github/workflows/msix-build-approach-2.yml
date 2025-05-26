@@ -26,7 +26,7 @@ env:
   SOLUTION_FILE: 'k0x-workbench.sln'
   WPF_PROJECT: 'src/WpfBlazor/WpfBlazor.csproj'
   WAP_PROJECT: 'Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj'
-  CERT_PATH: '_CertIgnore/K0xWorkbenchMsixSelfSigning.pfx'
+  CERT_PATH: '${{ github.workspace }}/temp-cert.pfx'
   BUILD_CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
   BUILD_PLATFORM: 'x64'
 
@@ -58,15 +58,41 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    - name: Verify certificate exists
+    - name: Create certificate file from secret
       run: |
-        if (-not (Test-Path "$env:CERT_PATH")) {
-          Write-Error "Certificate not found at: $env:CERT_PATH"
-          Write-Host "This workflow requires the self-signed certificate to be present in the repository."
-          Write-Host "Run the certificate creation scripts in Msix/cert-self-signed-scripts/ locally first."
+        Write-Host "Creating certificate file from GitHub secret..." -ForegroundColor Green
+        if (-not "$env:CERT_PFX_CONTENT") {
+          Write-Error "CERT_PFX_CONTENT secret is not set"
+          Write-Host "Please add the base64-encoded PFX certificate content to GitHub secrets as CERT_PFX_CONTENT"
           exit 1
         }
-        Write-Host "Certificate found at: $env:CERT_PATH"
+
+        try {
+          $bytes = [System.Convert]::FromBase64String("$env:CERT_PFX_CONTENT")
+          [System.IO.File]::WriteAllBytes("$env:CERT_PATH", $bytes)
+          Write-Host "Certificate file created successfully at: $env:CERT_PATH" -ForegroundColor Green
+        }
+        catch {
+          Write-Error "Failed to create certificate file: $($_.Exception.Message)"
+          Write-Host "Please ensure CERT_PFX_CONTENT contains valid base64-encoded PFX data"
+          exit 1
+        }
+      shell: pwsh
+      env:
+        CERT_PFX_CONTENT: ${{ secrets.CERT_PFX_CONTENT }}
+
+    - name: Verify certificate file
+      run: |
+        if (-not (Test-Path "$env:CERT_PATH")) {
+          Write-Error "Certificate file was not created at: $env:CERT_PATH"
+          exit 1
+        }
+
+        $certInfo = Get-Item "$env:CERT_PATH"
+        Write-Host "Certificate file verified:" -ForegroundColor Green
+        Write-Host "  Path: $($certInfo.FullName)" -ForegroundColor White
+        Write-Host "  Size: $([math]::Round($certInfo.Length / 1KB, 2)) KB" -ForegroundColor White
+        Write-Host "  Created: $($certInfo.CreationTime)" -ForegroundColor White
       shell: pwsh
 
     - name: Restore NuGet packages
@@ -217,6 +243,15 @@ jobs:
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Cleanup certificate file
+      if: always()
+      run: |
+        if (Test-Path "$env:CERT_PATH") {
+          Remove-Item "$env:CERT_PATH" -Force
+          Write-Host "Certificate file cleaned up" -ForegroundColor Green
+        }
+      shell: pwsh
 
   test:
     runs-on: windows-latest
