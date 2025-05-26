@@ -65,6 +65,12 @@ jobs:
           exit 1
         }
 
+        if (-not "$env:CERT_PASSWORD") {
+          Write-Error "CERT_PASSWORD secret is not set"
+          Write-Host "Please add the certificate password to GitHub secrets as CERT_PASSWORD"
+          exit 1
+        }
+
         try {
           $bytes = [System.Convert]::FromBase64String("$env:CERT_PFX_CONTENT")
           [System.IO.File]::WriteAllBytes("$env:CERT_PATH", $bytes)
@@ -78,6 +84,7 @@ jobs:
       shell: pwsh
       env:
         CERT_PFX_CONTENT: ${{ secrets.CERT_PFX_CONTENT }}
+        CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
 
     - name: Verify certificate file
       run: |
