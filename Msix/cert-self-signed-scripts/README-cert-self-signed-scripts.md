@@ -32,6 +32,9 @@ suitable for development and testing MSIX application packages.
 
 3. Import the PFX file into the Local Machine Trusted People store.
 
+   This step is only necessary if creating the MSIX app package via
+   Visual Studio.
+
     ```
     ImportPfxFileToLocalMachineTrustedPeopleStore.ps1
     ```
@@ -45,7 +48,14 @@ suitable for development and testing MSIX application packages.
     RemoveImportedCert.ps1
     ```
 
+   > SECURITY: Remove the imported certificate from the
+   *Local Machine Trusted People store* after building the MSIX
+   with Visual Studio, and add it back again before the next build?
+   See the *Security Considerations* section below.
+
+
 ## Limitations of Self-signed certificates
+
 > <sup>From: https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#create-a-self-signed-certificate</sup><br>
 **Note:** When you create and use a self-signed certificate only users who install and trust your certificate can run your application. This is easy to implement for testing but it may prevent additional users from installing your application. When you are ready to publish your application we recommend that you use a certificate issued by a trusted source. This system of centralized trust helps to ensure that the application ecosystem has levels of verification to protect users from malicious actors.
 
@@ -53,5 +63,5 @@ suitable for development and testing MSIX application packages.
 
 > <sup>From: https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#security-considerations</sup><br>
 > By adding a certificate to local machine certificate stores, you affect the certificate trust of all users on the computer. It is recommended that you remove those certificates when they are no longer necessary to prevent them from being used to compromise system trust.
->
 
+When you add a certificate to the local machine certificate store, it becomes trusted by all users on that computer. This means that any application or process running on the machine can use that certificate for authentication, encryption, or other security-related functions.
