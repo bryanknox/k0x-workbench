@@ -9,6 +9,7 @@
     <Description>A workbench for developers</Description>
     <ApplicationIcon>K0x.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />

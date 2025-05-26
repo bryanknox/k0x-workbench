@@ -103,6 +103,14 @@ jobs:
           Write-Error "Failed to restore NuGet packages"
           exit $LASTEXITCODE
         }
+
+        # Restore packages for the specific runtime identifier needed by MSIX packaging
+        Write-Host "Restoring packages for WPF project with runtime identifier..." -ForegroundColor Green
+        dotnet restore "$env:WPF_PROJECT" --runtime win-x64 --verbosity minimal
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to restore NuGet packages for win-x64 runtime"
+          exit $LASTEXITCODE
+        }
       shell: pwsh
 
     - name: Build WPF application
@@ -110,6 +118,7 @@ jobs:
         Write-Host "Building WPF application..." -ForegroundColor Green
         dotnet build "$env:WPF_PROJECT" `
           --configuration "$env:BUILD_CONFIGURATION" `
+          --runtime win-x64 `
           --no-restore `
           --verbosity minimal
 
@@ -138,6 +147,7 @@ jobs:
         msbuild "$env:WAP_PROJECT" `
           /p:Configuration="$env:BUILD_CONFIGURATION" `
           /p:Platform="$env:BUILD_PLATFORM" `
+          /p:RuntimeIdentifier=win-x64 `
           /p:AppxBundle=$bundleMode `
           /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" `
           /p:UapAppxPackageBuildMode=CI `
