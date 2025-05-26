@@ -103,6 +103,8 @@ jobs:
     - name: Restore NuGet packages
       run: |
         Write-Host "Restoring NuGet packages..." -ForegroundColor Green
+
+        # First restore without runtime identifier for all projects
         dotnet restore "$env:SOLUTION_FILE" --verbosity minimal
         if ($LASTEXITCODE -ne 0) {
           Write-Error "Failed to restore NuGet packages"
@@ -110,8 +112,9 @@ jobs:
         }
 
         # Restore packages for the specific runtime identifier needed by MSIX packaging
-        Write-Host "Restoring packages for WPF project with runtime identifier..." -ForegroundColor Green
-        dotnet restore "$env:WPF_PROJECT" --runtime win-x64 --verbosity minimal
+        # This needs to be done for the entire solution to ensure all dependencies are available
+        Write-Host "Restoring packages for entire solution with runtime identifier..." -ForegroundColor Green
+        dotnet restore "$env:SOLUTION_FILE" --runtime win-x64 --verbosity minimal
         if ($LASTEXITCODE -ne 0) {
           Write-Error "Failed to restore NuGet packages for win-x64 runtime"
           exit $LASTEXITCODE
