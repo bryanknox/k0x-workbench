@@ -152,7 +152,7 @@ jobs:
         Write-Host "Building MSIX package..." -ForegroundColor Green
 
         # Determine bundle creation setting
-        $createBundle = $env:CREATE_BUNDLE -eq 'true'
+        $createBundle = $env:CREATE_BUNDLE -eq true
         if ($createBundle) {
           Write-Host "Creating MSIX bundle..." -ForegroundColor Yellow
           $bundleMode = "Always"
