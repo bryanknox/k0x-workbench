@@ -11,7 +11,7 @@ on:
       create_bundle:
         description: 'Create MSIX bundle'
         required: false
-        default: true
+        default: false
         type: boolean
       configuration:
         description: 'Build configuration'
