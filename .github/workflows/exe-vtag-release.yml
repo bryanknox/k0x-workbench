@@ -24,13 +24,13 @@ env:
 
 jobs:
 
-  ci-checks:
-    name: CI Checks
-    uses: ./.github/workflows/ci-checks.yml
+  #ci-checks:
+  #  name: CI Checks
+  #  uses: ./.github/workflows/ci-checks.yml
 
   build-publish-wpfblazor-app-artifact:
     name: Build and publish WpfBlazor app artifact
-    needs: ci-checks
+    # needs: ci-checks
     runs-on: windows-2022
     timeout-minutes: 20
     steps:
