@@ -56,7 +56,7 @@ jobs:
             --output ${{ runner.temp }}/artifact-output `
             --verbosity minimal
 
-      - name: 🔒 Generate checksums
+      - name: 🔒 Generate internal checksums (for files inside zip)
         shell: pwsh
         run: |
           $artifactPath = "${{ runner.temp }}/artifact-output"
@@ -64,14 +64,39 @@ jobs:
             $hash = Get-FileHash -Path $_.FullName -Algorithm SHA256
             "$($hash.Hash)  $($_.Name)" | Out-File -FilePath "$artifactPath/checksums.txt" -Append -Encoding UTF8
           }
-          Write-Host "Generated checksums:"
+          Write-Host "Generated internal checksums (included in zip):"
           Get-Content "$artifactPath/checksums.txt"
 
-      - name: Upload WpfBlazor app to Artifacts
+      - name: 📦 Create zip archive of WpfBlazor app
+        shell: pwsh
+        run: |
+          $artifactPath = "${{ runner.temp }}/artifact-output"
+          $zipPath = "${{ runner.temp }}/k0x-workbench-app.zip"
+          Compress-Archive -Path "$artifactPath\*" -DestinationPath $zipPath -Force
+          Write-Host "Created zip archive: $zipPath"
+
+      - name: 🔒 Generate external checksums (for zip file)
+        shell: pwsh
+        run: |
+          $zipPath = "${{ runner.temp }}/k0x-workbench-app.zip"
+          $externalChecksumsPath = "${{ runner.temp }}/checksums.txt"
+          $hash = Get-FileHash -Path $zipPath -Algorithm SHA256
+          "$($hash.Hash)  $(Split-Path $zipPath -Leaf)" | Out-File -FilePath $externalChecksumsPath -Encoding UTF8
+          Write-Host "Generated external checksums (for zip file):"
+          Get-Content $externalChecksumsPath
+
+      - name: 📤 Upload WpfBlazor app zip to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}
-          path: ${{ runner.temp }}/artifact-output/*
+          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}-zip
+          path: ${{ runner.temp }}/k0x-workbench-app.zip
+          retention-days: 7
+
+      - name: 📤 Upload checksums to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: ${{ runner.temp }}/checksums.txt
           retention-days: 7
 
   draft-release-wpfblazor-app:
@@ -91,11 +116,26 @@ jobs:
           persist-credentials: false
           fetch-depth: 0  # Needed for generating release notes
 
-      - name: download artifacts
+      - name: 📥 Download zip artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}
+          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}-zip
           path: ${{ runner.temp }}/dist
+
+      - name: 📥 Download checksums artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: checksums
+          path: ${{ runner.temp }}/dist
+
+      - name: 🔍 Extract AssemblyName from WpfBlazor project file
+        id: extract_exe_name
+        shell: bash
+        run: |
+          # Read AssemblyName from the project file
+          ASSEMBLY_NAME=$(grep -oP '<AssemblyName>\K[^<]+' ${{ env.WPFBLAZOR_CSPROJ_PATH }})
+          echo "wpfblazor_exe_name=$ASSEMBLY_NAME" >> $GITHUB_OUTPUT
+          echo "Extracted WpfBlazor exe name: $ASSEMBLY_NAME"
 
       - name: 📝 Generate release notes
         id: release_notes
@@ -105,6 +145,9 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+          # Get the executable name from the extracted AssemblyName
+          EXE_NAME="${{ steps.extract_exe_name.outputs.wpfblazor_exe_name }}.exe"
+
           # Create release notes
           cat > release_notes.md << EOF
           ## K0x Workbench v$VERSION
@@ -113,13 +156,21 @@ jobs:
           This release includes the latest features and improvements for K0x Workbench.
 
           ### Download
-          - **Windows (x64)**: Download the executable from the assets below
-          - **Checksums**: SHA256 checksums are included for verification
+          - **Windows (x64)**: Download the zip file from the assets below
+          - **Checksums**: Two levels of SHA256 checksums are provided for security:
+            - **checksums.txt**: Contains the checksum for the zip file itself
+            - **Internal checksums**: The zip file contains a checksums.txt with hashes for all individual files
+
+          ### Verification
+          1. Download both the zip file and checksums.txt
+          2. Verify the zip file integrity: \`Get-FileHash k0x-workbench-app.zip -Algorithm SHA256\`
+          3. Compare with the hash in checksums.txt
+          4. After extraction, verify individual files using the checksums.txt inside the zip
 
           ### Installation
-          1. Download the appropriate executable for your platform
-          2. Verify the checksum (optional but recommended)
-          3. Run the application
+          1. Download and verify the zip file (see Verification above)
+          2. Extract the zip file to your desired location
+          3. Run $EXE_NAME to start the application
 
           ### System Requirements
           - Windows 10 version 1809 or later
@@ -128,7 +179,7 @@ jobs:
 
           echo "Generated release notes"
 
-      - name: create draft release
+      - name: 🚀 Create draft release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
