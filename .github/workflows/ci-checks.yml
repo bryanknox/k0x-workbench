@@ -66,7 +66,7 @@ jobs:
       # libraries, and tests projects.
       # This will not affect building and publishing the
       # MSIX packaging project which we do in separate workflows.
-      - name: Remove MSIX packaging project from solution for testing libraries
+      - name: ✂️ Remove MSIX packaging project from solution for testing libraries
         shell: pwsh
         run: |
           dotnet sln remove `
