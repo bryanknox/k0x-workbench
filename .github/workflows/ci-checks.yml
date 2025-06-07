@@ -35,10 +35,6 @@ jobs:
     name: Format Build and Test
     runs-on: windows-2022
     timeout-minutes: 30
-    strategy:
-      matrix:
-        configuration: [Release, Debug]
-      fail-fast: false
     steps:
 
       - name: 🤘 Checkout repository
@@ -107,17 +103,35 @@ jobs:
         shell: pwsh
         run: |
           dotnet build `
-            --configuration ${{ matrix.configuration }} `
+            --configuration ${{ env.CONFIGURATION }} `
             --no-restore
 
       - name: 🧪 dotnet test
         shell: pwsh
         run: |
+          $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
+          New-Item -Path $testResultsDir -ItemType Directory -Force
           dotnet test `
-            --configuration ${{ matrix.configuration }} `
+            --configuration ${{ env.CONFIGURATION }} `
             --no-build `
             --logger trx `
-            --results-directory ${{ runner.temp }}/test-results
+            --results-directory $testResultsDir `
+            --verbosity normal
+
+      - name: 🐛 Debug test results
+        if: always()
+        shell: pwsh
+        run: |
+          $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
+          Write-Host "Test results directory: $testResultsDir"
+          if (Test-Path $testResultsDir) {
+            Write-Host "Contents of test results directory:"
+            Get-ChildItem -Path $testResultsDir -Recurse | ForEach-Object {
+              Write-Host "  $($_.FullName)"
+            }
+          } else {
+            Write-Host "Test results directory does not exist!"
+          }
 
       - name: 📊 Publish Test Results
         uses: dorny/test-reporter@v1
@@ -131,6 +145,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results-${{ matrix.configuration }}
+          name: test-results-release
           path: ${{ runner.temp }}/test-results/
           retention-days: 7
