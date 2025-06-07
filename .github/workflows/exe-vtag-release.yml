@@ -8,6 +8,8 @@ on:
 
 # Security: Restrict default permissions
 permissions:
+  actions: read    # Required for ci-checks workflow
+  checks: write    # Required for ci-checks workflow
   contents: read
 
 env:
