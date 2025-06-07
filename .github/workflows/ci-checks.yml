@@ -21,6 +21,8 @@ concurrency:
 # Security: Restrict default permissions
 permissions:
   contents: read
+  actions: read
+  checks: write
 
 env:
   CONFIGURATION: Release
@@ -107,6 +109,7 @@ jobs:
             --no-restore
 
       - name: 🧪 dotnet test
+        id: dotnet-test
         shell: pwsh
         run: |
           $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
@@ -119,7 +122,7 @@ jobs:
             --verbosity normal
 
       - name: 🐛 Debug test results
-        if: always()
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
         shell: pwsh
         run: |
           $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
@@ -134,17 +137,18 @@ jobs:
           }
 
       - name: 📊 Publish Test Results
-        uses: dorny/test-reporter@v1
-        if: always()
+        uses: dorny/test-reporter@v2
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: .NET Tests
           path: ${{ runner.temp }}\test-results\*.trx
+          path-replace-backslashes: 'true'
           reporter: dotnet-trx
 
       - name: 📈 Upload test results as artifacts
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: test-results-release
-          path: ${{ runner.temp }}\test-results\
+          path: ${{ runner.temp }}/test-results/
           retention-days: 7
