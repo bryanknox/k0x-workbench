@@ -138,7 +138,7 @@ jobs:
         if: always()
         with:
           name: .NET Tests
-          path: ${{ runner.temp }}/test-results/*.trx
+          path: ${{ runner.temp }}\test-results\*.trx
           reporter: dotnet-trx
 
       - name: 📈 Upload test results as artifacts
@@ -146,5 +146,5 @@ jobs:
         if: always()
         with:
           name: test-results-release
-          path: ${{ runner.temp }}/test-results/
+          path: ${{ runner.temp }}\test-results\
           retention-days: 7
