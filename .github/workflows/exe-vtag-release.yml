@@ -71,14 +71,14 @@ jobs:
         shell: pwsh
         run: |
           $artifactPath = "${{ runner.temp }}/artifact-output"
-          $zipPath = "${{ runner.temp }}/k0x-workbench-app.zip"
+          $zipPath = "${{ runner.temp }}/${{ env.WPFBLAZOR_ARTIFACT_NAME }}.zip"
           Compress-Archive -Path "$artifactPath\*" -DestinationPath $zipPath -Force
           Write-Host "Created zip archive: $zipPath"
 
       - name: 🔒 Generate external checksums (for zip file)
         shell: pwsh
         run: |
-          $zipPath = "${{ runner.temp }}/k0x-workbench-app.zip"
+          $zipPath = "${{ runner.temp }}/${{ env.WPFBLAZOR_ARTIFACT_NAME }}.zip"
           $externalChecksumsPath = "${{ runner.temp }}/checksums.txt"
           $hash = Get-FileHash -Path $zipPath -Algorithm SHA256
           "$($hash.Hash)  $(Split-Path $zipPath -Leaf)" | Out-File -FilePath $externalChecksumsPath -Encoding UTF8
@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}-zip
-          path: ${{ runner.temp }}/k0x-workbench-app.zip
+          path: ${{ runner.temp }}/${{ env.WPFBLAZOR_ARTIFACT_NAME }}.zip
           retention-days: 7
 
       - name: 📤 Upload checksums to Artifacts
@@ -145,6 +145,7 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+          ARTIFACT_ZIP_NAME="${{ env.WPFBLAZOR_ARTIFACT_NAME }}.zip"
           # Get the executable name from the extracted AssemblyName
           EXE_NAME="${{ steps.extract_exe_name.outputs.wpfblazor_exe_name }}.exe"
 
@@ -163,7 +164,7 @@ jobs:
 
           ### Verification
           1. Download both the zip file and checksums.txt
-          2. Verify the zip file integrity: \`Get-FileHash k0x-workbench-app.zip -Algorithm SHA256\`
+          2. Verify the zip file integrity: \`Get-FileHash $ARTIFACT_ZIP_NAME -Algorithm SHA256\`
           3. Compare with the hash in checksums.txt
           4. After extraction, verify individual files using the checksums.txt inside the zip
 
