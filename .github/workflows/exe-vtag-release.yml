@@ -4,6 +4,7 @@ on:
   workflow_dispatch: # Manual trigger.
   push:
     tags: ["v*"]
+    branches: ["i28-exe-release-workflow"] # Temporary: for testing
 
 # Security: Restrict default permissions
 permissions:
@@ -100,28 +101,28 @@ jobs:
           # Extract version from tag
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          
+
           # Create release notes
           cat > release_notes.md << EOF
           ## K0x Workbench v$VERSION
-          
+
           ### What's New
           This release includes the latest features and improvements for K0x Workbench.
-          
+
           ### Download
           - **Windows (x64)**: Download the executable from the assets below
           - **Checksums**: SHA256 checksums are included for verification
-          
+
           ### Installation
           1. Download the appropriate executable for your platform
           2. Verify the checksum (optional but recommended)
           3. Run the application
-          
+
           ### System Requirements
           - Windows 10 version 1809 or later
           - .NET 9.0 Runtime (included in self-contained build)
           EOF
-          
+
           echo "Generated release notes"
 
       - name: create draft release
