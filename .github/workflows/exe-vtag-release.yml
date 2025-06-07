@@ -1,0 +1,137 @@
+name: exe-vtag-release
+
+on:
+  workflow_dispatch: # Manual trigger.
+  push:
+    tags: ["v*"]
+
+# Security: Restrict default permissions
+permissions:
+  contents: read
+
+env:
+  CONFIGURATION: Release
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  WPFBLAZOR_ARTIFACT_NAME: k0x-workbench-app
+  WPFBLAZOR_CSPROJ_PATH: src/WpfBlazor/WpfBlazor.csproj
+  DOTNET_VERSION: '9.0.x'
+  TARGET_RUNTIME: win-x64
+
+jobs:
+
+  ci-checks:
+    name: CI Checks
+    uses: ./.github/workflows/ci-checks.yml
+
+  build-publish-wpfblazor-app-artifact:
+    name: Build and publish WpfBlazor app artifact
+    needs: ci-checks
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+
+      - name: 📦 dotnet publish WpfBlazor app artifacts
+        shell: pwsh
+        run: |
+          dotnet publish `
+            $env:WPFBLAZOR_CSPROJ_PATH `
+            --configuration $env:CONFIGURATION `
+            --self-contained `
+            --runtime $env:TARGET_RUNTIME `
+            --output ${{ runner.temp }}/artifact-output `
+            --verbosity minimal
+
+      - name: 🔒 Generate checksums
+        shell: pwsh
+        run: |
+          $artifactPath = "${{ runner.temp }}/artifact-output"
+          Get-ChildItem -Path $artifactPath -File -Recurse | ForEach-Object {
+            $hash = Get-FileHash -Path $_.FullName -Algorithm SHA256
+            "$($hash.Hash)  $($_.Name)" | Out-File -FilePath "$artifactPath/checksums.txt" -Append -Encoding UTF8
+          }
+          Write-Host "Generated checksums:"
+          Get-Content "$artifactPath/checksums.txt"
+
+      - name: Upload WpfBlazor app to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}
+          path: ${{ runner.temp }}/artifact-output/*
+          retention-days: 7
+
+  draft-release-wpfblazor-app:
+    runs-on: ubuntu-latest
+    needs: build-publish-wpfblazor-app-artifact
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0  # Needed for generating release notes
+
+      - name: download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.WPFBLAZOR_ARTIFACT_NAME }}
+          path: ${{ runner.temp }}/dist
+
+      - name: 📝 Generate release notes
+        id: release_notes
+        shell: bash
+        run: |
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Create release notes
+          cat > release_notes.md << EOF
+          ## K0x Workbench v$VERSION
+          
+          ### What's New
+          This release includes the latest features and improvements for K0x Workbench.
+          
+          ### Download
+          - **Windows (x64)**: Download the executable from the assets below
+          - **Checksums**: SHA256 checksums are included for verification
+          
+          ### Installation
+          1. Download the appropriate executable for your platform
+          2. Verify the checksum (optional but recommended)
+          3. Run the application
+          
+          ### System Requirements
+          - Windows 10 version 1809 or later
+          - .NET 9.0 Runtime (included in self-contained build)
+          EOF
+          
+          echo "Generated release notes"
+
+      - name: create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          name: K0x Workbench v${{ steps.release_notes.outputs.version }}
+          tag_name: ${{ github.ref_name }}
+          body_path: release_notes.md
+          files: |
+            ${{ runner.temp }}/dist/*
