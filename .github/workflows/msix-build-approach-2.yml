@@ -1,5 +1,8 @@
 name: Build MSIX Package
 
+
+# Disabled in GitHub UI - this workflow is disabled
+
 on:
   push:
     branches: [ main, msix-release-workflow ]
