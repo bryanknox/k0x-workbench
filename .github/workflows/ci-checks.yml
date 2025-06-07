@@ -141,7 +141,7 @@ jobs:
         if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: .NET Tests
-          path: ${{ runner.temp }}\test-results\*.trx
+          path: ${{ runner.temp }}/test-results/*.trx
           path-replace-backslashes: 'true'
           reporter: dotnet-trx
 
