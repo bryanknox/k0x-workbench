@@ -5,25 +5,5 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>enable</WarningsAsErrors>
-
-    <!-- Version properties applied to all projects -->
-
-    <!-- Keep the the major.minor.patch semver parts of all
-         three version numbers in sync.
-         Always leave the build/revision part of the AssemblyVersion set to 0.
-         Update the build/revision part of the FileVersion for each build-->
-
-    <!-- Package version for NuGet packaging and semantic versioning.
-         (major.minor.patch) -->
-    <Version>1.0.0</Version>
-    <!-- Assembly version for .NET runtime
-        Changing this breaks binary compatibility.
-        Don't change the build/revision part of the AssemblyVersion.
-        (major.minor.patch.0) -->
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <!-- File version displayed in Windows File Properties.
-         Can be changed without breaking compatibility.
-         major.minor.patch.build) -->
-    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 </Project>

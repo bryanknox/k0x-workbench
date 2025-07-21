@@ -6,7 +6,7 @@ on:
   workflow_call: # Reusable workflow.
   workflow_dispatch: # Manual trigger.
   push:
-    branches: ["*"]
+    branches: ["**"]
     paths:
       - 'src/**'
       - 'tests/**'
