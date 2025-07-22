@@ -61,17 +61,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-dotnet-
 
-      # We remove the MSIX packaging project from the solution
-      # so that CI is focused on building and testing the apps,
-      # libraries, and tests projects.
-      # This will not affect building and publishing the
-      # MSIX packaging project which we do in separate workflows.
-      - name: ✂️ Remove MSIX packaging project from solution for testing libraries
-        shell: pwsh
-        run: |
-          dotnet sln remove `
-            "Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj"
-
       - name: 🔄 dotnet restore
         shell: pwsh
         run: |
