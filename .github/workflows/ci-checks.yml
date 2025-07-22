@@ -1,0 +1,143 @@
+# CI checks and tests of code changes.
+# Does not retain any build artifacts.
+name: ci-checks
+
+on:
+  workflow_call: # Reusable workflow.
+  workflow_dispatch: # Manual trigger.
+  push:
+    branches: ["**"]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/ci-checks.yml'
+
+# Ensure that only one run per branch (github.ref) and workflow.
+# Cancel any previous runs that are still in progress for the same group.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Security: Restrict default permissions
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+env:
+  CONFIGURATION: Release
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+
+  format-build-and-test:
+    name: Format Build and Test
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Only checkout the specific commit to improve security
+          persist-credentials: false
+
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 📦 Cache build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            */bin
+            */obj
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln', '**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-dotnet-
+
+      - name: 🔄 dotnet restore
+        shell: pwsh
+        run: |
+          dotnet restore
+
+      - name: ✓ dotnet format whitespace
+        shell: pwsh
+        run: |
+          dotnet format whitespace `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag
+
+      - name: ✓ dotnet format style
+        shell: pwsh
+        run: |
+          dotnet format style `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag
+
+      - name: ✓ dotnet format analyzers
+        shell: pwsh
+        run: |
+          dotnet format analyzers  `
+            --verify-no-changes `
+            --no-restore `
+            -v:diag
+
+      - name: 🙏 dotnet build
+        shell: pwsh
+        run: |
+          dotnet build `
+            --configuration ${{ env.CONFIGURATION }} `
+            --no-restore
+
+      - name: 🧪 dotnet test
+        id: dotnet-test
+        shell: pwsh
+        run: |
+          $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
+          New-Item -Path $testResultsDir -ItemType Directory -Force
+          dotnet test `
+            --configuration ${{ env.CONFIGURATION }} `
+            --no-build `
+            --logger trx `
+            --results-directory $testResultsDir `
+            --verbosity normal
+
+      - name: 🐛 Debug test results
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
+        shell: pwsh
+        run: |
+          $testResultsDir = Join-Path $env:RUNNER_TEMP "test-results"
+          Write-Host "Test results directory: $testResultsDir"
+          if (Test-Path $testResultsDir) {
+            Write-Host "Contents of test results directory:"
+            Get-ChildItem -Path $testResultsDir -Recurse | ForEach-Object {
+              Write-Host "  $($_.FullName)"
+            }
+          } else {
+            Write-Host "Test results directory does not exist!"
+          }
+
+      - name: 📊 Publish Test Results
+        uses: dorny/test-reporter@v2
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
+        with:
+          name: .NET Tests
+          path: ${{ runner.temp }}/test-results/*.trx
+          path-replace-backslashes: 'true'
+          reporter: dotnet-trx
+
+      - name: 📈 Upload test results as artifacts
+        uses: actions/upload-artifact@v4
+        if: always() && steps.dotnet-test.conclusion != 'skipped'
+        with:
+          name: test-results-release
+          path: ${{ runner.temp }}/test-results/
+          retention-days: 7
