@@ -131,7 +131,6 @@ if ($LASTEXITCODE -ne 0) {
 }
 else {
     Write-Host "✅ Release '$TagName' deleted successfully from '$Repo'."
-    $isReleaseDeleted = $true
 }
 
 # Step 2: Delete the remote tag from origin
