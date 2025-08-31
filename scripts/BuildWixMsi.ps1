@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-Builds the WiX MSI installer for the SampleWpfApp.
+Builds the WiX MSI installer for the K0K0xWorkbench WPF-Blazor hybrid app.
 
 .DESCRIPTION
 This script builds the WiX MSI installer using the parameterized project. It accepts
@@ -10,20 +10,20 @@ The script assumes that the application has already been published and are locat
 the directory indicated by the PublishedFilesPath parameter.
 
 .PARAMETER PackageId
-The WiX Package Id. Defaults to "bryanknox.SampleWpfApp.5fce338".
+The WiX Package Id. Defaults to "bryanknox.K0xWorkbench.250901".
 
 .PARAMETER Version
 The version number in semantic version format (e.g., "1.2.3"). This will be converted
 to a 4-part version number for the MSI package (e.g., "1.2.3.0").
 
 .PARAMETER ProductName
-The name of the product to be displayed in the installer. Defaults to "Sample WPF App".
+The name of the product to be displayed in the installer. Defaults to "K0xWorkbench".
 
 .PARAMETER Manufacturer
 The manufacturer name to be displayed in the installer. Defaults to "Bryan Knox".
 
 .PARAMETER PublishedFilesPath
-The path to the published application files. Defaults to "../local-published/SampleWpfApp-output".
+The path to the published application files. Defaults to "../local-published/WpfApp".
 
 .PARAMETER Configuration
 The build configuration to use. Defaults to "Release".
@@ -43,20 +43,20 @@ Otherwise, the default output path will be used : "WixMsi\bin\$Platform\$Configu
 param(
 
     [Parameter(Mandatory = $false, Position = 0)]
-    [string]$PackageId = "bryanknox.SampleWpfApp.5fce338",
+    [string]$PackageId = "bryanknox.K0xWorkbench.250901",
 
     [Parameter(Mandatory = $true)]
     [ValidatePattern('^\d+\.\d+\.\d+$')]
     [string]$Version,
 
     [Parameter(Mandatory = $false)]
-    [string]$ProductName = "Sample WPF App",
+    [string]$ProductName = "K0xWorkbench",
 
     [Parameter(Mandatory = $false)]
     [string]$Manufacturer = "Bryan Knox",
 
     [Parameter(Mandatory = $false)]
-    [string]$PublishedFilesPath = "local-published\SampleWpfApp-output",
+    [string]$PublishedFilesPath = "local-published\WpfApp",
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("Debug", "Release")]
@@ -83,7 +83,7 @@ try {
     Write-Host "🚀 Starting WiX MSI build for $ProductName v$Version" -ForegroundColor Green
 
     # Validate that we're in the correct directory (check for solution file)
-    $solutionFile = 'SampleWpfApp.sln'
+    $solutionFile = 'k0x-workbench.sln'
     if (-not (Test-Path $solutionFile)) {
         throw "Solution file '$solutionFile' not found. Please run this script from the repository root."
     }

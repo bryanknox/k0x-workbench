@@ -52,12 +52,6 @@ k0x-workbench.exe <path-to-workbench.json>
 
 ### Repo Folder structure
 
-`docs\guidelines` - Guidelines for devs and agents developing in this repo.
-
-`scripts\` - Scripts for development and testing.
-
-`src\SampleWpfApp` - Sample WPF app. Just a raw sample doesn't do anything interesting.
-
 `.github\chatmodes` - GitHub Copilot custom chat modes.
 
 `.github\workflows` - GitHub Actions workflows.
@@ -65,6 +59,18 @@ k0x-workbench.exe <path-to-workbench.json>
 `.github\workflows\pwsh` - PowerShell scripts used by workflows.
 
 `.github\workflows\pwsh-unit-tests` - Pester tests for Powershell scripts used by workflows.
+
+`docs\guidelines` - Guidelines for devs and agents developing in this repo.
+
+`scripts\` - Scripts for development and testing.
+
+`src\` - Source code for the K0xWorkbench app and associated libraries.
+
+`src\WpfBlazor` - The K0xWorkbench WPF-Blazor hybrid app.
+
+`tests` - Test projects.
+
+`WixMsi\` - WiX project for the K0xWorkbench WPF-Blazor hybrid app's installer (MSI).
 
 ### Building
 

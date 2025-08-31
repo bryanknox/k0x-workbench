@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <!-- Default values for parameterization - can be overridden via command line or environment -->
-    <PackageId Condition="'$(PackageId)' == ''">bryanknox.SampleWpfApp.5fce338</PackageId>
+    <PackageId Condition="'$(PackageId)' == ''">bryanknox.K0xWorkbench.250901</PackageId>
     <PackageVersion Condition="'$(PackageVersion)' == ''">1.0.0</PackageVersion>
-    <ProductName Condition="'$(ProductName)' == ''">Sample WPF App</ProductName>
+    <ProductName Condition="'$(ProductName)' == ''">K0xWorkbench</ProductName>
     <Manufacturer Condition="'$(Manufacturer)' == ''">Bryan Knox</Manufacturer>
-    <PublishedFilesPath Condition="'$(PublishedFilesPath)' == ''">$(MSBuildProjectDirectory)\..\local-published\SampleWpfApp-output</PublishedFilesPath>
-    <MainExecutableFileName Condition="'$(MainExecutableFileName)' == ''">SampleWpfApp.exe</MainExecutableFileName>
+    <PublishedFilesPath Condition="'$(PublishedFilesPath)' == ''">$(MSBuildProjectDirectory)\..\local-published\WpfApp</PublishedFilesPath>
+    <MainExecutableFileName Condition="'$(MainExecutableFileName)' == ''">K0xWorkbench.exe</MainExecutableFileName>
     <MsiFileName Condition="'$(MsiFileName)' == ''">WixMsi</MsiFileName>
     <OutputName>$(MsiFileName)</OutputName>
   </PropertyGroup>

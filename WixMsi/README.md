@@ -1,4 +1,4 @@
-# WiX MSI Installer for Sample WPF App
+# WiX MSI Installer for K0xWorkbench
 
 This directory contains a WiX 6 installer project that creates an MSI installer for the Sample WPF Application. The installer project is fully parameterized to support different build scenarios.
 
@@ -137,12 +137,12 @@ The installer project supports the following parameters:
 
 | Parameter | Description | Default Value |
 |-----------|-------------|---------------|
-| `PackageId` | Unique identifier for the package | "bryanknox.SampleWpfApp.5fce338" |
+| `PackageId` | Unique identifier for the package | "bryanknox.K0xWorkbench.250901" |
 | `PackageVersion` | 3-part version number (e.g., "1.2.3") | "1.0.0" |
-| `ProductName` | Display name of the product | "Sample WPF App" |
+| `ProductName` | Display name of the product | "K0xWorkbench" |
 | `Manufacturer` | Company/manufacturer name | "Bryan Knox" |
-| `PublishedFilesPath` | Path to published application files | "../local-published/SampleWpfApp-output" |
-| `MainExecutableFileName` | Name of the main executable file in the PublishedFilesPath | "SampleWpfApp.exe" |
+| `PublishedFilesPath` | Path to published application files | "../local-published/WpfApp" |
+| `MainExecutableFileName` | Name of the main executable file in the PublishedFilesPath | "K0xWorkbench.exe" |
 | `MsiFileName` | Base name for the generated MSI file (without .msi extension) | "WixMsi" |
 
 ## Usage
@@ -188,7 +188,7 @@ Use the provided PowerShell scripts for an automated build process:
 dotnet build WixMsi\WixMsi.wixproj `
   --configuration Release `
   -p:Platform=x64 `
-  -p:ProductName="Sample WPF App" `
+  -p:ProductName="K0xWorkbench" `
   -p:Manufacturer="Bryan Knox" `
   -p:PackageVersion="1.2.3" `
   -p:PublishedFilesPath="C:\full\path\to\published\files" `
@@ -201,7 +201,7 @@ dotnet build WixMsi\WixMsi.wixproj `
 msbuild WixMsi\WixMsi.wixproj `
   /p:Configuration=Release `
   /p:Platform=x64 `
-  /p:ProductName="Sample WPF App" `
+  /p:ProductName="K0xWorkbench" `
   /p:Manufacturer="Bryan Knox" `
   /p:PackageVersion="1.2.3" `
   /p:PublishedFilesPath="C:\full\path\to\published\files" `
@@ -231,11 +231,11 @@ Example GitHub Actions usage:
     dotnet build WixMsi/WixMsi.wixproj `
       --configuration Release `
       -p:Platform=x64 `
-      -p:ProductName="Sample WPF App" `
+      -p:ProductName="K0xWorkbench" `
       -p:Manufacturer="Bryan Knox" `
       -p:PackageVersion="${{ github.event.inputs.version }}" `
       -p:PublishedFilesPath="${{ github.workspace }}/published-output" `
-      -p:MsiFileName="SampleWpfApp-${{ github.event.inputs.version }}-Setup"
+      -p:MsiFileName="K0xWorkbench-${{ github.event.inputs.version }}-Setup"
 ```
 
 ## Development Notes

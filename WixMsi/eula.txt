@@ -1,9 +1,9 @@
 END-USER LICENSE AGREEMENT (EULA)
-SampleWpfApp
+K0xWorkbench
 
 Copyright (c) 2025 Bryan Knox
 
-This End-User License Agreement ("EULA") governs your use of the SampleWpfApp software ("Software").
+This End-User License Agreement ("EULA") governs your use of the K0xWorkbench software ("Software").
 
 Please read this EULA agreement carefully before completing the installation process and using the Software. It provides a license to use the Software and contains warranty information and liability disclaimers.
 

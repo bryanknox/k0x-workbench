@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-Publishes the SampleWpfApp and builds the WiX MSI installer in one step.
+Publishes the K0xWorkbench WPF App and builds the WiX MSI installer in one step.
 
 .DESCRIPTION
 This script combines the functionality of PublishWpfApp.ps1 and BuildWixMsi.ps1
@@ -9,13 +9,13 @@ to provide a complete build pipeline from source code to MSI installer. It publi
 WPF application and then builds the MSI installer that includes all published files.
 
 .PARAMETER PackageId
-The WiX Package Id. Defaults to "bryanknox.SampleWpfApp.5fce338".
+The WiX Package Id. Defaults to "bryanknox.K0xWorkbench.250901".
 
 .PARAMETER Version
 The version number in semantic version format (e.g., "1.2.3").
 
 .PARAMETER ProductName
-The name of the product to be displayed in the installer. Defaults to "Sample WPF App".
+The name of the product to be displayed in the installer. Defaults to "K0xWorkbench".
 
 .PARAMETER Manufacturer
 The manufacturer name to be displayed in the installer. Defaults to "Bryan Knox".
@@ -42,14 +42,14 @@ Otherwise, the default output path will be used : "WixMsi\bin\$Platform\$Configu
 param(
 
     [Parameter(Mandatory = $false, Position = 0)]
-    [string]$PackageId = "bryanknox.SampleWpfApp.5fce338",
+    [string]$PackageId = "bryanknox.K0xWorkbench.250901",
 
     [Parameter(Mandatory = $true)]
     [ValidatePattern('^\d+\.\d+\.\d+$')]
     [string]$Version,
 
     [Parameter(Mandatory = $false)]
-    [string]$ProductName = "Sample WPF App",
+    [string]$ProductName = "K0xWorkbench",
 
     [Parameter(Mandatory = $false)]
     [string]$Manufacturer = "Bryan Knox",
@@ -83,7 +83,7 @@ try {
     Write-Host "🚀 Starting complete build pipeline for $ProductName v$Version" -ForegroundColor Green
 
     # Validate that we're in the correct directory (check for solution file)
-    $solutionFile = 'SampleWpfApp.sln'
+    $solutionFile = 'k0x-workbench.sln'
     if (-not (Test-Path $solutionFile)) {
         throw "Solution file '$solutionFile' not found. Please run this script from the repository root."
     }
@@ -146,7 +146,7 @@ try {
     Write-Host "🎉 Complete build pipeline finished successfully!" -ForegroundColor Green
     Write-Host ""
     Write-Host "📂 Output locations:" -ForegroundColor Cyan
-    Write-Host "  - Published app: local-published\SampleWpfApp-output\" -ForegroundColor Gray
+    Write-Host "  - Published app: local-published\WpfApp\" -ForegroundColor Gray
     if ($MsiOutFolderPath) {
         Write-Host "  - MSI installer: $MsiOutFolderPath" -ForegroundColor Gray
     } else {
