@@ -1,12 +1,15 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-Builds and publishes the SampleWpfApp locally.
+Builds and publishes the WpfBlazor locally.
 
 .DESCRIPTION
-This script builds and publishes the SampleWpfApp following the same steps as the
+This script builds and publishes the WpfBlazor following the same steps as the
 GitHub Actions workflow. It takes a version number as input and publishes the app
 to a local output directory.
+
+NOTE: The name of the published app is taken from the AssemblyName configured in the project file.
+Not the project name.
 
 .PARAMETER Version
 The version number in semantic version format (e.g., "1.2.3").
@@ -30,16 +33,16 @@ $ErrorActionPreference = 'Stop'
 
 # Define constants similar to the workflow
 $CONFIGURATION = 'Release'
-$WPF_APP_CSPROJ_PATH = 'src/SampleWpfApp/SampleWpfApp.csproj'
+$WPF_APP_CSPROJ_PATH = 'src/WpfBlazor/WpfBlazor.csproj'
 $TARGET_RUNTIME = 'win-x64'
 $OUTPUT_BASE_DIR = 'local-published'
-$OUTPUT_DIR = Join-Path $OUTPUT_BASE_DIR 'SampleWpfApp-output'
+$OUTPUT_DIR = Join-Path $OUTPUT_BASE_DIR 'WpfBlazor-output'
 
 try {
-    Write-Host "🚀 Starting local publish of SampleWpfApp v$Version" -ForegroundColor Green
+    Write-Host "🚀 Starting local publish of WpfBlazor v$Version" -ForegroundColor Green
 
     # Validate that we're in the correct directory (check for solution file)
-    $solutionFile = 'SampleWpfApp.sln'
+    $solutionFile = 'WpfBlazor.sln'
     if (-not (Test-Path $solutionFile)) {
         throw "Solution file '$solutionFile' not found. Please run this script from the repository root."
     }
