@@ -36,13 +36,13 @@ $CONFIGURATION = 'Release'
 $WPF_APP_CSPROJ_PATH = 'src/WpfBlazor/WpfBlazor.csproj'
 $TARGET_RUNTIME = 'win-x64'
 $OUTPUT_BASE_DIR = 'local-published'
-$OUTPUT_DIR = Join-Path $OUTPUT_BASE_DIR 'WpfBlazor-output'
+$OUTPUT_DIR = Join-Path $OUTPUT_BASE_DIR 'WpfApp'
 
 try {
     Write-Host "🚀 Starting local publish of WpfBlazor v$Version" -ForegroundColor Green
 
     # Validate that we're in the correct directory (check for solution file)
-    $solutionFile = 'WpfBlazor.sln'
+    $solutionFile = 'k0x-workbench.sln'
     if (-not (Test-Path $solutionFile)) {
         throw "Solution file '$solutionFile' not found. Please run this script from the repository root."
     }
