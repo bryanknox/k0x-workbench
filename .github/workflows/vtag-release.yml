@@ -17,13 +17,13 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
   DOTNET_VERSION: '9.0.x'
   # Environment variables for MSI packaging
-  MSI_WIX_PACKAGE_ID: 'bryanknox.SampleWpfApp.5fce338'
+  MSI_WIX_PACKAGE_ID: 'bryanknox.K0xWorkbench.250901'
   MSI_WIX_PLATFORM: 'x64'
   MSI_WIX_PROJ_PATH: 'WixMsi/WixMsi.wixproj'
   MSI_WIX_MANUFACTURER: 'Bryan Knox'
   # Environment variables for WPF app
   CONFIGURATION: Release
-  WPF_APP_CSPROJ_PATH: src/SampleWpfApp/SampleWpfApp.csproj
+  WPF_APP_CSPROJ_PATH: src/WpfBlazor/WpfBlazor.csproj
   WPF_APP_RUNTIME: win-x64
 
 jobs:
