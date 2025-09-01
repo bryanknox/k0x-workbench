@@ -23,7 +23,7 @@ The name of the product to be displayed in the installer. Defaults to "K0xWorkbe
 The manufacturer name to be displayed in the installer. Defaults to "Bryan Knox".
 
 .PARAMETER PublishedFilesPath
-The path to the published application files. Defaults to "../local-published/WpfApp".
+The path to the published application files. Defaults to "../local-published-ignored/WpfApp".
 
 .PARAMETER Configuration
 The build configuration to use. Defaults to "Release".
@@ -36,7 +36,7 @@ The base name for the generated MSI file (without .msi extension). Defaults to "
 
 .PARAMETER MsiOutFolderPath
 Specifies the output folder path for the generated MSI installer files.
-Defaults to "local-published\msi"
+Defaults to "local-published-ignored\msi"
 #>
 
 [CmdletBinding()]
@@ -56,7 +56,7 @@ param(
     [string]$Manufacturer = "Bryan Knox",
 
     [Parameter(Mandatory = $false)]
-    [string]$PublishedFilesPath = "local-published\WpfApp",
+    [string]$PublishedFilesPath = "local-published-ignored\WpfApp",
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("Debug", "Release")]
@@ -70,7 +70,7 @@ param(
     [string]$MsiFileName = "WixMsi",
 
     [Parameter(Mandatory = $false)]
-    [string]$MsiOutFolderPath = "local-published\msi"
+    [string]$MsiOutFolderPath = "local-published-ignored\msi"
 )
 
 # Set error action preference

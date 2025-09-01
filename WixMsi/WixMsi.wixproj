@@ -6,7 +6,7 @@
     <PackageVersion Condition="'$(PackageVersion)' == ''">1.0.0</PackageVersion>
     <ProductName Condition="'$(ProductName)' == ''">K0xWorkbench</ProductName>
     <Manufacturer Condition="'$(Manufacturer)' == ''">Bryan Knox</Manufacturer>
-    <PublishedFilesPath Condition="'$(PublishedFilesPath)' == ''">$(MSBuildProjectDirectory)\..\local-published\WpfApp</PublishedFilesPath>
+    <PublishedFilesPath Condition="'$(PublishedFilesPath)' == ''">$(MSBuildProjectDirectory)\..\local-published-ignored\WpfApp</PublishedFilesPath>
     <MainExecutableFileName Condition="'$(MainExecutableFileName)' == ''">K0xWorkbench.exe</MainExecutableFileName>
     <MsiFileName Condition="'$(MsiFileName)' == ''">WixMsi</MsiFileName>
     <OutputName>$(MsiFileName)</OutputName>

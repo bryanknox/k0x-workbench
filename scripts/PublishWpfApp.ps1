@@ -35,7 +35,7 @@ $ErrorActionPreference = 'Stop'
 $CONFIGURATION = 'Release'
 $WPF_APP_CSPROJ_PATH = 'src/WpfBlazor/WpfBlazor.csproj'
 $TARGET_RUNTIME = 'win-x64'
-$OUTPUT_BASE_DIR = 'local-published'
+$OUTPUT_BASE_DIR = 'local-published-ignored'
 $OUTPUT_DIR = Join-Path $OUTPUT_BASE_DIR 'WpfApp'
 
 try {
@@ -87,7 +87,7 @@ try {
     New-Item -ItemType Directory -Path $OUTPUT_DIR -Force | Out-Null
     Write-Host "✅ Output directory ready: $OUTPUT_DIR" -ForegroundColor Green
 
-    # Create .gitignore file in the local-published folder
+    # Create .gitignore file in the local-published-ignored folder
     $gitignoreFile = Join-Path $OUTPUT_BASE_DIR '.gitignore'
     if (-not (Test-Path $gitignoreFile)) {
         Write-Host "📝 Creating .gitignore file..." -ForegroundColor Yellow

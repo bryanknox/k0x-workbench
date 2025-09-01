@@ -145,7 +145,7 @@ The installer project supports the following parameters:
 | `PackageVersion` | 3-part version number (e.g., "1.2.3") | "1.0.0" |
 | `ProductName` | Display name of the product | "K0xWorkbench" |
 | `Manufacturer` | Company/manufacturer name | "Bryan Knox" |
-| `PublishedFilesPath` | Path to published application files | "../local-published/WpfApp" |
+| `PublishedFilesPath` | Path to published application files | "../local-published-ignored/WpfApp" |
 | `MainExecutableFileName` | Name of the main executable file in the PublishedFilesPath | "K0xWorkbench.exe" |
 | `MsiFileName` | Base name for the generated MSI file (without .msi extension) | "WixMsi" |
 
@@ -215,7 +215,7 @@ msbuild WixMsi\WixMsi.wixproj `
 ### Output Location
 
 The location where the MSI installer will be created is specified by the `PublishedFilesPath` parameter, which defaults to:
-`local-published\msi\en-US` in the local dev scripts.
+`local-published-ignored\msi\en-US` in the local dev scripts.
 
 The WixMsi project's default location for the created MSI installer is:
 ```

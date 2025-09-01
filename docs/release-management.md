@@ -41,3 +41,11 @@ Example
 ```PowerShell
 .\scripts\PublishAndBuildMsi.ps1 -Version "1.0.0"
 ```
+
+### `local-published-ignored` folder
+
+The `local-published-ignored` folder is created automatically by the `PublishWpfApp.ps1` and/or `PublishAndBuildMsi.ps1` scripts and a `.gitignore` file is added to that folder so that any content will be NOT be added to source control.
+
+By default, folders for the published WPF app and MSI installers are created within the `local-published-ignored` folder by scripts in the repo's `scripts` folder.
+
+

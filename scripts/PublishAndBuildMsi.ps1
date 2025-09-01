@@ -35,7 +35,7 @@ The base name for the generated MSI file (without .msi extension). Defaults to "
 
 .PARAMETER MsiOutFolderPath
 Specifies the output folder path for the generated MSI installer files.
-Defaults to "local-published\msi"
+Defaults to "local-published-ignored\msi"
 #>
 
 [CmdletBinding()]
@@ -69,7 +69,7 @@ param(
     [string]$MsiFileName = "WixMsi",
 
     [Parameter(Mandatory = $false)]
-    [string]$MsiOutFolderPath = "local-published\msi"
+    [string]$MsiOutFolderPath = "local-published-ignored\msi"
 )
 
 # Set error action preference
@@ -142,7 +142,7 @@ try {
     Write-Host "🎉 Complete build pipeline finished successfully!" -ForegroundColor Green
     Write-Host ""
     Write-Host "📂 Output locations:" -ForegroundColor Cyan
-    Write-Host "  - Published app: local-published\WpfApp\" -ForegroundColor Gray
+    Write-Host "  - Published app: local-published-ignored\WpfApp\" -ForegroundColor Gray
     Write-Host "  - MSI installer: $MsiOutFolderPath" -ForegroundColor Gray
 
     # Find and display the MSI file details
