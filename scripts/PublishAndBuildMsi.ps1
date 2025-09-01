@@ -31,11 +31,11 @@ If specified, skips the publishing step and only builds the MSI installer.
 Useful when the application has already been published.
 
 .PARAMETER MsiFileName
-Optional. The base name for the generated MSI file (without .msi extension). Defaults to "WixMsi".
+The base name for the generated MSI file (without .msi extension). Defaults to "WixMsi".
 
 .PARAMETER MsiOutFolderPath
-Optional. Specifies the output folder path for the generated MSI installer files.
-Otherwise, the default output path will be used : "WixMsi\bin\$Platform\$Configuration\en-US\"
+Specifies the output folder path for the generated MSI installer files.
+Defaults to "local-published\msi"
 #>
 
 [CmdletBinding()]
@@ -69,7 +69,7 @@ param(
     [string]$MsiFileName = "WixMsi",
 
     [Parameter(Mandatory = $false)]
-    [string]$MsiOutFolderPath
+    [string]$MsiOutFolderPath = "local-published\msi"
 )
 
 # Set error action preference
@@ -105,12 +105,8 @@ try {
     Write-Host "  - Configuration: $Configuration"
     Write-Host "  - Platform: $Platform"
     Write-Host "  - Skip Publish: $SkipPublish"
-    if ($MsiOutFolderPath) {
-        Write-Host "  - MSI Out Folder Path: $MsiOutFolderPath"
-    }
-    if ($MsiFileName) {
-        Write-Host "  - MSI File Name: $MsiFileName"
-    }
+    Write-Host "  - MSI File Name: $MsiFileName"
+    Write-Host "  - MSI Out Folder Path: $MsiOutFolderPath"
 
     # Step 1: Publish the WPF application (unless skipped)
     if (-not $SkipPublish) {
@@ -147,14 +143,10 @@ try {
     Write-Host ""
     Write-Host "📂 Output locations:" -ForegroundColor Cyan
     Write-Host "  - Published app: local-published\WpfApp\" -ForegroundColor Gray
-    if ($MsiOutFolderPath) {
-        Write-Host "  - MSI installer: $MsiOutFolderPath" -ForegroundColor Gray
-    } else {
-        Write-Host "  - MSI installer: WixMsi\bin\$Platform\$Configuration\en-US\" -ForegroundColor Gray
-    }
+    Write-Host "  - MSI installer: $MsiOutFolderPath" -ForegroundColor Gray
 
     # Find and display the MSI file details
-    $msiSearchBase = if ($MsiOutFolderPath) { $MsiOutFolderPath } else { "WixMsi\bin\$Platform\$Configuration" }
+    $msiSearchBase = $MsiOutFolderPath
     $msiPattern = Join-Path $msiSearchBase "en-US\*.msi"
     $msiFiles = Get-ChildItem $msiPattern -ErrorAction SilentlyContinue
     if (-not $msiFiles) {
@@ -173,7 +165,6 @@ try {
         Write-Host "✨ To install the application, run:" -ForegroundColor Yellow
         Write-Host "   msiexec /i `"$($msiFile.FullName)`"" -ForegroundColor White
     }
-
 }
 catch {
     Write-Host ""

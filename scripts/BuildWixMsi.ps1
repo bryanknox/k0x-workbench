@@ -146,9 +146,7 @@ try {
     Write-Host "  - Configuration: $Configuration"
     Write-Host "  - Platform: $Platform"
     Write-Host "  - Published Files Path: $absolutePublishedFilesPath"
-    if ($MsiFileName) {
-        Write-Host "  - MSI File Name: $MsiFileName"
-    }
+    Write-Host "  - MSI File Name: $MsiFileName"
     Write-Host "  - MSI Out Folder Path: $absoluteMsiOutFolderPath"
 
     # Validate that published files exist
@@ -170,12 +168,9 @@ try {
         "-p:ProductName=$ProductName"
         "-p:Manufacturer=$Manufacturer"
         "-p:PublishedFilesPath=$absolutePublishedFilesPath"
+        "-p:MsiFileName=$MsiFileName"
         "-p:OutputPath=$absoluteMsiOutFolderPath"
     )
-
-    if ($MsiFileName) {
-        $buildArgs += "-p:MsiFileName=$MsiFileName"
-    }
 
     Write-Host "  - Running: dotnet $($buildArgs -join ' ')" -ForegroundColor Gray
     & dotnet @buildArgs
