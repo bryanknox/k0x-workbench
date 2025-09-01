@@ -32,11 +32,11 @@ The build configuration to use. Defaults to "Release".
 The target platform. Defaults to "x64" (the only platform currently supported).
 
 .PARAMETER MsiFileName
-Optional. The base name for the generated MSI file (without .msi extension). Defaults to "WixMsi".
+The base name for the generated MSI file (without .msi extension). Defaults to "WixMsi".
 
 .PARAMETER MsiOutFolderPath
-Optional. Specifies the output folder path for the generated MSI installer files.
-Otherwise, the default output path will be used : "WixMsi\bin\$Platform\$Configuration\en-US\"
+Specifies the output folder path for the generated MSI installer files.
+Defaults to "local-published\msi"
 #>
 
 [CmdletBinding()]
@@ -70,7 +70,7 @@ param(
     [string]$MsiFileName = "WixMsi",
 
     [Parameter(Mandatory = $false)]
-    [string]$MsiOutFolderPath
+    [string]$MsiOutFolderPath = "local-published\msi"
 )
 
 # Set error action preference
@@ -106,37 +106,36 @@ try {
 
     # Resolve MSI Out folder (if provided) to an absolute path and ensure it exists with trailing separator
     $absoluteMsiOutFolderPath = $null
-    if ($MsiOutFolderPath) {
-        if ([System.IO.Path]::IsPathRooted($MsiOutFolderPath)) {
-            $absoluteMsiOutFolderPath = $MsiOutFolderPath
-        } else {
-            $resolved = Resolve-Path -Path $MsiOutFolderPath -ErrorAction SilentlyContinue
-            $absoluteMsiOutFolderPath = if ($resolved) { $resolved.Path } else { Join-Path (Get-Location) $MsiOutFolderPath }
-        }
-
-        # Normalize to full path before checking/creating/clearing
-        $absoluteMsiOutFolderPath = [System.IO.Path]::GetFullPath($absoluteMsiOutFolderPath)
-
-        if (Test-Path -Path $absoluteMsiOutFolderPath -PathType Container) {
-            # Clear existing content in the MSI output folder (safety: never clear a root drive)
-            $root = [System.IO.Path]::GetPathRoot($absoluteMsiOutFolderPath)
-            if ($absoluteMsiOutFolderPath -eq $root) {
-                throw "Refusing to clear root drive pointed to by MsiOutFolderPath '$absoluteMsiOutFolderPath'."
-            }
-            Write-Host "🧹 Clearing existing MsiOutFolderPath contents: $absoluteMsiOutFolderPath" -ForegroundColor DarkGray
-            Get-ChildItem -Path $absoluteMsiOutFolderPath -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-        }
-        elseif (Test-Path -Path $absoluteMsiOutFolderPath -PathType Leaf) {
-            throw "MsiOutFolderPath '$absoluteMsiOutFolderPath' points to a file, not a directory."
-        }
-        else {
-            New-Item -ItemType Directory -Path $absoluteMsiOutFolderPath -Force | Out-Null
-        }
-
-        if ($absoluteMsiOutFolderPath -notmatch '[\\/]$') {
-            $absoluteMsiOutFolderPath += [System.IO.Path]::DirectorySeparatorChar
-        }
+    if ([System.IO.Path]::IsPathRooted($MsiOutFolderPath)) {
+        $absoluteMsiOutFolderPath = $MsiOutFolderPath
+    } else {
+        $resolved = Resolve-Path -Path $MsiOutFolderPath -ErrorAction SilentlyContinue
+        $absoluteMsiOutFolderPath = if ($resolved) { $resolved.Path } else { Join-Path (Get-Location) $MsiOutFolderPath }
     }
+
+    # Normalize to full path before checking/creating/clearing
+    $absoluteMsiOutFolderPath = [System.IO.Path]::GetFullPath($absoluteMsiOutFolderPath)
+
+    if (Test-Path -Path $absoluteMsiOutFolderPath -PathType Container) {
+        # Clear existing content in the MSI output folder (safety: never clear a root drive)
+        $root = [System.IO.Path]::GetPathRoot($absoluteMsiOutFolderPath)
+        if ($absoluteMsiOutFolderPath -eq $root) {
+            throw "Refusing to clear root drive pointed to by MsiOutFolderPath '$absoluteMsiOutFolderPath'."
+        }
+        Write-Host "🧹 Clearing existing MsiOutFolderPath contents: $absoluteMsiOutFolderPath" -ForegroundColor DarkGray
+        Get-ChildItem -Path $absoluteMsiOutFolderPath -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    elseif (Test-Path -Path $absoluteMsiOutFolderPath -PathType Leaf) {
+        throw "MsiOutFolderPath '$absoluteMsiOutFolderPath' points to a file, not a directory."
+    }
+    else {
+        New-Item -ItemType Directory -Path $absoluteMsiOutFolderPath -Force | Out-Null
+    }
+
+    if ($absoluteMsiOutFolderPath -notmatch '[\\/]$') {
+        $absoluteMsiOutFolderPath += [System.IO.Path]::DirectorySeparatorChar
+    }
+
 
     Write-Host "📋 Build configuration:" -ForegroundColor Cyan
     Write-Host "  - Package Id: $PackageId"
@@ -150,9 +149,7 @@ try {
     if ($MsiFileName) {
         Write-Host "  - MSI File Name: $MsiFileName"
     }
-    if ($absoluteMsiOutFolderPath) {
-        Write-Host "  - MSI Out Folder Path: $absoluteMsiOutFolderPath"
-    }
+    Write-Host "  - MSI Out Folder Path: $absoluteMsiOutFolderPath"
 
     # Validate that published files exist
     if (-not (Test-Path (Join-Path $absolutePublishedFilesPath "*.exe"))) {
@@ -173,15 +170,11 @@ try {
         "-p:ProductName=$ProductName"
         "-p:Manufacturer=$Manufacturer"
         "-p:PublishedFilesPath=$absolutePublishedFilesPath"
+        "-p:OutputPath=$absoluteMsiOutFolderPath"
     )
 
     if ($MsiFileName) {
         $buildArgs += "-p:MsiFileName=$MsiFileName"
-    }
-    if ($absoluteMsiOutFolderPath) {
-        # Set both OutDir and OutputPath for broader MSBuild compatibility
-        # $buildArgs += "-p:OutDir=$absoluteMsiOutFolderPath"
-        $buildArgs += "-p:OutputPath=$absoluteMsiOutFolderPath"
     }
 
     Write-Host "  - Running: dotnet $($buildArgs -join ' ')" -ForegroundColor Gray
@@ -194,15 +187,10 @@ try {
     Write-Host "✅ WiX MSI installer built successfully!" -ForegroundColor Green
 
     # Find and display the output MSI file
-    if ($absoluteMsiOutFolderPath) {
-        $msiPattern = Join-Path $absoluteMsiOutFolderPath "en-US\*.msi"
-        $msiFiles = Get-ChildItem $msiPattern -ErrorAction SilentlyContinue
-        if (-not $msiFiles) {
-            $msiPattern = Join-Path $absoluteMsiOutFolderPath "*.msi"
-            $msiFiles = Get-ChildItem $msiPattern -ErrorAction SilentlyContinue
-        }
-    } else {
-        $msiPattern = "WixMsi\bin\$Platform\$Configuration\en-US\*.msi"
+    $msiPattern = Join-Path $absoluteMsiOutFolderPath "en-US\*.msi"
+    $msiFiles = Get-ChildItem $msiPattern -ErrorAction SilentlyContinue
+    if (-not $msiFiles) {
+        $msiPattern = Join-Path $absoluteMsiOutFolderPath "*.msi"
         $msiFiles = Get-ChildItem $msiPattern -ErrorAction SilentlyContinue
     }
 
