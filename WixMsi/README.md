@@ -1,8 +1,8 @@
 # WiX MSI Installer for K0xWorkbench
 
-This directory contains a WiX 6 installer project that creates an MSI installer for the Sample WPF Application. The installer project is fully parameterized to support different build scenarios.
+This directory contains a WiX 6 installer project that creates an MSI installer for the WPF Application.
 
-This WiX installer project can be easily adapted to other .NET applications that need an MSI for installation on Windows machines.
+> This WiX installer project is fully parameterized so it can be easily adapted to other .NET applications that need an MSI for installation on Windows machines.
 
 ## Overview
 
@@ -11,13 +11,17 @@ The WiX installer project uses the WiX 6 Toolset.
 - **File Harvesting**: Uses the `Files` element to automatically harvest all files from the published application output
 - **Parameterization**: Supports configurable product name, manufacturer, version, file paths, and MSI filename
 
-## Project Structure
+## Project File Structure
 
 - `Package.wxs` - Main package definition with parameterized properties
-- `AppComponents.wxs` - Component group that harvests files using the `Files` element
+- `AppComponents.wxs` - Component group that harvests files using the WiX Toolset's `Files` element
+- `eula.rtf` - The End User License Agreement (EULA) used in the installer.
+- `eula.txt` - The raw text of the EULA
 - `Folders.wxs` - Directory structure definition
 - `Package.en-us.wxl` - Localization strings
-- `WixMsi.wixproj` - MSBuild project file with parameterization support
+- `Shortcut.wxs` - Defines Windows shortcuts to be installed and uninstalled
+- `WixMsi.wixproj` - MSBuild project file with parameterization
+support
 
 ## Key Features
 
@@ -41,7 +45,7 @@ The installer is configured with `Scope="perUser"` which provides several benefi
 - **No Administrator Rights Required**: Users can install the application without elevated privileges
 - **User-Specific Installation**: Each user gets their own copy of the application
 - **Clean Uninstall**: Complete removal without affecting other users or system files
-- **Installation Location**: Files are installed to `%LOCALAPPDATA%\{ProductName}` by default
+- **Installation Location**: By default, files are installed to `%LOCALAPPDATA%\{ProductName}`
 
 ### Selectable Install Location
 
@@ -145,7 +149,7 @@ The installer project supports the following parameters:
 | `MainExecutableFileName` | Name of the main executable file in the PublishedFilesPath | "K0xWorkbench.exe" |
 | `MsiFileName` | Base name for the generated MSI file (without .msi extension) | "WixMsi" |
 
-## Usage
+## Dev Usage
 
 ### Prerequisites
 
@@ -210,21 +214,20 @@ msbuild WixMsi\WixMsi.wixproj `
 
 ### Output Location
 
-The MSI installer will be created in:
+The location where the MSI installer will be created is specified by the `PublishedFilesPath` parameter, which defaults to:
+`local-published\msi\en-US` in the local dev scripts.
+
+The WixMsi project's default location for the created MSI installer is:
 ```
 WixMsi\bin\{Platform}\{Configuration}\en-US\{MsiFileName}.msi
 ```
-
-For example:
-- Default: `WixMsi\bin\x64\Release\en-US\WixMsi.msi`
-- With custom name: `WixMsi\bin\x64\Release\en-US\MyApp-Setup.msi`
+For example: `WixMsi\bin\x64\Release\en-US\WixMsi.msi`
 
 ## GitHub Actions Integration
 
 The parameterized design makes it easy to integrate with CI/CD pipelines.
 
 Example GitHub Actions usage:
-
 ```yaml
 - name: Build MSI Installer
   run: |
@@ -237,6 +240,8 @@ Example GitHub Actions usage:
       -p:PublishedFilesPath="${{ github.workspace }}/published-output" `
       -p:MsiFileName="K0xWorkbench-${{ github.event.inputs.version }}-Setup"
 ```
+
+See `.github\workflows\vtag-release.yml`
 
 ## Development Notes
 

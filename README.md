@@ -6,6 +6,10 @@ A Windows desktop application for quick access to context specific tools and inf
 - Add **tools** to quickly launch apps, run scripts, or open a documents or websites.
 - Group tools into **toolkits** organized around tasks, scenarios, or categories.
 
+## Releases and Downloads
+
+For releases, download, and installation information see this repo's [Releases](https://github.com/bryanknox/k0x-workbench/releases) page.
+
 ## Example Workbench
 
 - Workbench: **My Project**
@@ -46,9 +50,10 @@ k0x-workbench.exe <path-to-workbench.json>
   - XUnit
   - FluentAssertions
   - Moq
+  - WiX 6 Toolkit - https://docs.firegiant.com/wix/
 - GitHub Actions workflows
   - PowerShell 7
-  - Pester 5
+  - Pester 5 test framework for PowerShell - https://pester.dev/
 
 ### Repo Folder structure
 
@@ -60,9 +65,11 @@ k0x-workbench.exe <path-to-workbench.json>
 
 `.github\workflows\pwsh-unit-tests` - Pester tests for Powershell scripts used by workflows.
 
+`docs\` - Docs for developing in this repo.
+
 `docs\guidelines` - Guidelines for devs and agents developing in this repo.
 
-`scripts\` - Scripts for development and testing.
+`scripts\` - Scripts development and local dev testing.
 
 `src\` - Source code for the K0xWorkbench app and associated libraries.
 
@@ -71,6 +78,12 @@ k0x-workbench.exe <path-to-workbench.json>
 `tests` - Test projects.
 
 `WixMsi\` - WiX project for the K0xWorkbench WPF-Blazor hybrid app's installer (MSI).
+
+## Development docs in this repo
+
+- [PowerShell in GitHub Actions Workflows](./docs/pwsh-in-workflows.md)
+
+- [WiX MSI Installer project documentation](./WixMsi/README.md)
 
 ### Building
 

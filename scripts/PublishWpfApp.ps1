@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-Builds and publishes the WpfBlazor locally.
+Builds and publishes the WpfBlazor app locally.
 
 .DESCRIPTION
 This script builds and publishes the WpfBlazor following the same steps as the
