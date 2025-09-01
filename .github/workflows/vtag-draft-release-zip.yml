@@ -2,8 +2,8 @@ name: draft-vtag-release-zip
 
 on:
   workflow_dispatch: # Manual trigger.
-  push:
-    tags: ["v*"]
+#  push:
+#    tags: ["v*"]
 
 # Ensure that only one run per branch (github.ref) and workflow.
 # Cancel any previous runs that are still in progress for the same group.

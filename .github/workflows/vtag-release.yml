@@ -1,0 +1,258 @@
+name: vtag-release
+
+on:
+  workflow_dispatch: # Manual trigger.
+  push:
+    tags: ["v*"]
+
+# Security: Restrict default permissions
+permissions:
+  actions: read    # Required for ci-checks workflow
+  checks: write    # Required for ci-checks workflow
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_VERSION: '9.0.x'
+  # Environment variables for MSI packaging
+  MSI_WIX_PACKAGE_ID: 'bryanknox.SampleWpfApp.5fce338'
+  MSI_WIX_PLATFORM: 'x64'
+  MSI_WIX_PROJ_PATH: 'WixMsi/WixMsi.wixproj'
+  MSI_WIX_MANUFACTURER: 'Bryan Knox'
+  # Environment variables for WPF app
+  CONFIGURATION: Release
+  WPF_APP_CSPROJ_PATH: src/SampleWpfApp/SampleWpfApp.csproj
+  WPF_APP_RUNTIME: win-x64
+
+jobs:
+
+  get-version-job:
+    name: Get version from v-tag job
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      release-version: ${{ steps.get-version.outputs.RELEASE_VERSION }}
+    steps:
+      - name: 🏷️ Get version from v-tag
+        id: get-version
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.ref_name }}"
+          $version = $tagName -replace '^v', ''
+          Write-Host "Tag name: $tagName"
+          Write-Host "Release version: $version"
+          # Output as workflow step variable.
+          "RELEASE_VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+  build-publish-artifacts-job:
+    name: Build and publish artifacts
+    needs: get-version-job
+    runs-on: windows-2022
+    timeout-minutes: 20
+    outputs:
+      wpf-app-assembly-name: ${{ steps.get-names.outputs.WPF_APP_ASSEMBLY_NAME }}
+      zip-artifact-name: ${{ steps.get-names.outputs.ZIP_ARTIFACT_NAME }}
+      zip-file-name: ${{ steps.get-names.outputs.ZIP_FILE_NAME }}
+      msi-artifact-name: ${{ steps.get-names.outputs.MSI_ARTIFACT_NAME }}
+      msi-file-name: ${{ steps.get-names.outputs.MSI_NAME }}.msi
+    steps:
+
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: 🔧 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔍 Get names to use
+        id: get-names
+        shell: pwsh
+        run: |
+          # Import the module
+          Import-Module "./.github/workflows/pwsh/Get-AssemblyNameOrExit.psm1" -Force
+
+          $assemblyName = Get-AssemblyNameOrExit -ProjectPath $env:WPF_APP_CSPROJ_PATH
+
+          $version = "${{ needs.get-version-job.outputs.release-version }}"
+          $artifactNameCore = "${assemblyName}-${version}-${env:WPF_APP_RUNTIME}"
+
+          $msiArtifactName = "${artifactNameCore}.msi"
+          $msiName = "${artifactNameCore}"
+
+          $zipArtifactName = "${artifactNameCore}-zip"
+          $zipFileName = "${artifactNameCore}.zip"
+
+          Write-Host "version: $version"
+          Write-Host "MSI_ARTIFACT_NAME: $msiArtifactName"
+          Write-Host "MSI_NAME: $msiName"
+          Write-Host "WPF_APP_ASSEMBLY_NAME: $assemblyName"
+          Write-Host "ZIP_ARTIFACT_NAME: $zipArtifactName"
+          Write-Host "ZIP_FILE_NAME : $zipFileName"
+
+          # Output as workflow step variables.
+
+          "MSI_ARTIFACT_NAME=$msiArtifactName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          "MSI_NAME=$msiName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          "WPF_APP_ASSEMBLY_NAME=$assemblyName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          "ZIP_ARTIFACT_NAME=$zipArtifactName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          "ZIP_FILE_NAME=$zipFileName" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: 📦 dotnet publish WPF app
+        shell: pwsh
+        env:
+          STEP_BUILD_NUMBER: ${{ github.run_number }}
+          STEP_SEM_VERSION: ${{ needs.get-version-job.outputs.release-version }}
+          STEP_SEM_VERSION_DOT_ZERO: ${{ needs.get-version-job.outputs.release-version }}.0
+          STEP_WPF_APP_PUB_OUTPUT_PATH: ${{ runner.temp }}/wpf-pub-output
+        run: |
+          dotnet publish `
+            $env:WPF_APP_CSPROJ_PATH `
+            --configuration $env:CONFIGURATION `
+            --self-contained `
+            --runtime $env:WPF_APP_RUNTIME `
+            --output $env:STEP_WPF_APP_PUB_OUTPUT_PATH `
+            --verbosity minimal `
+            -p:Version=$env:STEP_SEM_VERSION `
+            -p:AssemblyVersion=$env:STEP_SEM_VERSION_DOT_ZERO `
+            -p:FileVersion=$env:STEP_SEM_VERSION_DOT_ZERO `
+            -p:IncludeSourceRevisionInInformationalVersion=true
+
+      - name: 📦 Create Zip archive of WPF app
+        shell: pwsh
+        run: |
+          $wpfAppPublishedOutputPath = "${{ runner.temp }}/wpf-pub-output"
+          $zipPath = Join-Path "${{ runner.temp }}" "${{ steps.get-names.outputs.ZIP_FILE_NAME }}"
+          Compress-Archive -Path "$wpfAppPublishedOutputPath\*" -DestinationPath $zipPath -Force
+          Write-Host "Created zip archive: $zipPath"
+
+      - name: 📤 Upload Zip to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ steps.get-names.outputs.ZIP_ARTIFACT_NAME }}"
+          path: "${{ runner.temp }}/${{ steps.get-names.outputs.ZIP_FILE_NAME }}"
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: 📦 Create MSI for WPF app
+        shell: pwsh
+        env:
+          STEP_MAIN_EXECUTABLE_FILE_NAME: ${{ steps.get-names.outputs.WPF_APP_ASSEMBLY_NAME }}.exe
+          STEP_MSI_FILE_NAME_WITH_OUT_EXT: ${{ steps.get-names.outputs.MSI_NAME }}
+          STEP_MSI_OUTPUT_PATH: ${{ runner.temp }}/msi-output
+          STEP_PACKAGE_VERSION: ${{ needs.get-version-job.outputs.release-version }}
+          STEP_PRODUCT_NAME: ${{ steps.get-names.outputs.WPF_APP_ASSEMBLY_NAME }}
+          STEP_WPF_APP_PUB_FOLDER_PATH: ${{ runner.temp }}/wpf-pub-output
+        run: |
+          dotnet build `
+            $env:MSI_WIX_PROJ_PATH `
+            --configuration $env:CONFIGURATION `
+            --verbosity minimal `
+            -p:PackageId=$env:MSI_WIX_PACKAGE_ID `
+            -p:PackageVersion=$env:STEP_PACKAGE_VERSION `
+            -p:Platform=$env:MSI_WIX_PLATFORM `
+            -p:ProductName=$env:STEP_PRODUCT_NAME `
+            -p:Manufacturer=$env:MSI_WIX_MANUFACTURER `
+            -p:PublishedFilesPath=$env:STEP_WPF_APP_PUB_FOLDER_PATH `
+            -p:MsiFileName=$env:STEP_MSI_FILE_NAME_WITH_OUT_EXT `
+            -p:OutputPath=$env:STEP_MSI_OUTPUT_PATH
+
+      - name: 📤 Upload MSI to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ steps.get-names.outputs.MSI_ARTIFACT_NAME }}"
+          path: "${{ runner.temp }}/msi-output/en-US/*.msi"
+          retention-days: 7
+          if-no-files-found: error
+
+  release-job:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs: [get-version-job, build-publish-artifacts-job]
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+
+      - name: 🤘 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0  # Needs full depth for generating release notes
+
+      - name: 📥 Download zip artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build-publish-artifacts-job.outputs.zip-artifact-name }}
+          path: ${{ runner.temp }}/dist
+
+      - name: 📥 Download MSI artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build-publish-artifacts-job.outputs.msi-artifact-name }}
+          path: ${{ runner.temp }}/dist
+
+      - name: 📝 Generate release notes
+        id: release-notes
+        shell: pwsh
+        env:
+          STEP_VERSION: ${{ needs.get-version-job.outputs.release-version }}
+          STEP_ARTIFACT_ZIP_NAME: ${{ needs.build-publish-artifacts-job.outputs.zip-file-name }}
+          STEP_ARTIFACT_MSI_NAME: ${{ needs.build-publish-artifacts-job.outputs.msi-file-name }}
+          STEP_APP_NAME: ${{ needs.build-publish-artifacts-job.outputs.wpf-app-assembly-name }}
+          STEP_EXE_NAME: ${{ needs.build-publish-artifacts-job.outputs.wpf-app-assembly-name }}.exe
+        run: |
+          # Create release notes using StringBuilder for multiline content
+          $sb = [System.Text.StringBuilder]::new()
+          [void]$sb.AppendLine("## v$env:STEP_VERSION $env:STEP_APP_NAME")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("### What's New")
+          [void]$sb.AppendLine("This release includes the latest features and improvements for $env:STEP_APP_NAME.")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("### Download")
+          [void]$sb.AppendLine("- **Windows (x64) Portable**: Download the zip file from the assets below")
+          [void]$sb.AppendLine("- **Windows (x64) Installer**: Download the MSI file from the assets below")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("### Verification")
+          [void]$sb.AppendLine("1. Download the ``$env:STEP_ARTIFACT_ZIP_NAME`` or ``$env:STEP_ARTIFACT_MSI_NAME`` file from the GitHub release assets")
+          [void]$sb.AppendLine("2. Copy the SHA256 for the downloaded file from the GitHub release assets")
+          [void]$sb.AppendLine("3. Verify the file integrity: ``Get-FileHash <filename> -Algorithm SHA256``")
+          [void]$sb.AppendLine("4. Compare with the hash returned with the SHA256 from GitHub")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("### Installation")
+          [void]$sb.AppendLine("#### Portable (Zip)")
+          [void]$sb.AppendLine("1. Download and verify the zip file (see Verification above)")
+          [void]$sb.AppendLine("2. Extract the zip file to your desired location")
+          [void]$sb.AppendLine("3. Run ``$env:STEP_EXE_NAME`` to start the application")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("#### Installer (MSI)")
+          [void]$sb.AppendLine("1. Download and verify the MSI file (see Verification above)")
+          [void]$sb.AppendLine("2. Run the MSI installer to install the application")
+          [void]$sb.AppendLine("3. Launch the application from the Start Menu or Desktop shortcut")
+          [void]$sb.AppendLine("")
+          [void]$sb.AppendLine("### System Requirements")
+          [void]$sb.AppendLine("- Windows 10 version 1809 or later")
+          [void]$sb.AppendLine("- .NET 9.0 Runtime (included in self-contained build)")
+
+          $sb.ToString() | Out-File -FilePath "release-notes.md" -Encoding utf8
+          Write-Host "Generated release notes"
+
+      - name: 🚀 Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          name: v${{ needs.get-version-job.outputs.release-version }} ${{ needs.build-publish-artifacts-job.outputs.wpf-app-assembly-name }}
+          tag_name: ${{ github.ref_name }}
+          body_path: release-notes.md
+          files: |
+            ${{ runner.temp }}/dist/*
