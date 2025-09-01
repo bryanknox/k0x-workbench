@@ -90,6 +90,24 @@ public class Program
 
             _logger.LogInformation("WPF application has finished running with exit code {ExitCode}.", exitCode);
         }
+        catch (Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException ex)
+        {
+            _logger.LogError(ex, "WebView2 Runtime not found.");
+
+            MessageBox.Show(
+                "WebView2 Runtime is required but not installed on this system.\n"
+                + "\n"
+                + "Please install the Microsoft Edge WebView2 Runtime from:\n"
+                + "https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH\n"
+                + "\n"
+                + "The application cannot continue without WebView2 Runtime.",
+                caption: "WebView2 Runtime Required",
+                button: MessageBoxButton.OK,
+                icon: MessageBoxImage.Warning);
+
+            // Don't rethrow - exit gracefully
+            return;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "RunWpfApp unhandled exception.");
