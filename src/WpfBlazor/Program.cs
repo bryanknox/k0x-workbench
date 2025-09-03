@@ -109,7 +109,11 @@ public class Program
         catch (System.Reflection.TargetInvocationException ex) when (ex.InnerException is Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException)
         {
             var webView2Ex = (Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException)ex.InnerException;
-            _logger.LogError(webView2Ex, "WebView2 Runtime not found (wrapped in TargetInvocationException).");
+            _logger.LogError(webView2Ex, "WebView2 Runtime not found.");
+
+            string exceptionInfo = GetExceptionInfo(ex);
+
+            _logger.LogError("Exception Details:\n" + exceptionInfo);
 
             MessageBox.Show(
                 "WebView2 Runtime is required but not installed on this system.\n"
@@ -117,7 +121,9 @@ public class Program
                 + "Please install the Microsoft Edge WebView2 Runtime from:\n"
                 + "https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH\n"
                 + "\n"
-                + "The application cannot continue without WebView2 Runtime.",
+                + "The application cannot continue without the WebView2 Runtime."
+                + "\n"
+                + exceptionInfo,
                 caption: "WebView2 Runtime Required",
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Warning);
