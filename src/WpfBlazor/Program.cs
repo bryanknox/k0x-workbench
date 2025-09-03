@@ -78,7 +78,7 @@ public class Program
 
         while (current != null)
         {
-            lines.Add(current.GetType().Name);
+            lines.Add(current.GetType().FullName ?? current.GetType().Name + ":");
             lines.Add(current.Message);
             lines.Add(string.Empty);
             current = current.InnerException;
@@ -121,8 +121,9 @@ public class Program
                 + "Please install the Microsoft Edge WebView2 Runtime from:\n"
                 + "https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH\n"
                 + "\n"
-                + "The application cannot continue without the WebView2 Runtime."
+                + "The application cannot continue without the WebView2 Runtime.\n"
                 + "\n"
+                + "Exception Details:\n"
                 + exceptionInfo,
                 caption: "WebView2 Runtime Required",
                 button: MessageBoxButton.OK,
@@ -142,6 +143,7 @@ public class Program
             MessageBox.Show(
                 "An unhandled exception occurred in the WPF-Blazor app.\n"
                 + "\n"
+                + "Exception Details:\n"
                 + exceptionInfo,
                 caption: "Error in WPF-Blazor App",
                 button: MessageBoxButton.OK,
