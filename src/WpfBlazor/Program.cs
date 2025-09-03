@@ -71,6 +71,22 @@ public class Program
         benchFilePathProvider.FilePath = benchJsonFilePath;
     }
 
+    static string GetExceptionInfo(Exception ex)
+    {
+        var lines = new List<string>();
+        Exception? current = ex;
+
+        while (current != null)
+        {
+            lines.Add(current.GetType().Name);
+            lines.Add(current.Message);
+            lines.Add(string.Empty);
+            current = current.InnerException;
+        }
+
+        return string.Join(Environment.NewLine, lines);
+    }
+
     // Ensure this method is not inlined, so that no WPF assemblies are loaded
     // before this method is called from the Main method.
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -90,9 +106,10 @@ public class Program
 
             _logger.LogInformation("WPF application has finished running with exit code {ExitCode}.", exitCode);
         }
-        catch (Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException ex)
+        catch (System.Reflection.TargetInvocationException ex) when (ex.InnerException is Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException)
         {
-            _logger.LogError(ex, "WebView2 Runtime not found.");
+            var webView2Ex = (Microsoft.Web.WebView2.Core.WebView2RuntimeNotFoundException)ex.InnerException;
+            _logger.LogError(webView2Ex, "WebView2 Runtime not found (wrapped in TargetInvocationException).");
 
             MessageBox.Show(
                 "WebView2 Runtime is required but not installed on this system.\n"
@@ -112,12 +129,14 @@ public class Program
         {
             _logger.LogError(ex, "RunWpfApp unhandled exception.");
 
+            string exceptionInfo = GetExceptionInfo(ex);
+
+            _logger.LogError("Exception Details:\n" + exceptionInfo);
+
             MessageBox.Show(
                 "An unhandled exception occurred in the WPF-Blazor app.\n"
                 + "\n"
-                + $"{ex.GetType()}\n"
-                + "\n"
-                + $"{ex.Message}\n",
+                + exceptionInfo,
                 caption: "Error in WPF-Blazor App",
                 button: MessageBoxButton.OK,
                 icon: MessageBoxImage.Error);
