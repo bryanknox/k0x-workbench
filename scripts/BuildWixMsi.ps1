@@ -1,7 +1,6 @@
 #!/usr/bin/env pwsh
 <#
-.SYNOPSIS
-Builds the WiX MSI installer for the K0K0xWorkbench WPF-Blazor hybrid app.
+Builds the WiX MSI installer for the K0xWorkbench WPF-Blazor hybrid app.
 
 .DESCRIPTION
 This script builds the WiX MSI installer using the parameterized project. It accepts
