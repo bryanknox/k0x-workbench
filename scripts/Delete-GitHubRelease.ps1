@@ -15,7 +15,7 @@
     authenticated, and requires git to be available in the PATH.
 
 .PARAMETER Repo
-    The GitHub repository in the format 'username/repo-name' or
+    Optional. The GitHub repository in the format 'personal-name/repo-name' or
     'organization/repo-name'. This must be the full repository identifier as
     used by GitHub. If not specified, the repository will be automatically
     detected from the local git remote 'origin'.
@@ -25,10 +25,10 @@
     if used (e.g., 'v1.0.0', '1.2.3-beta', etc.).
 
 .EXAMPLE
-    .\Delete-GitHubRelease.ps1 -Repo "bryanknox/wpf-release-play" `
+    .\Delete-GitHubRelease.ps1 -Repo "myorg/myrepo" `
                                -TagName "v1.0.0"
 
-    Deletes the v1.0.0 release and tag from the bryanknox/wpf-release-play
+    Deletes the v1.0.0 release and tag from the myorg/myrepo
     repository.
 
 .EXAMPLE
@@ -38,10 +38,10 @@
     local git remote 'origin'.
 
 .EXAMPLE
-    .\Delete-GitHubRelease.ps1 -Repo "myorg/myproject" `
+    .\Delete-GitHubRelease.ps1 -Repo "myorg/myrepo" `
                                -TagName "2.1.0-preview"
 
-    Deletes the 2.1.0-preview release and tag from the myorg/myproject
+    Deletes the 2.1.0-preview release and tag from the myorg/myrepo
     repository.
 
 .NOTES
