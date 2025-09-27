@@ -40,6 +40,54 @@ Start the app from the command. Optional, provide the path to a workbench JSON f
 k0x-workbench.exe <path-to-workbench.json>
 ```
 
+## Configuration
+
+The app can be configured via its `appsettings.json`, or equivalent environment variables.
+
+Values set in environment variables will override any value set in the `appsettings.json` file.
+
+### `DataFolder` (`K0xWorkbench_DataFolderPath`)
+
+Specifies the absolute folder path where the app's internal data files should be stored.
+
+The default location is the `%USERPROFILE%\.k0xworkbench` folder.
+
+Example: `C:\Users\<YourUsername>\.k0xworkbench`
+
+### `LogsFolderPath` (`K0xWorkbench_LogsFolderPath`)
+
+Specifies the absolute folder path where the app's log files should be stored.
+
+The default location is the `%LOCALAPPDATA%\K0xWorkbench\logs` folder.
+
+Example: `C:\Users\<YourUsername>\AppData\Local\K0xWorkbench\logs`
+
+### `Serilog.MinimumLevel` (`K0xWorkbench_Serilog__MinimumLevel`)
+
+Specifies the minimum logging level for messages that should be written to log files.
+rride any coorespoinding value set in the `appsettings.json` file.
+
+### `DataFolder` (`K0xWorkbench_DataFolderPath`)
+
+Specifies the absolute folder path where the app's internal data files should be stored.
+
+The default location is the `%USERPROFILE%\.k0xworkbench` folder.
+
+Example: `C:\Users\<YourUsername>\.k0xworkbench`
+
+### `LogsFolderPath` (`K0xWorkbench_LogsFolderPath`)
+
+Specifies the absolute folder path where the app's log files should be stored.
+
+The default location is the `%LOCALAPPDATA%\K0xWorkbench\logs` folder.
+
+Example: `C:\Users\<YourUsername>\AppData\Local\K0xWorkbench\logs`
+
+### `Serilog.MinimumLevel` (`K0xWorkbench_Serilog__MinimumLevel`)
+
+Specifies the minimum logging level for messages that should be written to log files.
+
+
 ## Development
 
 ### Tech Stack
