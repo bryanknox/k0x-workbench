@@ -6,10 +6,10 @@ namespace K0x.Workbench.RecentBenches.Internal;
 
 public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 {
-    private readonly ILocalAppDataFolderPathProvider _folderPathProvider;
+    private readonly IDataFolderPathProvider _folderPathProvider;
 
     public RecentBenchesFilePathProvider(
-        ILocalAppDataFolderPathProvider recentBenchesFolderPathProvider
+        IDataFolderPathProvider recentBenchesFolderPathProvider
     )
     {
         _folderPathProvider = recentBenchesFolderPathProvider;
@@ -17,7 +17,7 @@ public class RecentBenchesFilePathProvider : IRecentBenchesFilePathProvider
 
     public string GetFilePath()
     {
-        string folderPath = _folderPathProvider.GetLocalAppDataFolderPath();
+        string folderPath = _folderPathProvider.GetDataFolderPath();
         string filePath = Path.Combine(folderPath, RecentBenchesConstants.DefaultFileName);
 
         return filePath;

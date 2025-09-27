@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.IO;
-using WpfBlazor.InternalServices;
 
 namespace WpfBlazor;
 
@@ -25,16 +24,12 @@ internal static class LoggingConfiguration
 
     private static void Configure(IConfiguration configuration)
     {
-        string localAppDataFolderPath = new LocalAppDataFolderPathProvider()
-            .GetLocalAppDataFolderPath();
+        string logsFolderPath = GetLogsFolderPath(configuration);
 
-        string logDirectoryPath = Path.Combine(
-            localAppDataFolderPath,
-            "logs");
-        Directory.CreateDirectory(logDirectoryPath);
+        Directory.CreateDirectory(logsFolderPath);
 
         string logFilePath = Path.Combine(
-            logDirectoryPath,
+            logsFolderPath,
             $"log_{DateTime.Now:yyyyMMdd_HHmmss}.log");
 
         Log.Logger = new LoggerConfiguration()
@@ -48,7 +43,7 @@ internal static class LoggingConfiguration
 
         // Delete log files older than 5 days
         var expireDate = DateTime.Now.AddDays(-5);
-        var logFiles = Directory.GetFiles(logDirectoryPath, "*.log");
+        var logFiles = Directory.GetFiles(logsFolderPath, "*.log");
         foreach (var logFile in logFiles)
         {
             if (File.GetCreationTime(logFile) < expireDate)
@@ -56,5 +51,24 @@ internal static class LoggingConfiguration
                 File.Delete(logFile);
             }
         }
+    }
+
+    private static string GetLogsFolderPath(IConfiguration configuration)
+    {
+        string? logsFolderPath = configuration["LogsFolderPath"];
+
+        if (string.IsNullOrWhiteSpace(logsFolderPath))
+        {
+            // Default to a folder under user's LocalApplicationData folder.
+
+            string baseFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            logsFolderPath = Path.Combine(baseFolderPath, "K0xWorkbench", "logs");
+        }
+
+        // Create the folder if it does not exist.
+        Directory.CreateDirectory(logsFolderPath);
+
+        return logsFolderPath;
     }
 }

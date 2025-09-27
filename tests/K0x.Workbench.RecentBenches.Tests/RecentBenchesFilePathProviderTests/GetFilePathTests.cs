@@ -8,20 +8,20 @@ namespace K0x.Workbench.RecentBenches.Tests.RecentBenchesFilePathProviderTests;
 
 public class GetFilePathTests
 {
-    private readonly Mock<ILocalAppDataFolderPathProvider> _localAppDataFolderPathProviderMock;
+    private readonly Mock<IDataFolderPathProvider> _dataFolderPathProviderMock;
     private readonly RecentBenchesFilePathProvider _provider;
 
     public GetFilePathTests()
     {
-        _localAppDataFolderPathProviderMock = new Mock<ILocalAppDataFolderPathProvider>();
-        _provider = new RecentBenchesFilePathProvider(_localAppDataFolderPathProviderMock.Object);
+        _dataFolderPathProviderMock = new Mock<IDataFolderPathProvider>();
+        _provider = new RecentBenchesFilePathProvider(_dataFolderPathProviderMock.Object);
     }
 
     [Fact]
     public void Should_Return_FilePath()
     {
         // Arrange
-        _localAppDataFolderPathProviderMock.Setup(p => p.GetLocalAppDataFolderPath())
+        _dataFolderPathProviderMock.Setup(p => p.GetDataFolderPath())
             .Returns("defaultFolder");
 
         // Act

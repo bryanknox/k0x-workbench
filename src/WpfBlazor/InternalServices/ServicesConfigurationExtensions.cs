@@ -13,8 +13,8 @@ public static class ServicesConfigurationExtensions
         services.AddSingleton<IAppTitleSetService>(s => s.GetRequiredService<AppTitleService>());
     }
 
-    public static void AddLocalAppDataFolderPathProvider(this IServiceCollection services)
+    public static void AddDataFolderPathProvider(this IServiceCollection services)
     {
-        services.AddScoped<ILocalAppDataFolderPathProvider, LocalAppDataFolderPathProvider>();
+        services.AddScoped<IDataFolderPathProvider, DataFolderPathProvider>();
     }
 }
