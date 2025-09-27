@@ -46,7 +46,7 @@ The app can be configured via its `appsettings.json` or equivalent environment v
 
 Values set in environment variables will override any corresponding value set in the `appsettings.json` file.
 
-### `DataFolder` (`K0xWorkbench_DataFolderPath`)
+### `DataFolderPath` (`K0xWorkbench_DataFolderPath`)
 
 Specifies the absolute folder path where the app's internal data files should be stored.
 
