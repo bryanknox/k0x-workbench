@@ -25,11 +25,11 @@ internal static class LoggingConfiguration
 
     private static void Configure(IConfiguration configuration)
     {
-        string localAppDataFolderPath = new LocalAppDataFolderPathProvider()
-            .GetLocalAppDataFolderPath();
+        string dataFolderPath = new DataFolderPathProvider()
+            .GetDataFolderPath();
 
         string logDirectoryPath = Path.Combine(
-            localAppDataFolderPath,
+            dataFolderPath,
             "logs");
         Directory.CreateDirectory(logDirectoryPath);
 

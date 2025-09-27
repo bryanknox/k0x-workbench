@@ -25,7 +25,7 @@ internal static class ProgramConfiguration
 
             services.AddAppTitleService();
 
-            services.AddLocalAppDataFolderPathProvider();
+            services.AddDataFolderPathProvider();
 
             services.AddRecentBenchesJsonFiles();
 
