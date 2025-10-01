@@ -82,11 +82,14 @@ The following sequence describes how the WpfBlazor app starts up, configures its
 - **JavaScript**: Loads `blazor.webview.js` for WebView2 integration
 - **App Mount**: Blazor app mounts to the `<div id="app">` element
 
-### 9. Navigation and Layout
+### 9. Initial Page Routing and Navigation
+- **Index Page**: `Index.razor` serves as the startup route determiner (mapped to "/")
+- **Route Logic**: Uses `IBenchFilePathProvider` to determine initial navigation:
+  - If a bench file is specified → navigates to `/bench` (BenchPage)
+  - If no bench file is specified → navigates to `/recent` (RecentPage)
 - **Main Layout**: `MainLayout.razor` provides the overall page structure
 - **Navigation**: `NavMenu.razor` handles application navigation
-- **Default Route**: Typically resolves to `Home.razor` or similar default page
-- **Page Types**: Includes pages like `BenchPage`, `RecentPage`, and `Home`
+- **Page Types**: Includes `BenchPage`, and `RecentPage`
 
 ## Key Components
 
@@ -104,9 +107,9 @@ The following sequence describes how the WpfBlazor app starts up, configures its
 - `wwwroot/index.html` - HTML host page for Blazor content
 
 ### Pages
-- `Home.razor` - Default home page
-- `BenchPage.razor` - Workbench/bench management page
-- `RecentPage.razor` - Recent files/projects page
+- `Index.razor` - Startup route determiner that automatically navigates based on bench file presence
+- `BenchPage.razor` - Workbench page
+- `RecentPage.razor` - Recent workbenches list page
 
 ## Dependencies
 
