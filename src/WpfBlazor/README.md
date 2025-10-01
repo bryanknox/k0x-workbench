@@ -4,7 +4,7 @@ This is a hybrid WPF-Blazor application that combines the power of WPF for nativ
 
 The K0x Workbench application serves as a developer workbench tool.
 
-This README focuses on the techincal details of the application to provide an understanding of how it works.
+This README focuses on the technical details of the application to provide an understanding of how it works.
 
 ## Architecture Overview
 
