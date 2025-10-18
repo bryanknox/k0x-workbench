@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:WpfBlazor"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
-        Width="800">
+        Height="830"
+        Width="420">
     <Grid>
         <blazor:BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
             <blazor:BlazorWebView.RootComponents>
