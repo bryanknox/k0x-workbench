@@ -27,7 +27,7 @@
     color: white;
 }
 
-.nav-link.active {
+::deep .nav-link.active {
     background-color: rgba(255, 255, 255, 0.3) !important;
     color: #00d4ff !important;
     font-weight: 700 !important;
