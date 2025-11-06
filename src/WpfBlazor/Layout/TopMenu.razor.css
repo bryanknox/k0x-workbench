@@ -7,31 +7,32 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
-    min-height: 3.5rem;
+    gap: 0.5rem;
+    min-height: 2.5rem;
 }
 
 .nav-link {
     color: #d7d7d7;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.75rem;
     border-radius: 4px;
     display: flex;
     align-items: center;
     white-space: nowrap;
+    font-size: 0.9rem;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.12);
     color: white;
 }
 
 ::deep .nav-link.active {
-    background-color: rgba(255, 255, 255, 0.3) !important;
-    color: #00d4ff !important;
-    font-weight: 700 !important;
-    border-bottom: 4px solid #00d4ff !important;
-    padding-bottom: calc(0.5rem - 4px) !important;
-    box-shadow: 0 -2px 8px rgba(0, 212, 255, 0.3) inset !important;
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    color: #f0f0f0 !important;
+    font-weight: 600 !important;
+    border-bottom: 3px solid #e8b84d !important;
+    padding-bottom: calc(0.4rem - 3px) !important;
+    box-shadow: 0 2px 6px rgba(232, 184, 77, 0.3) !important;
 }
