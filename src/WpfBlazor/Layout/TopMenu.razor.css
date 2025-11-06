@@ -23,12 +23,15 @@
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.15);
     color: white;
 }
 
 .nav-link.active {
-    background-color: rgba(255, 255, 255, 0.37);
-    color: white;
-    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    color: #00d4ff !important;
+    font-weight: 700 !important;
+    border-bottom: 4px solid #00d4ff !important;
+    padding-bottom: calc(0.5rem - 4px) !important;
+    box-shadow: 0 -2px 8px rgba(0, 212, 255, 0.3) inset !important;
 }
