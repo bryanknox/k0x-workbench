@@ -88,7 +88,7 @@ The following sequence describes how the WpfBlazor app starts up, configures its
   - If a bench file is specified → navigates to `/bench` (BenchPage)
   - If no bench file is specified → navigates to `/recent` (RecentPage)
 - **Main Layout**: `MainLayout.razor` provides the overall page structure
-- **Navigation**: `NavMenu.razor` handles application navigation
+- **Navigation**: `TopMenu.razor` provides a page navigation menu
 - **Page Types**: Includes `BenchPage`, and `RecentPage`
 
 ## Key Components
@@ -103,7 +103,7 @@ The following sequence describes how the WpfBlazor app starts up, configures its
 ### Blazor Components
 - `BlazorApp.razor` - Root Blazor component with routing
 - `MainLayout.razor` - Primary layout component
-- `NavMenu.razor` - Navigation menu component
+- `TopMenu.razor` - Horizontal navigation menu component with active route highlighting
 - `wwwroot/index.html` - HTML host page for Blazor content
 
 ### Pages
