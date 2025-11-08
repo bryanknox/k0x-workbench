@@ -4,7 +4,26 @@ namespace K0x.Workbench.DataStorage.JsonFiles;
 
 public class BenchFilePathProvider : IBenchFilePathProvider
 {
-    public string? FilePath { get; private set; }
+    private readonly object _lock = new();
+    private string? _filePath;
+
+    public string? FilePath
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _filePath;
+            }
+        }
+        private set
+        {
+            lock (_lock)
+            {
+                _filePath = value;
+            }
+        }
+    }
 
     public void SetFilePath(string? filePath)
     {
@@ -14,6 +33,14 @@ public class BenchFilePathProvider : IBenchFilePathProvider
             return;
         }
 
+        var trimmedPath = TrimAndRemoveQuotes(filePath);
+        var validatedPath = ValidateAndNormalizePath(trimmedPath);
+
+        FilePath = validatedPath;
+    }
+
+    private static string TrimAndRemoveQuotes(string filePath)
+    {
         var workingFilePath = filePath.Trim();
 
         // Check for and remove surrounding quotes.
@@ -22,9 +49,12 @@ public class BenchFilePathProvider : IBenchFilePathProvider
             workingFilePath = workingFilePath[1..^1].Trim();
         }
 
-        // Make sure we have an absolute path.
-        workingFilePath = System.IO.Path.GetFullPath(workingFilePath);
+        return workingFilePath;
+    }
 
-        FilePath = workingFilePath;
+    private static string ValidateAndNormalizePath(string filePath)
+    {
+        // Make sure we have an absolute path.
+        return System.IO.Path.GetFullPath(filePath);
     }
 }
