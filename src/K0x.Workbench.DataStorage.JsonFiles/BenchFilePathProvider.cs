@@ -1,9 +1,17 @@
 ﻿using K0x.Workbench.DataStorage.Abstractions;
+using System.IO.Abstractions; // From TestableIO.System.IO.Abstractions.Wrappers NuGet.
 
 namespace K0x.Workbench.DataStorage.JsonFiles;
 
 public class BenchFilePathProvider : IBenchFilePathProvider
 {
+    private readonly IFileSystem _fileSystem;
+
+    public BenchFilePathProvider(IFileSystem fileSystem)
+    {
+        _fileSystem = fileSystem;
+    }
+
     public string? FilePath { get; private set; }
 
     public void SetFilePath(string? filePath)
@@ -44,10 +52,10 @@ public class BenchFilePathProvider : IBenchFilePathProvider
         return string.IsNullOrWhiteSpace(workingFilePath) ? null : workingFilePath;
     }
 
-    private static string ValidateAndNormalizePath(string filePath)
+    private string ValidateAndNormalizePath(string filePath)
     {
         // Check for invalid characters before attempting to get full path.
-        var invalidChars = System.IO.Path.GetInvalidPathChars();
+        var invalidChars = _fileSystem.Path.GetInvalidPathChars();
         if (filePath.IndexOfAny(invalidChars) >= 0)
         {
             throw new ArgumentException("File path contains invalid characters.", nameof(filePath));
@@ -63,7 +71,7 @@ public class BenchFilePathProvider : IBenchFilePathProvider
         try
         {
             // Make sure we have an absolute path.
-            var fullPath = System.IO.Path.GetFullPath(filePath);
+            var fullPath = _fileSystem.Path.GetFullPath(filePath);
 
             // Additional validation: check the resulting full path length.
             if (fullPath.Length > 32767)

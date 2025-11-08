@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Wrappers" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\K0x.Workbench.DataStorage.Abstractions\K0x.Workbench.DataStorage.Abstractions.csproj" />
