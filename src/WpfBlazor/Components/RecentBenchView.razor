@@ -34,7 +34,7 @@
     private void OnRecentBenchClick(MouseEventArgs e)
     {
         Logger.LogInformation("OnRecentBenchClick: {RecentBench}", RecentBench);
-        BenchFilePathProvider.FilePath = RecentBench.FilePath;
+        BenchFilePathProvider.SetFilePath(RecentBench.FilePath);
         NavigationManager.NavigateTo("/bench");
     }
 }
