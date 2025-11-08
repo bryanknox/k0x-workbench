@@ -243,7 +243,7 @@ public partial class BenchPage : ComponentBase
     private async Task UpdateBenchAndInfoAsync(Bench? bench, string? filePath)
     {
         Bench = bench;
-        BenchFilePathProvider.FilePath = filePath;
+        BenchFilePathProvider.SetFilePath(filePath);
         TitleSetService.SetTitle(bench?.Label);
 
         if (bench != null

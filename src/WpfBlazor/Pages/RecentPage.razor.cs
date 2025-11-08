@@ -67,7 +67,7 @@ public partial class RecentPage : ComponentBase
 
     private void OnRecentBenchClick(RecentBench bench)
     {
-        BenchFilePathProvider.FilePath = bench.FilePath;
+        BenchFilePathProvider.SetFilePath(bench.FilePath);
         NavigationManager.NavigateTo("/bench");
     }
 

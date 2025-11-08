@@ -68,7 +68,7 @@ public class Program
         // We set its FilePath here so that it is available to the rest of the app.
         var benchFilePathProvider = serviceProvider.GetRequiredService<IBenchFilePathProvider>();
 
-        benchFilePathProvider.FilePath = benchJsonFilePath;
+        benchFilePathProvider.SetFilePath(benchJsonFilePath);
     }
 
     static string GetExceptionInfo(Exception ex)
