@@ -15,7 +15,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
   DOTNET_NOLOGO: true                     # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_VERSION: '9.0.x'
+  DOTNET_VERSION: '10.0.x'
   # Environment variables for MSI packaging
   MSI_WIX_PACKAGE_ID: 'bryanknox.K0xWorkbench.250901'
   MSI_WIX_PLATFORM: 'x64'

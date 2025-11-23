@@ -30,7 +30,7 @@ Describe "Get-AssemblyNameOrExit" {
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <AssemblyName>MyCustomApp</AssemblyName>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -52,7 +52,7 @@ Describe "Get-AssemblyNameOrExit" {
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 </Project>
@@ -248,7 +248,7 @@ Get-AssemblyNameOrExit -ProjectPath `$ProjectPath
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <AssemblyName>ValidApp</AssemblyName>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
