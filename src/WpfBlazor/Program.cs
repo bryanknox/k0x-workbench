@@ -1,4 +1,4 @@
-﻿using K0x.Workbench.DataStorage.Abstractions;
+using K0x.Workbench.DataStorage.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
