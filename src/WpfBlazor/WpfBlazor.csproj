@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>K0xWorkbench</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>WpfBlazor</RootNamespace>
     <Copyright>Copyright © Bryan Knox 2024</Copyright>
