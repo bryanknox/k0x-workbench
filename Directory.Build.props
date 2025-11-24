@@ -5,5 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>enable</WarningsAsErrors>
+    <WindowsTargetFramework>net10.0-windows10.0.26100.0</WindowsTargetFramework>
   </PropertyGroup>
 </Project>

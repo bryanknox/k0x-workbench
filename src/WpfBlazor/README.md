@@ -120,7 +120,7 @@ The following sequence describes how the WpfBlazor app starts up, configures its
 - `Serilog.*` - Structured logging packages
 
 ### Runtime Requirements
-- .NET 9.0 Windows
+- .NET 10.0 Windows
 - Microsoft Edge WebView2 Runtime (automatically prompts for installation if missing. The user must take action outside of the application to install the missing runtime)
 
 ## Configuration

@@ -240,7 +240,7 @@ jobs:
           [void]$sb.AppendLine("")
           [void]$sb.AppendLine("### System Requirements")
           [void]$sb.AppendLine("- Windows 10 version 1809 or later")
-          [void]$sb.AppendLine("- .NET 9.0 Runtime (included in self-contained build)")
+          [void]$sb.AppendLine("- .NET 10.0 Runtime (included in self-contained build)")
 
           $sb.ToString() | Out-File -FilePath "release-notes.md" -Encoding utf8
           Write-Host "Generated release notes"

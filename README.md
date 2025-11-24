@@ -72,7 +72,7 @@ Specifies the minimum logging level for messages that should be written to log f
 ### Tech Stack
 
 - WPF-Blazor hybrid app
-  - .NET 9, C#
+  - .NET 10, C#
   - Serilog
   - XUnit
   - FluentAssertions
