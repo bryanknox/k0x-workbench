@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
     <AssemblyName>K0xWorkbench</AssemblyName>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>WpfBlazor</RootNamespace>
-    <Copyright>Copyright © Bryan Knox 2024</Copyright>
+    <Copyright>Copyright © Bryan Knox 2025</Copyright>
     <Description>A workbench for developers</Description>
     <ApplicationIcon>K0x.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
