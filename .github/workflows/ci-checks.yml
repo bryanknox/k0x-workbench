@@ -44,13 +44,13 @@ jobs:
     steps:
 
       - name: 🤘 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Only checkout the specific commit to improve security
           persist-credentials: false
 
       - name: 🔧 Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -139,7 +139,7 @@ jobs:
           reporter: dotnet-trx
 
       - name: 📈 Upload test results as artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: test-results-release

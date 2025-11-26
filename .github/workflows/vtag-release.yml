@@ -60,12 +60,12 @@ jobs:
     steps:
 
       - name: 🤘 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: 🔧 Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -135,7 +135,7 @@ jobs:
           Write-Host "Created zip archive: $zipPath"
 
       - name: 📤 Upload Zip to Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "${{ steps.get-names.outputs.ZIP_ARTIFACT_NAME }}"
           path: "${{ runner.temp }}/${{ steps.get-names.outputs.ZIP_FILE_NAME }}"
@@ -166,7 +166,7 @@ jobs:
             -p:OutputPath=$env:STEP_MSI_OUTPUT_PATH
 
       - name: 📤 Upload MSI to Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "${{ steps.get-names.outputs.MSI_ARTIFACT_NAME }}"
           path: "${{ runner.temp }}/msi-output/en-US/*.msi"
@@ -183,19 +183,19 @@ jobs:
     steps:
 
       - name: 🤘 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
           fetch-depth: 0  # Needs full depth for generating release notes
 
       - name: 📥 Download zip artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ needs.build-publish-artifacts-job.outputs.zip-artifact-name }}
           path: ${{ runner.temp }}/dist
 
       - name: 📥 Download MSI artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ needs.build-publish-artifacts-job.outputs.msi-artifact-name }}
           path: ${{ runner.temp }}/dist
