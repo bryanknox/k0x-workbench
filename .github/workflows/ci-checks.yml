@@ -8,6 +8,10 @@ on:
   push:
     branches: ["**"]
     paths:
+      - 'Directory.Build.props'
+      - 'Directory.Packages.props'
+      - 'global.json'
+      - 'k0x-workbench.sln'
       - 'src/**'
       - 'tests/**'
       - '.github/workflows/ci-checks.yml'
