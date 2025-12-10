@@ -84,7 +84,7 @@ Specifies the minimum logging level for messages that should be written to log f
 
 ### Repo Folder structure
 
-`.github\chatmodes` - GitHub Copilot custom chat modes.
+`.github\agents` - GitHub Copilot custom agents.
 
 `.github\workflows` - GitHub Actions workflows.
 
