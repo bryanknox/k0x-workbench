@@ -1,39 +1,43 @@
 @page "/recent"
 @using WpfBlazor.Components
 
-<h3>Recent Benches</h3>
+<div class="page-container">
 
-@if (IsLoading)
-{
-    <p>Loading...</p>
-}
-else if (!string.IsNullOrEmpty(ErrorMessage))
-{
-    <p class="text-danger">@ErrorMessage</p>
-}
-else if (RecentBenches.Count == 0)
-{
-    <p>No recent benches available</p>
-}
-else
-{
+    <h3>Recent Benches</h3>
 
-    <hr class="horizontal-separator" />
+    @if (IsLoading)
+    {
+        <p>Loading...</p>
+    }
+    else if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <p class="text-danger">@ErrorMessage</p>
+    }
+    else if (RecentBenches.Count == 0)
+    {
+        <p>No recent benches available</p>
+    }
+    else
+    {
 
-    <div>
-        <span class="bench-path">
-            Recent Benches file: @(RecentBenchesFilePathProvider.GetFilePath() ?? "null")
-            <i class="bi bi-pencil action-icon" @onclick="OnEditRecentBenchesFileClick" title="Edit Recent Benches file"></i>
-            <i class="bi bi-arrow-repeat action-icon" @onclick="OnReloadRecentBenchesClick" title="Reload Recent Benches file"></i>
-        </span>
-    </div>
+        <hr class="horizontal-separator" />
 
-    <div>
-        <ul>
-            @foreach (var bench in RecentBenches)
-            {
-                <RecentBenchView RecentBench="bench" />
-            }
-        </ul>
-    </div>
-}
+        <div>
+            <span class="bench-path">
+                Recent Benches file: @(RecentBenchesFilePathProvider.GetFilePath() ?? "null")
+                <i class="bi bi-pencil action-icon" @onclick="OnEditRecentBenchesFileClick" title="Edit Recent Benches file"></i>
+                <i class="bi bi-arrow-repeat action-icon" @onclick="OnReloadRecentBenchesClick" title="Reload Recent Benches file"></i>
+            </span>
+        </div>
+
+        <div class="recent-list-container">
+            <ul>
+                @foreach (var bench in RecentBenches)
+                {
+                    <RecentBenchView RecentBench="bench" />
+                }
+            </ul>
+        </div>
+    }
+
+</div>

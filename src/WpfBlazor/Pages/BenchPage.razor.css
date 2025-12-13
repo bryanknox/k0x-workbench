@@ -18,6 +18,17 @@
 
 .container {
     margin: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bench-view-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
 }
 
 .horizontal-separator {
