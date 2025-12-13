@@ -31,6 +31,12 @@
     margin-bottom: 10px;
 }
 
+.recent-list-container ul {
+    margin: 0;
+    padding-left: 0;
+    list-style-position: inside;
+}
+
 .container {
     margin: 5px;
 }
