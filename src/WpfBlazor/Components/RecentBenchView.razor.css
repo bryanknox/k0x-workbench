@@ -23,4 +23,7 @@ p {
     display: block;
     font-size: smaller;
     color: gray;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
