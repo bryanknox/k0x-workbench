@@ -12,7 +12,7 @@ p {
 }
 
 .indent1 {
-    margin-left: 25px; /* Adjust the value as needed */
+    margin-left: 15px;
 }
 
 .indent2 {
@@ -23,4 +23,7 @@ p {
     display: block;
     font-size: smaller;
     color: gray;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
