@@ -16,6 +16,12 @@
     font-size: 0.875rem;
 }
 
+.bench-label {
+    font-size: 1em;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
 .page-container {
     height: 100%;
     display: flex;

@@ -3,6 +3,7 @@
 
 <div class="page-container">
     <div class="controls-container">
+
         <div>
             <button class="btn btn-primary btn-small" @onclick="NewBenchFileAsync">New...</button>
 
@@ -12,6 +13,8 @@
         </div>
 
         <hr class="horizontal-separator" />
+
+        <div class="bench-label">@Bench?.Label</div>
 
         <div>
             <span class="bench-path">
