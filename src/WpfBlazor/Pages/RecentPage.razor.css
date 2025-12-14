@@ -22,20 +22,21 @@
     flex-direction: column;
 }
 
+.controls-container {
+    padding: 10px
+}
+
 .recent-list-container {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    padding: 0 0 10px 10px; /* (no top), (no right), bottom, left padding */
 }
 
 .recent-list-container ul {
     margin: 0;
     padding-left: 0;
     list-style-position: inside;
-}
-
-.container {
-    margin: 5px;
 }
 
 .horizontal-separator {

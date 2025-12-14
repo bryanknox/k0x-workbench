@@ -16,16 +16,21 @@
     font-size: 0.875rem;
 }
 
-.container {
+.page-container {
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.controls-container {
+    padding: 10px
 }
 
 .bench-view-container {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    padding: 0 0 10px 10px; /* (no top), (no right), bottom, left padding */
 }
 
 .horizontal-separator {

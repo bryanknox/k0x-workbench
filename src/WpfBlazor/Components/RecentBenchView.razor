@@ -27,7 +27,7 @@
     [Parameter]
     public RecentBench RecentBench { get; set; } = default!;
 
-    private bool IsExpanded { get; set; } = true;
+    private bool IsExpanded { get; set; } = false;
 
     private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
 
