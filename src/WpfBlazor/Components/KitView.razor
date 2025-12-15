@@ -3,16 +3,28 @@
 
 <div>
 
-    <div class="kit-label">@Kit.Label</div>
+    <div style="cursor:pointer" @onclick="() => IsExpanded = !IsExpanded" role="button">
+        <span class="bi @expanderIconClass"
+            aria-hidden="true">&nbsp;</span>
+        <span class="kit-label">@Kit.Label</span>
+    </div>
 
-    @foreach (var tool in Kit.Tools)
-    {
-        <ToolView Tool="tool" />
-    }
-
+    <div class="kit-container">
+        @if (IsExpanded)
+        {
+            @foreach (var tool in Kit.Tools)
+            {
+                <ToolView Tool="tool" />
+            }
+        }
+    </div>
 </div>
 
 @code {
     [Parameter]
     public Kit Kit { get; set; } = default!;
+
+    private bool IsExpanded { get; set; } = false;
+
+    private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
 }
