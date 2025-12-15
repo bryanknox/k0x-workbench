@@ -3,12 +3,9 @@
 
 <div>
 
-    <div>
+    <div style="cursor:pointer" @onclick="() => IsExpanded = !IsExpanded" role="button">
         <span class="bi @expanderIconClass"
-            aria-hidden="true"
-            style="cursor:pointer"
-            @onclick="() => IsExpanded = !IsExpanded">&nbsp;</span>
-
+            aria-hidden="true">&nbsp;</span>
         <span class="kit-label">@Kit.Label</span>
     </div>
 
