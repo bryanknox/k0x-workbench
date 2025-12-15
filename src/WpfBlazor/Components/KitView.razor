@@ -4,10 +4,13 @@
 <div>
 
     <div>
-        <span class="bi @expanderIconClass"
-            aria-hidden="true"
-            style="cursor:pointer"
-            @onclick="() => IsExpanded = !IsExpanded">&nbsp;</span>
+        <button type="button"
+                class="bi @expanderIconClass"
+                style="cursor:pointer; background:none; border:none; padding:0;"
+                @onclick="() => IsExpanded = !IsExpanded"
+                aria-label="Toggle kit expansion">
+            &nbsp;
+        </button>
 
         <span class="kit-label">@Kit.Label</span>
     </div>
