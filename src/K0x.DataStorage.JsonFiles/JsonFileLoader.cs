@@ -25,7 +25,12 @@ public class JsonFileLoader<T> : IJsonFileLoader<T>
 
         string json = await sr.ReadToEndAsync();
 
-        T? data = JsonSerializer.Deserialize<T>(json);
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+        };
+
+        T? data = JsonSerializer.Deserialize<T>(json, options);
 
         // data is not null because an exception will be thrown if the JSON is invalid.
         return data!;

@@ -16,7 +16,12 @@ public class JsonFileSaver<T> : IJsonFileSaver<T>
         Justification = "Instances of this class are used in dependency injection.")]
     public async Task SaveAsync(T data, string filePath)
     {
-        string json = JsonSerializer.Serialize(data);
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+        };
+
+        string json = JsonSerializer.Serialize(data, options);
 
         // Overwrite the file if it exists.
         using var sw = new StreamWriter(filePath, append: false);
