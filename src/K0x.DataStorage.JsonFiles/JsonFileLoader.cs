@@ -25,6 +25,9 @@ public class JsonFileLoader<T> : IJsonFileLoader<T>
 
         string json = await sr.ReadToEndAsync();
 
+        // Use ReferenceHandler.Preserve to support circular references in object graphs.
+        // This allows deserializing objects with self-referencing properties (e.g., Kit.Kits)
+        // without throwing JsonException.
         var options = new JsonSerializerOptions
         {
             ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve

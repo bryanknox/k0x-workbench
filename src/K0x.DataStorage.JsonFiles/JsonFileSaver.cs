@@ -16,6 +16,9 @@ public class JsonFileSaver<T> : IJsonFileSaver<T>
         Justification = "Instances of this class are used in dependency injection.")]
     public async Task SaveAsync(T data, string filePath)
     {
+        // Use ReferenceHandler.Preserve to support circular references in object graphs.
+        // This allows serializing objects with self-referencing properties (e.g., Kit.Kits)
+        // without throwing JsonException.
         var options = new JsonSerializerOptions
         {
             ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
