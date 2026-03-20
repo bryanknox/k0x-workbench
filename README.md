@@ -86,6 +86,10 @@ Specifies the minimum logging level for messages that should be written to log f
 
 `.github\agents` - GitHub Copilot custom agents.
 
+`.github\instructions` - GitHub Copilot instructions.
+
+`.github\prompts` - GitHub Copilot prompts.
+
 `.github\workflows` - GitHub Actions workflows.
 
 `.github\workflows\pwsh` - PowerShell scripts used by workflows.
