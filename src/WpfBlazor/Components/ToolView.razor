@@ -25,10 +25,19 @@
         {
             <span class="text-line indent1">Working Directory: @Tool.WorkingDirectory</span>
         }
+        else if (!string.IsNullOrWhiteSpace(DefaultWorkingDirectory))
+        {
+            <span class="text-line indent1">Working Directory: @DefaultWorkingDirectory</span>
+            <span class="text-line indent2">(inherited)</span>
+        }
     }
 </div>
 
 @code {
+
+    [Parameter]
+    public string? DefaultWorkingDirectory { get; set; } = default;
+
     [Parameter]
     public Tool Tool { get; set; } = default!;
 
@@ -38,11 +47,15 @@
 
     private void Execute(MouseEventArgs e)
     {
+        string? workingDirectory = string.IsNullOrWhiteSpace(Tool.WorkingDirectory)
+            ? DefaultWorkingDirectory
+            : Tool.WorkingDirectory;
+
         var psi = new System.Diagnostics.ProcessStartInfo
         {
             FileName = Tool.Command,
             Arguments = Tool.Arguments,
-            WorkingDirectory = Tool.WorkingDirectory,
+            WorkingDirectory = workingDirectory,
             ErrorDialog = true,
             UseShellExecute = true,
         };

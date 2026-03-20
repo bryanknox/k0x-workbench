@@ -14,21 +14,32 @@
         {
             @foreach (var tool in Kit.Tools)
             {
-                <ToolView Tool="tool" />
+                <ToolView Tool="@tool" DefaultWorkingDirectory="@GetDefaultWorkingDirectory()" />
             }
             @foreach (var kit in Kit.Kits)
             {
-                <KitView Kit="kit" />
+                <KitView Kit="@kit" DefaultWorkingDirectory="@GetDefaultWorkingDirectory()" />
             }
         }
     </div>
 </div>
 
 @code {
+
+    [Parameter]
+    public string? DefaultWorkingDirectory { get; set; } = default;
+
     [Parameter]
     public Kit Kit { get; set; } = default!;
 
     private bool IsExpanded { get; set; } = false;
 
     private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
+
+    private string? GetDefaultWorkingDirectory()
+    {
+        return string.IsNullOrWhiteSpace(Kit.DefaultWorkingDirectory)
+            ? DefaultWorkingDirectory
+            : Kit.DefaultWorkingDirectory;
+    }
 }
