@@ -12,13 +12,14 @@
     <div class="kit-container">
         @if (IsExpanded)
         {
+            var effectiveDefaultWorkingDirectory = GetDefaultWorkingDirectory();
             @foreach (var tool in Kit.Tools)
             {
-                <ToolView Tool="@tool" DefaultWorkingDirectory="@GetDefaultWorkingDirectory()" />
+                <ToolView Tool="@tool" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
             }
             @foreach (var kit in Kit.Kits)
             {
-                <KitView Kit="@kit" DefaultWorkingDirectory="@GetDefaultWorkingDirectory()" />
+                <KitView Kit="@kit" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
             }
         }
     </div>
