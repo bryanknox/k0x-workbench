@@ -1,0 +1,348 @@
+name: Build MSIX Package
+
+
+# Disabled in GitHub UI - this workflow is disabled
+
+on:
+  push:
+    branches: [ main, msix-release-workflow ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build configuration'
+        required: false
+        default: 'Release'
+        type: choice
+        options:
+        - Release
+        - Debug
+
+env:
+  SOLUTION_FILE: 'k0x-workbench.sln'
+  WPF_PROJECT: 'src/WpfBlazor/WpfBlazor.csproj'
+  WAP_PROJECT: 'Msix/WpfBlazor.Packaging/WpfBlazor.Packaging.wapproj'
+  CERT_PATH: '${{ github.workspace }}/temp-cert.pfx'
+  BUILD_CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
+  BUILD_PLATFORM: 'x64'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Create certificate file from secret
+      run: |
+        Write-Host "Creating certificate file from GitHub secret..." -ForegroundColor Green
+        if (-not "$env:CERT_PFX_CONTENT") {
+          Write-Error "CERT_PFX_CONTENT secret is not set"
+          Write-Host "Please add the base64-encoded PFX certificate content to GitHub secrets as CERT_PFX_CONTENT"
+          exit 1
+        }
+
+        if (-not "$env:CERT_PASSWORD") {
+          Write-Error "CERT_PASSWORD secret is not set"
+          Write-Host "Please add the certificate password to GitHub secrets as CERT_PASSWORD"
+          exit 1
+        }
+
+        try {
+          $bytes = [System.Convert]::FromBase64String("$env:CERT_PFX_CONTENT")
+          [System.IO.File]::WriteAllBytes("$env:CERT_PATH", $bytes)
+          Write-Host "Certificate file created successfully at: $env:CERT_PATH" -ForegroundColor Green
+        }
+        catch {
+          Write-Error "Failed to create certificate file: $($_.Exception.Message)"
+          Write-Host "Please ensure CERT_PFX_CONTENT contains valid base64-encoded PFX data"
+          exit 1
+        }
+      shell: pwsh
+      env:
+        CERT_PFX_CONTENT: ${{ secrets.CERT_PFX_CONTENT }}
+        CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+
+    - name: Verify certificate file
+      run: |
+        if (-not (Test-Path "$env:CERT_PATH")) {
+          Write-Error "Certificate file was not created at: $env:CERT_PATH"
+          exit 1
+        }
+
+        $certInfo = Get-Item "$env:CERT_PATH"
+        Write-Host "Certificate file verified:" -ForegroundColor Green
+        Write-Host "  Path: $($certInfo.FullName)" -ForegroundColor White
+        Write-Host "  Size: $([math]::Round($certInfo.Length / 1KB, 2)) KB" -ForegroundColor White
+        Write-Host "  Created: $($certInfo.CreationTime)" -ForegroundColor White
+      shell: pwsh
+
+    - name: Restore NuGet packages
+      run: |
+        Write-Host "Restoring NuGet packages..." -ForegroundColor Green
+
+        # First restore without runtime identifier for all projects
+        dotnet restore "$env:SOLUTION_FILE" --verbosity minimal
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to restore NuGet packages"
+          exit $LASTEXITCODE
+        }
+
+        # Restore packages for the specific runtime identifier needed by MSIX packaging
+        # This needs to be done for the entire solution to ensure all dependencies are available
+        Write-Host "Restoring packages for entire solution with runtime identifier..." -ForegroundColor Green
+        dotnet restore "$env:SOLUTION_FILE" --runtime win-x64 --verbosity minimal
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to restore NuGet packages for win-x64 runtime"
+          exit $LASTEXITCODE
+        }
+      shell: pwsh
+
+    - name: Build WPF application
+      run: |
+        Write-Host "Building WPF application..." -ForegroundColor Green
+        dotnet build "$env:WPF_PROJECT" `
+          --configuration "$env:BUILD_CONFIGURATION" `
+          --runtime win-x64 `
+          --no-restore `
+          --verbosity minimal
+
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to build WPF application"
+          exit $LASTEXITCODE
+        }
+        Write-Host "WPF application built successfully" -ForegroundColor Green
+      shell: pwsh
+
+    - name: Restore MSIX packaging project
+      run: |
+        Write-Host "Restoring packages for MSIX packaging project..." -ForegroundColor Green
+        msbuild "$env:WAP_PROJECT" /t:Restore /verbosity:minimal
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to restore NuGet packages for MSIX packaging project"
+          exit $LASTEXITCODE
+        }
+      shell: pwsh
+
+    - name: Build MSIX package
+      run: |
+        Write-Host "Building MSIX package..." -ForegroundColor Green
+
+        # Build the packaging project using MSBuild (WAP projects require MSBuild, not dotnet build)
+        msbuild "$env:WAP_PROJECT" `
+          /p:Configuration="$env:BUILD_CONFIGURATION" `
+          /p:Platform="$env:BUILD_PLATFORM" `
+          /p:AppxBundle="Never" `
+          /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" `
+          /p:UapAppxPackageBuildMode=CI `
+          /p:AppxPackageSigningEnabled=true `
+          /p:PackageCertificateKeyFile="$env:CERT_PATH" `
+          /p:PackageCertificatePassword="${{ secrets.CERT_PASSWORD }}" `
+          /p:AppxPackageSigningTimestampDigestAlgorithm=SHA256 `
+          /verbosity:minimal
+
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to build MSIX package"
+          exit $LASTEXITCODE
+        }
+        Write-Host "MSIX package built successfully" -ForegroundColor Green
+      shell: pwsh
+
+    - name: Verify build outputs
+      run: |
+        Write-Host "Verifying build outputs..." -ForegroundColor Green
+
+        $outputDir = "Msix/WpfBlazor.Packaging/AppPackages"
+        if (-not (Test-Path $outputDir)) {
+          Write-Error "Output directory not found: $outputDir"
+          exit 1
+        }
+
+        # Find generated packages
+        $packages = Get-ChildItem -Path $outputDir -Recurse -Include "*.msix", "*.msixbundle" |
+                   Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-10) }
+
+        if (-not $packages) {
+          Write-Error "No MSIX packages found in output directory"
+          exit 1
+        }
+
+        Write-Host "Found packages:" -ForegroundColor Cyan
+        foreach ($package in $packages) {
+          $size = [math]::Round($package.Length / 1MB, 2)
+          Write-Host "  - $($package.Name) ($size MB)" -ForegroundColor White
+        }
+
+        # Store package info for artifact upload
+        $packageInfo = @{
+          Count = $packages.Count
+          TotalSize = [math]::Round(($packages | Measure-Object -Property Length -Sum).Sum / 1MB, 2)
+          Files = $packages | ForEach-Object { $_.Name }
+        }
+
+        $packageInfo | ConvertTo-Json | Out-File -FilePath "package-info.json"
+        Write-Host "Package verification completed successfully" -ForegroundColor Green
+      shell: pwsh
+
+    - name: Upload MSIX packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: msix-packages-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_PLATFORM }}
+        path: |
+          Msix/WpfBlazor.Packaging/AppPackages/**/*
+          !Msix/WpfBlazor.Packaging/AppPackages/**/Dependencies/**
+        retention-days: 30
+
+    - name: Upload package info
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-info-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_PLATFORM }}
+        path: package-info.json
+        retention-days: 7
+
+    - name: Upload certificate for testing
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-certificate-${{ env.BUILD_CONFIGURATION }}
+        path: Msix/WpfBlazor.Packaging/AppPackages/**/*.cer
+        retention-days: 7
+      if: success()
+
+    - name: Create release (on tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          Msix/WpfBlazor.Packaging/AppPackages/**/*.msix
+          Msix/WpfBlazor.Packaging/AppPackages/**/*.msixbundle
+          Msix/WpfBlazor.Packaging/AppPackages/**/*.cer
+        body: |
+          ## K0x Workbench ${{ github.ref_name }}
+
+          ### Installation Instructions
+          1. Download and install the certificate (.cer file) to "Trusted People" store
+          2. Install the MSIX package (.msix or .msixbundle file)
+
+          ### Package Details
+          - Configuration: ${{ env.BUILD_CONFIGURATION }}
+          - Platform: ${{ env.BUILD_PLATFORM }}
+          - Bundle: false
+
+          ### Files in this release
+          - Certificate for testing (install first)
+          - MSIX package/bundle (main installer)
+        draft: false
+        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Cleanup certificate file
+      if: always()
+      run: |
+        if (Test-Path "$env:CERT_PATH") {
+          Remove-Item "$env:CERT_PATH" -Force
+          Write-Host "Certificate file cleaned up" -ForegroundColor Green
+        }
+      shell: pwsh
+
+  test:
+    runs-on: windows-latest
+    needs: build
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    env:
+      BUILD_CONFIGURATION: ${{ github.event.inputs.configuration || 'Release' }}
+      BUILD_PLATFORM: 'x64'
+
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: msix-packages-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_PLATFORM }}
+        path: packages
+
+    - name: Download certificate
+      uses: actions/download-artifact@v4
+      with:
+        name: test-certificate-${{ env.BUILD_CONFIGURATION }}
+        path: cert
+
+    - name: Validate MSIX package
+      run: |
+        Write-Host "Validating MSIX package..." -ForegroundColor Green
+
+        # Find the Windows SDK tools
+        $sdkPaths = @(
+          "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.0.22621.0\x64",
+          "${env:ProgramFiles(x86)}\Windows Kits\10\bin\10.0.26100.0\x64"
+        )
+
+        $makeAppxPath = $null
+        foreach ($path in $sdkPaths) {
+          $candidate = "$path\makeappx.exe"
+          if (Test-Path $candidate) {
+            $makeAppxPath = $candidate
+            break
+          }
+        }
+
+        if (-not $makeAppxPath) {
+          Write-Warning "MakeAppx.exe not found, skipping package validation"
+          return
+        }
+
+        # Find MSIX packages
+        $packages = Get-ChildItem -Path "packages" -Recurse -Include "*.msix", "*.msixbundle"
+
+        foreach ($package in $packages) {
+          Write-Host "Validating: $($package.Name)" -ForegroundColor Yellow
+          & $makeAppxPath verify /p $package.FullName
+
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "✓ $($package.Name) is valid" -ForegroundColor Green
+          } else {
+            Write-Warning "✗ $($package.Name) validation failed"
+          }
+        }
+      shell: pwsh
+
+    - name: Test package installation (dry run)
+      run: |
+        Write-Host "Testing package installation (dry run)..." -ForegroundColor Green
+
+        # Find certificate and package
+        $certFile = Get-ChildItem -Path "cert" -Recurse -Include "*.cer" | Select-Object -First 1
+        $packageFile = Get-ChildItem -Path "packages" -Recurse -Include "*.msix", "*.msixbundle" | Select-Object -First 1
+
+        if ($certFile -and $packageFile) {
+          Write-Host "Would install certificate: $($certFile.Name)" -ForegroundColor Yellow
+          Write-Host "Would install package: $($packageFile.Name)" -ForegroundColor Yellow
+          Write-Host "Package size: $([math]::Round($packageFile.Length / 1MB, 2)) MB" -ForegroundColor Cyan
+
+          # Note: We don't actually install on CI to avoid interfering with the runner
+          Write-Host "✓ Installation test completed (dry run)" -ForegroundColor Green
+        } else {
+          Write-Warning "Certificate or package file not found for installation test"
+        }
+      shell: pwsh
