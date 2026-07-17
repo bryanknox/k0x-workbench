@@ -112,14 +112,20 @@ Specifies the minimum logging level for messages that should be written to log f
 
 ## Development docs in this repo
 
-- [PowerShell in GitHub Actions Workflows](./docs/pwsh-in-workflows.md)
+- [WpfBlazor - K0x Workbench app overview](./src/WpfBlazor/README.md)
+
+- [Dependabot use](./docs/dependabot.md)
+
+- [PowerShell in GitHub Actions Workflows](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
 
 - [WiX MSI Installer project documentation](./WixMsi/README.md)
+
+## Local Development
 
 ### Building
 
 - Build `k0x-workbench.slnx` in Visual Studio
-- or `cd src\WpfBlazor` and run `dotnet build`
+- or run `dotnet build` from the repo root (builds the whole solution)
 
 ### Testing
 
@@ -131,6 +137,22 @@ Specifies the minimum logging level for messages that should be written to log f
 
 - See: [PowerShell Workflow Steps Guidelines](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
   for info about tests for related PowerShell scripts.
+
+### Running
+
+- Run the app from Visual Studio (F5, with `WpfBlazor` set as the startup project)
+- or `cd src\WpfBlazor` and run `dotnet run`
+
+Optionally provide the path to a workbench JSON file. When using `dotnet run`,
+pass it after `--`:
+
+```shell
+dotnet run -- <path-to-workbench.json>
+```
+
+See [Start from Command Line](#start-from-command-line) for details on the
+command-line argument. Requires the Microsoft Edge WebView2 Runtime (the app
+prompts to install it if missing).
 
 ### Releasing
 
