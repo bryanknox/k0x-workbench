@@ -8,7 +8,7 @@ K0x Workbench is a Windows-only WPF-Blazor hybrid desktop app (.NET 10) for quic
 
 ## Commands
 
-All .NET commands run from the repo root against `k0x-workbench.sln` (or from a project folder).
+All .NET commands run from the repo root against `k0x-workbench.slnx` (or from a project folder).
 
 ```powershell
 dotnet build                          # build the solution

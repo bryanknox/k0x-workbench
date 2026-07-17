@@ -118,7 +118,7 @@ Specifies the minimum logging level for messages that should be written to log f
 
 ### Building
 
-- Build `k0x-workbench.sln` in Visual Studio 2022
+- Build `k0x-workbench.slnx` in Visual Studio
 - or `cd src\WpfBlazor` and run `dotnet build`
 
 ### Testing
@@ -126,7 +126,7 @@ Specifies the minimum logging level for messages that should be written to log f
 - Tests are run automatically in GitHub Actions workflows.
 
 - Manually run tests for the WPF app:
-  - In Visual Studio 2022 Test Explorer
+  - In Visual Studio Test Explorer
   - or, `dotnet test`
 
 - See: [PowerShell Workflow Steps Guidelines](./docs/guidelines/pwsh-workflow-steps-guidelines.md)

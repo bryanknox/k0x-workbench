@@ -11,7 +11,7 @@ on:
       - 'Directory.Build.props'
       - 'Directory.Packages.props'
       - 'global.json'
-      - 'k0x-workbench.sln'
+      - 'k0x-workbench.slnx'
       - 'src/**'
       - 'tests/**'
       - '.github/workflows/ci-checks.yml'
