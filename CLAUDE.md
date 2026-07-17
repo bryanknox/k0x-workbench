@@ -65,6 +65,7 @@ Libraries follow an abstractions/implementation split. Interfaces and models liv
 Rules from `.github/instructions/K0xWorkbench.instructions.md` apply to any `*K0xBench.json` file:
 
 - Root: `Bench` property containing a `Kit` object (the root Kit). Kits have `Label`, `DefaultWorkingDirectory`, `Tools`, and nested `Kits`. Tools have `Label`, `Command`, `Arguments`, `WorkingDirectory`.
+- The JSON root property stays named `Bench` for backward file compatibility (`BenchJsonFileModel.Bench`, typed `Kit`). In code, name identifiers for a bench file's root kit `benchKit`/`BenchKit`; use plain `kit` for generic Kit values. Avoid `rootKit` (reads as "rootkit").
 - A Tool's unset `WorkingDirectory` is inherited from the containing Kit's `DefaultWorkingDirectory`; an unset Kit `DefaultWorkingDirectory` is inherited from the nearest ancestor Kit.
 - Use forward slashes in paths, omit null/empty Tool properties, and hoist shared `WorkingDirectory` values up to the Kit's `DefaultWorkingDirectory`.
 

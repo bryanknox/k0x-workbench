@@ -8,7 +8,7 @@ Also called Bench files or Workbench files.
 
 ### Structure
 
-Root object with a `Bench` property containing a `Kit` object (the root Kit).
+Root object with a `Bench` property containing a `Kit` object (the root Kit). The property is named `Bench` for backward file compatibility. The root Kit's `Label` is the workbench label, and like any Kit it can have a `DefaultWorkingDirectory`, `Tools`, and nested `Kits`.
 
 **Kit** object:
 - `Label` (string)
