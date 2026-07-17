@@ -13,11 +13,11 @@ namespace K0x.Workbench.DataStorage.JsonFiles
             _jsonFileSaver = jsonFileSaver;
         }
 
-        public async Task SaveAsync(Bench bench, string filePath)
+        public async Task SaveAsync(Kit benchKit, string filePath)
         {
             var fileModel = new BenchJsonFileModel
             {
-                Bench = bench
+                Bench = benchKit
             };
 
             await _jsonFileSaver.SaveAsync(fileModel, filePath);

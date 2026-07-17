@@ -16,7 +16,7 @@ preferred tool patterns, and cleanup rules.
 
 1. Act on any `*K0xBench.json` files in editor context or referenced by the user.
 2. If none are apparent, list available `*K0xBench.json` files and ask.
-3. **Skip** files that don't match the naming pattern or lack the expected structure (`Bench` → `Label` + `Kits`). Inform the user why.
+3. **Skip** files that don't match the naming pattern or lack the expected structure (`Bench` → root `Kit` object). Inform the user why.
 
 ## Additional normalization guidance
 

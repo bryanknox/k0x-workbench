@@ -1,0 +1,37 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="cspell.config.yaml" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/K0x.DataStorage.JsonFiles/K0x.DataStorage.JsonFiles.csproj" />
+    <Project Path="src/K0x.Workbench.DataStorage.Abstractions/K0x.Workbench.DataStorage.Abstractions.csproj" />
+    <Project Path="src/K0x.Workbench.DataStorage.JsonFiles/K0x.Workbench.DataStorage.JsonFiles.csproj" />
+    <Project Path="src/K0x.Workbench.Files.Abstractions/K0x.Workbench.Files.Abstractions.csproj" />
+    <Project Path="src/K0x.Workbench.RecentBenches.Abstractions/K0x.Workbench.RecentBenches.Abstractions.csproj" />
+    <Project Path="src/K0x.Workbench.RecentBenches/K0x.Workbench.RecentBenches.csproj" />
+    <Project Path="src/WpfBlazor/WpfBlazor.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/K0x.DataStorage.JsonFiles.Tests/K0x.DataStorage.JsonFiles.Tests.csproj" />
+    <Project Path="tests/K0x.Workbench.DataStorage.JsonFiles.Tests/K0x.Workbench.DataStorage.JsonFiles.Tests.csproj" />
+    <Project Path="tests/K0x.Workbench.RecentBenches.Tests/K0x.Workbench.RecentBenches.Tests.csproj" />
+  </Folder>
+</Solution>

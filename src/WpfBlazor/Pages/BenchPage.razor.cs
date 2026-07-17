@@ -27,7 +27,7 @@ public partial class BenchPage : ComponentBase
     [Inject]
     private IAppTitleSetService TitleSetService { get; set; } = default!;
 
-    protected Bench? Bench { get; set; }
+    protected Kit? BenchKit { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,9 +35,9 @@ public partial class BenchPage : ComponentBase
 
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+            Kit? benchKit = await LoadBenchKitFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
-            await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
+            await UpdateBenchKitAndInfoAsync(benchKit, BenchFilePathProvider.FilePath);
         }
 
         Logger.LogTrace("OnInitializedAsync END.");
@@ -54,12 +54,12 @@ public partial class BenchPage : ComponentBase
 
         if (result is true)
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(dialog.FileName!);
+            Kit? benchKit = await LoadBenchKitFromJsonFileAsync(dialog.FileName!);
 
             // Only update if successful. Keep the current bench if not.
-            if (bench is not null)
+            if (benchKit is not null)
             {
-                await UpdateBenchAndInfoAsync(bench, dialog.FileName);
+                await UpdateBenchKitAndInfoAsync(benchKit, dialog.FileName);
             }
         }
     }
@@ -75,19 +75,19 @@ public partial class BenchPage : ComponentBase
 
         if (result is true)
         {
-            Bench = null;
+            BenchKit = null;
 
-            Bench sampleBench = CreateSampleBench(dialog.FileName);
+            Kit sampleBenchKit = CreateSampleBenchKit(dialog.FileName);
 
-            await SaveBenchFileAsync(sampleBench, dialog.FileName);
+            await SaveBenchFileAsync(sampleBenchKit, dialog.FileName);
 
-            await UpdateBenchAndInfoAsync(sampleBench, dialog.FileName);
+            await UpdateBenchKitAndInfoAsync(sampleBenchKit, dialog.FileName);
         }
     }
 
     private async Task SaveAsBenchFileAsync(MouseEventArgs e)
     {
-        if (Bench is null)
+        if (BenchKit is null)
         {
             MessageBox.Show(
                 "No bench to save.",
@@ -106,9 +106,9 @@ public partial class BenchPage : ComponentBase
 
         if (result is true)
         {
-            await SaveBenchFileAsync(Bench, dialog.FileName!);
+            await SaveBenchFileAsync(BenchKit, dialog.FileName!);
 
-            await UpdateBenchAndInfoAsync(Bench, dialog.FileName);
+            await UpdateBenchKitAndInfoAsync(BenchKit, dialog.FileName);
         }
     }
 
@@ -145,27 +145,27 @@ public partial class BenchPage : ComponentBase
     {
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+            Kit? benchKit = await LoadBenchKitFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
             // Only update if successful. Keep the current bench if not.
-            if (bench is not null)
+            if (benchKit is not null)
             {
-                await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
+                await UpdateBenchKitAndInfoAsync(benchKit, BenchFilePathProvider.FilePath);
             }
         }
     }
 
-    private async Task<Bench?> LoadBenchFromJsonFileAsync(string jsonFilePath)
+    private async Task<Kit?> LoadBenchKitFromJsonFileAsync(string jsonFilePath)
     {
         try
         {
-            Bench bench = await BenchFileLoader.LoadAsync(jsonFilePath);
+            Kit benchKit = await BenchFileLoader.LoadAsync(jsonFilePath);
 
-            return bench;
+            return benchKit;
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, $"{nameof(LoadBenchFromJsonFileAsync)} Error");
+            Logger.LogError(ex, $"{nameof(LoadBenchKitFromJsonFileAsync)} Error");
 
             MessageBox.Show(
                 "An error occurred loading the bench from JSON file.\n"
@@ -182,14 +182,14 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private static Bench CreateSampleBench(string jsonFilePath)
+    private static Kit CreateSampleBenchKit(string jsonFilePath)
     {
         string absoluteFilePath = System.IO.Path.GetFullPath(jsonFilePath);
         string folderPath = System.IO.Path.GetDirectoryName(absoluteFilePath)
             ?? string.Empty;
         string fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(absoluteFilePath);
 
-        return new Bench
+        return new Kit
         {
             Label = fileNameWithoutExtension,
             Kits = new List<Kit>
@@ -217,11 +217,11 @@ public partial class BenchPage : ComponentBase
         };
     }
 
-    private async Task SaveBenchFileAsync(Bench bench, string jsonFilePath)
+    private async Task SaveBenchFileAsync(Kit benchKit, string jsonFilePath)
     {
         try
         {
-            await BenchFileSaver.SaveAsync(bench, jsonFilePath);
+            await BenchFileSaver.SaveAsync(benchKit, jsonFilePath);
         }
         catch (Exception ex)
         {
@@ -240,16 +240,16 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private async Task UpdateBenchAndInfoAsync(Bench? bench, string? filePath)
+    private async Task UpdateBenchKitAndInfoAsync(Kit? benchKit, string? filePath)
     {
-        Bench = bench;
+        BenchKit = benchKit;
         BenchFilePathProvider.SetFilePath(filePath);
-        TitleSetService.SetTitle(bench?.Label);
+        TitleSetService.SetTitle(benchKit?.Label);
 
-        if (bench != null
+        if (benchKit != null
             && !string.IsNullOrWhiteSpace(filePath))
         {
-            await RecentBenchAdder.AddRecentBenchAsync(filePath, bench.Label);
+            await RecentBenchAdder.AddRecentBenchAsync(filePath, benchKit.Label);
         }
     }
 }

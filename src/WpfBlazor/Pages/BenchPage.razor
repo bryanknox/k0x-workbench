@@ -14,7 +14,7 @@
 
         <hr class="horizontal-separator" />
 
-        <div class="bench-label">@Bench?.Label</div>
+        <div class="bench-label">@BenchKit?.Label</div>
 
         <div>
             <span class="bench-path">
@@ -29,9 +29,9 @@
     </div>
 
     <div class="bench-view-container">
-        @if (Bench != null)
+        @if (BenchKit != null)
         {
-            <BenchView Bench=Bench />
+            <ToolKitView Kit=BenchKit />
         }
         else
         {

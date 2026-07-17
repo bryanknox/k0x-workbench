@@ -8,7 +8,7 @@ K0x Workbench is a Windows-only WPF-Blazor hybrid desktop app (.NET 10) for quic
 
 ## Commands
 
-All .NET commands run from the repo root against `k0x-workbench.sln` (or from a project folder).
+All .NET commands run from the repo root against `k0x-workbench.slnx` (or from a project folder).
 
 ```powershell
 dotnet build                          # build the solution
@@ -50,7 +50,7 @@ Releases are triggered by pushing a v-tag (strict 3-part semver), preferably via
 Libraries follow an abstractions/implementation split. Interfaces and models live in `*.Abstractions` projects; implementations depend on them. Each implementation project exposes a `ServicesConfigurationExtensions` class for DI registration.
 
 - `K0x.DataStorage.JsonFiles` — generic JSON file load/save (`IJsonFileLoader<T>` / `IJsonFileSaver<T>`).
-- `K0x.Workbench.DataStorage.Abstractions` — domain models (`Bench`, `Kit`, `Tool`) and interfaces (`IBenchFileLoader`, `IBenchFileSaver`, `IBenchProvider`, `IBenchFilePathProvider`).
+- `K0x.Workbench.DataStorage.Abstractions` — domain models (`Kit`, `Tool`) and interfaces (`IBenchFileLoader`, `IBenchFileSaver`, `IBenchFilePathProvider`).
 - `K0x.Workbench.DataStorage.JsonFiles` — bench file persistence built on the generic JSON layer.
 - `K0x.Workbench.RecentBenches` (+ `.Abstractions`) — tracks recently opened bench files, stored in the app data folder.
 - `K0x.Workbench.Files.Abstractions` — `IDataFolderPathProvider` (app data folder, default `%USERPROFILE%\.k0xworkbench`).
@@ -58,13 +58,14 @@ Libraries follow an abstractions/implementation split. Interfaces and models liv
 
 ### WpfBlazor app flow
 
-`Program.Main` → `ProgramConfiguration.Setup()` builds a generic host: config from `appsettings.json`, environment variables, and `K0xWorkbench_`-prefixed environment overrides; Serilog logging; registers all services from the libraries above. Command-line arg (bench file path) is stored in the singleton `IBenchFilePathProvider`. WPF `MainWindow` hosts a `BlazorWebView` (WebView2) that shares the app's `IServiceProvider`, rooted at `BlazorApp.razor`. `Pages/Index.razor` ("/") is a route determiner: navigates to `/bench` (BenchPage) if a bench file path is set, otherwise `/recent` (RecentPage). UI components for the bench tree are in `Components/` (`BenchView` → `KitView` → `ToolView`). See `src/WpfBlazor/README.md` for the detailed startup sequence.
+`Program.Main` → `ProgramConfiguration.Setup()` builds a generic host: config from `appsettings.json`, environment variables, and `K0xWorkbench_`-prefixed environment overrides; Serilog logging; registers all services from the libraries above. Command-line arg (bench file path) is stored in the singleton `IBenchFilePathProvider`. WPF `MainWindow` hosts a `BlazorWebView` (WebView2) that shares the app's `IServiceProvider`, rooted at `BlazorApp.razor`. `Pages/Index.razor` ("/") is a route determiner: navigates to `/bench` (BenchPage) if a bench file path is set, otherwise `/recent` (RecentPage). UI components for the bench tree are in `Components/` (`ToolKitView` → `KitView` → `ToolView`). See `src/WpfBlazor/README.md` for the detailed startup sequence.
 
 ### Bench (K0xBench.json) file format
 
 Rules from `.github/instructions/K0xWorkbench.instructions.md` apply to any `*K0xBench.json` file:
 
-- Root: `Bench` object with `Label` and `Kits`. Kits have `Label`, `DefaultWorkingDirectory`, `Tools`, and nested `Kits`. Tools have `Label`, `Command`, `Arguments`, `WorkingDirectory`.
+- Root: `Bench` property containing a `Kit` object (the root Kit). Kits have `Label`, `DefaultWorkingDirectory`, `Tools`, and nested `Kits`. Tools have `Label`, `Command`, `Arguments`, `WorkingDirectory`.
+- The JSON root property stays named `Bench` for backward file compatibility (`BenchJsonFileModel.Bench`, typed `Kit`). In code, name identifiers for a bench file's root kit `benchKit`/`BenchKit`; use plain `kit` for generic Kit values. Avoid `rootKit` (reads as "rootkit").
 - A Tool's unset `WorkingDirectory` is inherited from the containing Kit's `DefaultWorkingDirectory`; an unset Kit `DefaultWorkingDirectory` is inherited from the nearest ancestor Kit.
 - Use forward slashes in paths, omit null/empty Tool properties, and hoist shared `WorkingDirectory` values up to the Kit's `DefaultWorkingDirectory`.
 

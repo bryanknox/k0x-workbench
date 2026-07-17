@@ -82,7 +82,7 @@ try {
     Write-Host "🚀 Starting WiX MSI build for $ProductName v$Version" -ForegroundColor Green
 
     # Validate that we're in the correct directory (check for solution file)
-    $solutionFile = 'k0x-workbench.sln'
+    $solutionFile = 'k0x-workbench.slnx'
     if (-not (Test-Path $solutionFile)) {
         throw "Solution file '$solutionFile' not found. Please run this script from the repository root."
     }
