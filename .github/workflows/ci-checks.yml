@@ -44,18 +44,18 @@ jobs:
     steps:
 
       - name: 🤘 Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           # Only checkout the specific commit to improve security
           persist-credentials: false
 
       - name: 🔧 Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: 📦 Cache build outputs
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.nuget/packages
@@ -131,7 +131,7 @@ jobs:
           }
 
       - name: 📊 Publish Test Results
-        uses: dorny/test-reporter@v3
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: .NET Tests
@@ -140,7 +140,7 @@ jobs:
           reporter: dotnet-trx
 
       - name: 📈 Upload test results as artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && steps.dotnet-test.conclusion != 'skipped'
         with:
           name: test-results-release
