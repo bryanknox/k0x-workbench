@@ -25,7 +25,14 @@ dotnet format style --verify-no-changes
 dotnet format analyzers --verify-no-changes
 ```
 
-`Directory.Build.props` sets `WarningsAsErrors`, nullable enabled, net10.0 (app targets `net10.0-windows10.0.26100.0`). NuGet versions are centralized in `Directory.Packages.props`.
+`Directory.Build.props` sets `WarningsAsErrors`, nullable enabled, net10.0 (app targets `net10.0-windows10.0.26100.0`). NuGet versions are centralized in `Directory.Packages.props` (Central Package Management with transitive pinning; per-project `VersionOverride` is disabled).
+
+NuGet lock files (`packages.lock.json`, committed) pin the full restore graph; CI restores with `--locked-mode` and `RestoreLockedMode` is on whenever `CI=true`. After changing any package version or reference, regenerate the lock files and commit them:
+
+```powershell
+dotnet restore --force-evaluate                        # solution projects
+dotnet restore WixMsi/WixMsi.wixproj --force-evaluate  # WixMsi is not in the solution
+```
 
 PowerShell scripts used by GitHub Actions workflows have Pester 5 tests:
 

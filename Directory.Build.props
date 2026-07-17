@@ -7,4 +7,13 @@
     <WarningsAsErrors>enable</WarningsAsErrors>
     <WindowsTargetFramework>net10.0-windows10.0.26100.0</WindowsTargetFramework>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- Generate and use NuGet lock files (packages.lock.json, committed to git). -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!-- In CI, fail restore if it would change a lock file. GitHub Actions sets CI=true. -->
+    <RestoreLockedMode Condition="'$(CI)' == 'true' or '$(ContinuousIntegrationBuild)' == 'true'">true</RestoreLockedMode>
+    <!-- Keep the win-x64 restore graph in every lock file so the locked-mode
+         publish for runtime win-x64 in CI can restore. -->
+    <RuntimeIdentifiers Condition="'$(MSBuildProjectExtension)' == '.csproj'">win-x64</RuntimeIdentifiers>
+  </PropertyGroup>
 </Project>

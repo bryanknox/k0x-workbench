@@ -4,9 +4,26 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "saturday"
+      time: "03:00"
+      timezone: "America/Los_Angeles"
     groups:
       actions:
         patterns:
           - "*"
     commit-message:
       prefix: "ci"
+
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "03:00"
+      timezone: "America/Los_Angeles"
+    groups:
+      nuget:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps"
