@@ -12,15 +12,7 @@
     <div class="kit-container">
         @if (IsExpanded)
         {
-            var effectiveDefaultWorkingDirectory = GetDefaultWorkingDirectory();
-            @foreach (var tool in Kit.Tools)
-            {
-                <ToolView Tool="@tool" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
-            }
-            @foreach (var kit in Kit.Kits)
-            {
-                <KitView Kit="@kit" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
-            }
+            <ToolKitView Kit="@Kit" DefaultWorkingDirectory="@DefaultWorkingDirectory" />
         }
     </div>
 </div>
@@ -36,11 +28,4 @@
     private bool IsExpanded { get; set; } = false;
 
     private string expanderIconClass => IsExpanded ? "bi-caret-down" : "bi-caret-right";
-
-    private string? GetDefaultWorkingDirectory()
-    {
-        return string.IsNullOrWhiteSpace(Kit.DefaultWorkingDirectory)
-            ? DefaultWorkingDirectory
-            : Kit.DefaultWorkingDirectory;
-    }
 }

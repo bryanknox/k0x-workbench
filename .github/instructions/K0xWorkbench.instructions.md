@@ -8,9 +8,7 @@ Also called Bench files or Workbench files.
 
 ### Structure
 
-Root object with a `Bench` property containing:
-- `Label` (string)
-- `Kits` (array of `Kit` objects)
+Root object with a `Bench` property containing a `Kit` object (the root Kit).
 
 **Kit** object:
 - `Label` (string)

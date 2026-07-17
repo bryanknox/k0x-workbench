@@ -27,7 +27,7 @@ public partial class BenchPage : ComponentBase
     [Inject]
     private IAppTitleSetService TitleSetService { get; set; } = default!;
 
-    protected Bench? Bench { get; set; }
+    protected Kit? Bench { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,7 +35,7 @@ public partial class BenchPage : ComponentBase
 
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+            Kit? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
             await UpdateBenchAndInfoAsync(bench, BenchFilePathProvider.FilePath);
         }
@@ -54,7 +54,7 @@ public partial class BenchPage : ComponentBase
 
         if (result is true)
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(dialog.FileName!);
+            Kit? bench = await LoadBenchFromJsonFileAsync(dialog.FileName!);
 
             // Only update if successful. Keep the current bench if not.
             if (bench is not null)
@@ -77,7 +77,7 @@ public partial class BenchPage : ComponentBase
         {
             Bench = null;
 
-            Bench sampleBench = CreateSampleBench(dialog.FileName);
+            Kit sampleBench = CreateSampleBench(dialog.FileName);
 
             await SaveBenchFileAsync(sampleBench, dialog.FileName);
 
@@ -145,7 +145,7 @@ public partial class BenchPage : ComponentBase
     {
         if (!string.IsNullOrEmpty(BenchFilePathProvider.FilePath))
         {
-            Bench? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
+            Kit? bench = await LoadBenchFromJsonFileAsync(BenchFilePathProvider.FilePath);
 
             // Only update if successful. Keep the current bench if not.
             if (bench is not null)
@@ -155,11 +155,11 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private async Task<Bench?> LoadBenchFromJsonFileAsync(string jsonFilePath)
+    private async Task<Kit?> LoadBenchFromJsonFileAsync(string jsonFilePath)
     {
         try
         {
-            Bench bench = await BenchFileLoader.LoadAsync(jsonFilePath);
+            Kit bench = await BenchFileLoader.LoadAsync(jsonFilePath);
 
             return bench;
         }
@@ -182,14 +182,14 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private static Bench CreateSampleBench(string jsonFilePath)
+    private static Kit CreateSampleBench(string jsonFilePath)
     {
         string absoluteFilePath = System.IO.Path.GetFullPath(jsonFilePath);
         string folderPath = System.IO.Path.GetDirectoryName(absoluteFilePath)
             ?? string.Empty;
         string fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(absoluteFilePath);
 
-        return new Bench
+        return new Kit
         {
             Label = fileNameWithoutExtension,
             Kits = new List<Kit>
@@ -217,7 +217,7 @@ public partial class BenchPage : ComponentBase
         };
     }
 
-    private async Task SaveBenchFileAsync(Bench bench, string jsonFilePath)
+    private async Task SaveBenchFileAsync(Kit bench, string jsonFilePath)
     {
         try
         {
@@ -240,7 +240,7 @@ public partial class BenchPage : ComponentBase
         }
     }
 
-    private async Task UpdateBenchAndInfoAsync(Bench? bench, string? filePath)
+    private async Task UpdateBenchAndInfoAsync(Kit? bench, string? filePath)
     {
         Bench = bench;
         BenchFilePathProvider.SetFilePath(filePath);

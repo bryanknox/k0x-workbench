@@ -4,6 +4,6 @@ namespace K0x.Workbench.DataStorage.Abstractions
 {
     public interface IBenchFileLoader
     {
-        Task<Bench> LoadAsync(string filePath);
+        Task<Kit> LoadAsync(string filePath);
     }
 }

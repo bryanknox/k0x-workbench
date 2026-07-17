@@ -12,7 +12,7 @@ public class LoadAsyncTests
     {
         // Arrange
         var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
-        var expectedBench = new Bench
+        var expectedBench = new Kit
         {
             Label = "Test Bench",
             Kits = new List<Kit>

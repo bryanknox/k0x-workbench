@@ -21,7 +21,7 @@ public class SaveAsyncTests
     {
         // Arrange
         var filePath = "C:/fake/file/path.json";
-        var bench = new Bench
+        var bench = new Kit
         {
             Label = "Test Bench",
             Kits = new List<Kit>

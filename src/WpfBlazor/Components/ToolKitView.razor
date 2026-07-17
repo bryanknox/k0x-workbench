@@ -1,0 +1,34 @@
+@using K0x.Workbench.DataStorage.Abstractions.Models
+@namespace WpfBlazor.Components
+
+<div>
+
+    @{
+        var effectiveDefaultWorkingDirectory = GetDefaultWorkingDirectory();
+    }
+    @foreach (var tool in Kit.Tools)
+    {
+        <ToolView Tool="@tool" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
+    }
+    @foreach (var kit in Kit.Kits)
+    {
+        <KitView Kit="@kit" DefaultWorkingDirectory="@effectiveDefaultWorkingDirectory" />
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public string? DefaultWorkingDirectory { get; set; } = default;
+
+    [Parameter]
+    public Kit Kit { get; set; } = default!;
+
+    private string? GetDefaultWorkingDirectory()
+    {
+        return string.IsNullOrWhiteSpace(Kit.DefaultWorkingDirectory)
+            ? DefaultWorkingDirectory
+            : Kit.DefaultWorkingDirectory;
+    }
+}
