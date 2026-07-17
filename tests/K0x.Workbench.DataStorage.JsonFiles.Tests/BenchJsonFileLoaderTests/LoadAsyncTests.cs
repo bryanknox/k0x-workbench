@@ -8,11 +8,11 @@ namespace K0x.Workbench.DataStorage.JsonFiles.Tests.BenchJsonFileLoaderTests;
 public class LoadAsyncTests
 {
     [Fact]
-    public async Task LoadAsync_ShouldReturnBench_WhenFileIsLoadedSuccessfully()
+    public async Task LoadAsync_ShouldReturnBenchKit_WhenFileIsLoadedSuccessfully()
     {
         // Arrange
         var mockJsonFileLoader = new Mock<IJsonFileLoader<BenchJsonFileModel>>();
-        var expectedBench = new Kit
+        var expectedBenchKit = new Kit
         {
             Label = "Test Bench",
             Kits = new List<Kit>
@@ -32,7 +32,7 @@ public class LoadAsyncTests
                 }
             }
         };
-        var benchJsonFileModel = new BenchJsonFileModel { Bench = expectedBench };
+        var benchJsonFileModel = new BenchJsonFileModel { Bench = expectedBenchKit };
         mockJsonFileLoader.Setup(loader => loader.LoadAsync(It.IsAny<string>()))
             .ReturnsAsync(benchJsonFileModel);
 
@@ -42,7 +42,7 @@ public class LoadAsyncTests
         var result = await benchJsonFileLoader.LoadAsync("testFilePath.json");
 
         // Assert
-        result.Should().BeEquivalentTo(expectedBench);
+        result.Should().BeEquivalentTo(expectedBenchKit);
     }
 
     [Fact]

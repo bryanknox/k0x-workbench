@@ -17,11 +17,11 @@ public class SaveAsyncTests
     }
 
     [Fact]
-    public async Task SaveAsync_ShouldWriteBenchToFile()
+    public async Task SaveAsync_ShouldWriteBenchKitToFile()
     {
         // Arrange
         var filePath = "C:/fake/file/path.json";
-        var bench = new Kit
+        var benchKit = new Kit
         {
             Label = "Test Bench",
             Kits = new List<Kit>
@@ -39,11 +39,11 @@ public class SaveAsyncTests
         };
 
         // Act
-        await _benchJsonFileSaver.SaveAsync(bench, filePath);
+        await _benchJsonFileSaver.SaveAsync(benchKit, filePath);
 
         // Assert
         _mockJsonFileSaver.Verify(
-            saver => saver.SaveAsync(It.Is<BenchJsonFileModel>(model => model.Bench == bench), filePath),
+            saver => saver.SaveAsync(It.Is<BenchJsonFileModel>(model => model.Bench == benchKit), filePath),
             Times.Once);
     }
 }
