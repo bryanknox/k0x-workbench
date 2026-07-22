@@ -4,6 +4,12 @@ Project orientation for this repository is canonical in `AGENTS.md` at
 the repository root. Read it before answering questions about this
 project or changing code in it.
 
+Shared agent guidance — bench file rules, PowerShell guidelines, expert
+lens bodies — is canonical in the `ai/` directory, in harness-neutral
+markdown. Everything under `.github/` is a thin entrypoint that links
+there; read the linked file rather than working from the entrypoint
+alone.
+
 Path-scoped rules in `.github/instructions/` load automatically when
 your work matches their `applyTo` glob.
 
@@ -12,8 +18,8 @@ these are **not** Claude-only: `.claude/skills/` is one of the project
 skill roots Copilot reads, so those skills are available here, including
 as slash commands — for example `/normalize-bench-file`. That path is
 used because it is the one root every harness this project targets can
-read; see `AGENTS.md` for the table.
+read; `ai/README.md` has the table.
 
 Do not restate project facts in this file; put them in `AGENTS.md` or in
-the canonical rule document they belong to. See
-`docs/agent-primitives-design.md` for the layout and why.
+the canonical `ai/` document they belong to. See
+`ai/agent-primitives-design.md` for the layout and why.

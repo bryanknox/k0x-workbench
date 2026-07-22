@@ -114,13 +114,15 @@ Specifies the minimum logging level for messages that should be written to log f
 
 - [AGENTS.md - project orientation for AI coding agents](./AGENTS.md)
 
+- [ai/ - harness-neutral guidance shared by AI coding agents](./ai/README.md)
+
 - [WpfBlazor - K0x Workbench app overview](./src/WpfBlazor/README.md)
 
 - [Dependabot use](./docs/dependabot.md)
 
-- [Agent primitives design](./docs/agent-primitives-design.md)
+- [Agent primitives design](./ai/agent-primitives-design.md)
 
-- [PowerShell in GitHub Actions Workflows](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
+- [PowerShell in GitHub Actions Workflows](./ai/pwsh-workflow-steps-guidelines.md)
 
 - [WiX MSI Installer project documentation](./WixMsi/README.md)
 
@@ -139,7 +141,7 @@ Specifies the minimum logging level for messages that should be written to log f
   - In Visual Studio Test Explorer
   - or, `dotnet test`
 
-- See: [PowerShell Workflow Steps Guidelines](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
+- See: [PowerShell Workflow Steps Guidelines](./ai/pwsh-workflow-steps-guidelines.md)
   for info about tests for related PowerShell scripts.
 
 ### Running

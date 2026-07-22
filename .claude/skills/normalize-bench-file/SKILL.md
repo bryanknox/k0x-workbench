@@ -22,11 +22,11 @@ Apply the K0x Workbench bench file conventions to one or more
 
 ## Step 1 — load the canonical rules
 
-Read `.github/instructions/K0xWorkbench.instructions.md`. It defines the
-bench file structure, the `DefaultWorkingDirectory` inheritance model,
-the **Preferred Tool Patterns**, and the **Common Cleanup Tasks** you
-will apply. It is the only copy of those rules; do not work from memory
-of this skill's summary.
+Read `ai/bench-file-format.md`. It defines the bench file structure, the
+`DefaultWorkingDirectory` inheritance model, the **Preferred Tool
+Patterns**, and the **Common Cleanup Tasks** you will apply. It is the
+only copy of those rules; do not work from memory of this skill's
+summary.
 
 If that file is not present (for example the bench file lives outside
 this repository), say so and ask the user for the rules before editing
@@ -55,8 +55,9 @@ Never edit a file you skipped.
 
 ## Step 3 — normalize
 
-Apply every item under **Common Cleanup Tasks** in the instructions
-file, and move tools toward the shapes under **Preferred Tool Patterns**.
+Apply every item under **Common Cleanup Tasks** in the bench file format
+document, and move tools toward the shapes under **Preferred Tool
+Patterns**.
 
 Judgement rules that govern those edits:
 

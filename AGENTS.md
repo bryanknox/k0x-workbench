@@ -124,58 +124,32 @@ plain `kit` for generic `Kit` values. Avoid `rootKit` — it reads as
 
 Structure, inheritance, preferred tool patterns, and cleanup rules for
 any `*K0xBench.json` file are defined in
-[.github/instructions/K0xWorkbench.instructions.md](.github/instructions/K0xWorkbench.instructions.md).
-Read that file before creating or editing a bench file. It is the only
-copy of those rules — do not restate them elsewhere.
+[ai/bench-file-format.md](ai/bench-file-format.md). Read that file
+before creating or editing a bench file. It is the only copy of those
+rules — do not restate them elsewhere.
 
 ### PowerShell for GitHub Actions workflows
 
 Rules for `.github/workflows/pwsh` (scripts and modules) and
 `pwsh-unit-tests` (Pester tests) are defined in:
 
-- [docs/guidelines/pwsh-workflow-steps-guidelines.md](docs/guidelines/pwsh-workflow-steps-guidelines.md)
-- [docs/guidelines/pwsh-orexit-pattern-guidelines.md](docs/guidelines/pwsh-orexit-pattern-guidelines.md)
+- [ai/pwsh-workflow-steps-guidelines.md](ai/pwsh-workflow-steps-guidelines.md)
+- [ai/pwsh-orexit-pattern-guidelines.md](ai/pwsh-orexit-pattern-guidelines.md)
 
 Read the relevant file before writing or reviewing workflow PowerShell.
 These are the only copies of those rules.
 
 ## How agent guidance is organized
 
-Every rule lives in exactly one canonical file; harness-specific files
-are thin entrypoints that point at it. When adding guidance, put the
-fact in its canonical file and reference it — never paste specifics into
+Every rule lives in exactly one canonical file under [ai/](ai/), in
+harness-neutral markdown. Files under `.claude/` and `.github/` are thin
+entrypoints carrying only the frontmatter their harness requires, plus a
+link to the `ai/` file that holds the content. When adding guidance, put
+the fact in its `ai/` file and reference it — never paste specifics into
 an entrypoint.
 
-| File | Role |
-|---|---|
-| `AGENTS.md` | this file — canonical project orientation |
-| `CLAUDE.md` | Claude Code entrypoint; imports this file |
-| `.github/copilot-instructions.md` | Copilot entrypoint; points at this file |
-| `.github/instructions/*.instructions.md` | canonical path-scoped rules (Copilot loads by glob) |
-| `.claude/rules/*.md` | Claude Code shims for the same path-scoped rules |
-| `.claude/skills/*/SKILL.md` | task procedures — **not Claude-only**; see below |
-| `.github/agents/*.agent.md`, `.claude/agents/*.md` | expert lenses, one pair per lens |
-| `docs/guidelines/*.md` | canonical harness-neutral rule documents |
-
-### Why skills live under `.claude/`
-
-`.claude/skills/` is **not** a Claude Code-only directory. GitHub Copilot
-and Cursor both read it as a project skill root, so a skill placed there
-is available in all three — including as a `/slash-command`. It is used
-here because Claude Code reads *only* that path, while every other
-harness reads several. It is the one location all our targets share, not
-a statement about which tool this project prefers.
-
-If your harness is not listed below, check its own docs for which skill
-roots it reads before assuming these skills are unavailable to you.
-
-| Harness | Reads `.claude/skills/`? |
-|---|---|
-| Claude Code | yes (only root it reads) |
-| GitHub Copilot | yes |
-| Cursor | yes |
-| Codex | **no** — reads `.agents/skills/` |
-
-The design behind this layout, including the portability facts it rests
-on and what to do when a harness is added or dropped, is in
-[docs/agent-primitives-design.md](docs/agent-primitives-design.md).
+Read [ai/README.md](ai/README.md) before adding, moving, or editing any
+agent primitive. It maps each primitive type to its per-harness
+location, explains why skills live under `.claude/skills/` even though
+they are not Claude-only, and states when to link versus import.
+Ordinary work on this project does not need it.

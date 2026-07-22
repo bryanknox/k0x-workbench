@@ -8,6 +8,12 @@ markdown.
 Targets: **GitHub Copilot** and **Anthropic Claude Code**.
 Cost stance: `balanced` (no cap declared).
 
+> **Revision 2 (2026-07-22)** introduced the `ai/` directory and moved
+> every shared body into it. Sections 1–10 describe the design as
+> originally emitted; **[section 11](#11-revision-2--the-ai-directory)**
+> records what changed and why, and its file paths are the current ones.
+> Where the two disagree, section 11 wins.
+
 ---
 
 ## 1. Intent and scope
@@ -410,8 +416,169 @@ file move, not a rewrite.
 |---|---|
 | **Add Codex or another `.agents/`-only harness** | Move the skill folder to `.agents/skills/`, leave a symlink (or accept a copy) at `.claude/skills/` for Claude Code, and re-verify no double registration in Copilot. |
 | **Add Cursor** | Nothing. Cursor already reads `.claude/skills/`. |
-| **Drop Claude Code** | `git mv .claude/skills .agents/skills`; delete `.claude/rules/` and `.claude/agents/`; drop the `@AGENTS.md` line from `CLAUDE.md` or delete the file. `AGENTS.md` and the canonical rule documents are unchanged. |
-| **Drop Copilot** | Delete `.github/copilot-instructions.md`, `.github/agents/`, and fold `.github/instructions/K0xWorkbench.instructions.md` into `.claude/rules/k0xbench.md` as canonical. |
+| **Drop Claude Code** | `git mv .claude/skills .agents/skills`; delete `.claude/rules/` and `.claude/agents/`; drop the `@AGENTS.md` line from `CLAUDE.md` or delete the file. `AGENTS.md` and everything in `ai/` are unchanged. |
+| **Drop Copilot** | Delete `.github/copilot-instructions.md`, `.github/agents/`, and `.github/instructions/`. `AGENTS.md` and everything in `ai/` are unchanged. |
+
+Revision 2 (section 11) is what makes both rows cheap: the canonical
+content lives in `ai/`, so dropping a harness deletes only entrypoints.
 
 Re-verify the table above before acting on any row; these surfaces move
 faster than this document.
+
+---
+
+## 11. Revision 2 — the `ai/` directory
+
+Designed and emitted 2026-07-22, starting from this packet as section 6
+requires. Revision 1 got every fact to exactly one file. Revision 2
+fixes *where* those files sit: content shared between harnesses now
+lives in one harness-neutral directory, and the harness directories hold
+nothing but entrypoints.
+
+### 11.1 Intent and boundary
+
+Add `ai/` as the single home for harness-neutral markdown that agent
+primitives link to. Move every shared body there. Leave in `.claude/`
+and `.github/` only what the harness must find at that path —
+frontmatter plus a link.
+
+Boundary — this revision does **not**: change any rule's content, add or
+remove a primitive, change which harnesses are targeted, or introduce
+`.agents/skills/` (see 11.6).
+
+### 11.2 Findings on revision 1's output
+
+Re-ran the refactor-pattern triggers across the emitted module graph.
+
+| # | Finding | Trigger | Severity | Cure |
+|---|---|---|---|---|
+| G1 | The `workflow-pwsh-dev` persona body is byte-identical in `.claude/agents/workflow-pwsh-dev.md` and `.github/agents/workflow-pwsh-dev.agent.md`. Only the `tools:` syntax differs. | R3 DUPLICATED INLINE CONTENT | HIGH | R3 EXTRACT to `ai/workflow-pwsh-dev-lens.md`; both files keep frontmatter, identity, and the out-of-scope boundary. |
+| G2 | The canonical bench rules sit at a Copilot-owned path (`.github/instructions/`) while three consumers across two harnesses read them. Section 10's own "Drop Copilot" row admits the problem: it has to *fold the canonical copy* into a Claude path. | R3 WRONG-LENS INLINE | MEDIUM | Move the body to `ai/bench-file-format.md`; both rule files become shims. |
+| G3 | "Where primitives live and why" is told three times — `AGENTS.md` (40 lines, always-on), `.github/copilot-instructions.md`, and `CLAUDE.md`. | R3 DUPLICATED INLINE CONTENT + R5 PROSE BLOAT | MEDIUM | Extract to `ai/README.md`; `AGENTS.md` keeps a 6-line pointer, which also evicts 34 lines from every session's prefix. |
+| G4 | The neutral corpus is scattered across `docs/guidelines/`, `.github/instructions/`, and two persona bodies. An agent has no single place to look. | — (SoC) | LOW | Consolidate under `ai/`. |
+| G5 | `docs/` mixes human release documentation with agent rule documents. | — (SoC) | LOW | `docs/` keeps `release-management.md` and `dependabot.md`; everything agent-facing moves to `ai/`. |
+
+No BLOCKER findings.
+
+### 11.3 Component diagram
+
+```mermaid
+flowchart LR
+    subgraph AI["ai/ — harness-neutral"]
+        RM[/README<br/>primitive map/]
+        BF[(bench file<br/>format)]
+        LN[(pwsh dev<br/>lens body)]
+        GD[(pwsh<br/>guidelines)]
+    end
+
+    AG[/AGENTS<br/>orientation/]
+    CM[/CLAUDE<br/>entrypoint/]
+    CI[/copilot<br/>entrypoint/]
+    BR[/bench rule<br/>Claude/]
+    BC[/bench rule<br/>Copilot/]
+    NS[normalize<br/>bench file]
+    PC((pwsh lens<br/>Copilot))
+    PK((pwsh lens<br/>Claude))
+
+    CM -- "@ import" --> AG
+    CI -- read --> AG
+    AG -- link --> RM
+    AG -- link --> BF
+    AG -- link --> GD
+    BR -- link --> BF
+    BC -- link --> BF
+    NS -- "load at step 1" --> BF
+    PC -- "load first" --> LN
+    PK -- "load first" --> LN
+    LN -- "ground in" --> GD
+
+    classDef moved stroke-dasharray: 5 5;
+    class BF,LN,GD,RM,BR,BC,PC,PK moved;
+```
+
+Legend as in section 2. Dashed = content moved or file rewritten in this
+revision. Every arrow crossing out of a harness directory is a link the
+agent follows with a tool call; the one exception is `CLAUDE.md`'s
+`@AGENTS.md`, which the harness expands.
+
+### 11.4 Interface sketch (current paths)
+
+| Module | Path | Type | Holds |
+|---|---|---|---|
+| primitive map | `ai/README.md` | asset | what `ai/` is; per-harness entrypoint locations; link-vs-import rule |
+| bench rules | `ai/bench-file-format.md` | asset (canonical) | bench file structure, inheritance, tool patterns, cleanup |
+| pwsh lens body | `ai/workflow-pwsh-dev-lens.md` | asset (canonical) | grounding duty, in/out of scope, working rules, test command |
+| pwsh guidelines | `ai/pwsh-*-guidelines.md` | asset (canonical) | unchanged content, moved from `docs/guidelines/` |
+| design packet | `ai/agent-primitives-design.md` | asset | this file |
+| project orientation | `AGENTS.md` | rule (always on) | project facts; links into `ai/` |
+| Claude entrypoint | `CLAUDE.md` | rule (always on) | `@AGENTS.md` + Claude-only notes |
+| Copilot entrypoint | `.github/copilot-instructions.md` | rule (always on) | pointer to `AGENTS.md` and `ai/` |
+| bench rule (Claude) | `.claude/rules/k0xbench.md` | rule (`paths:`) | glob + link |
+| bench rule (Copilot) | `.github/instructions/K0xWorkbench.instructions.md` | rule (`applyTo:`) | glob + link |
+| pwsh lens (Claude) | `.claude/agents/workflow-pwsh-dev.md` | persona | frontmatter + link + boundary |
+| pwsh lens (Copilot) | `.github/agents/workflow-pwsh-dev.agent.md` | persona | frontmatter + link + boundary |
+| normalize skill | `.claude/skills/normalize-bench-file/SKILL.md` | module entrypoint | procedure; loads `ai/bench-file-format.md` at step 1 |
+
+Composition modes are unchanged from section 3.5: every `ai/` file is a
+LOCAL SIBLING, every entrypoint is INLINE. **External modules required:
+NONE.**
+
+### 11.5 Link, do not import
+
+Claude Code expands `@path` imports into the session prefix **at
+launch** — the memory docs state plainly that imports "help organization
+but don't reduce context, since imported files load at launch". So an
+import placed below the always-on layer would defeat the very laziness
+that layer exists to provide:
+
+- `@` in a path-scoped rule would risk loading the bench rules into
+  every session, discarding the `paths:` gate. (Whether the expansion
+  actually defers with the rule is undocumented; the failure is silent
+  and expensive, so the design does not depend on the answer.)
+- Subagent definition files are not memory files. The subagent docs
+  specify `name`, `description`, `tools`, and `model` and describe no
+  import syntax, so `@` in a persona would ship as literal text.
+- A skill's `references/` are load-on-demand by construction.
+
+Therefore: **`CLAUDE.md`'s `@AGENTS.md` is the only import in this
+repo.** Everything else links, and the linking entrypoint says
+explicitly that the link must be followed. Copilot has no import
+mechanism at all, so this also keeps the two harnesses symmetric.
+
+Cost effect: no `ai/` file enters a session prefix unless the agent
+opens it. `AGENTS.md` loses 34 always-on lines (G3). Net always-on
+prefix is smaller than revision 1's.
+
+### 11.6 Deliberate rejections
+
+- **No `.agents/skills/`.** It is the emerging vendor-neutral primitive
+  root, and moving the skill there would satisfy the "neutral location"
+  instinct — but Claude Code does not read it (section 10), so the skill
+  would silently vanish from one of the two target harnesses. Mirroring
+  or stubbing re-registers the skill in Copilot and Cursor, which read
+  several roots. Unchanged verdict. *Revisit if* Claude Code adds
+  `.agents/skills/`, which collapses the whole question.
+- **A skill body does not move to `ai/`.** Unlike a rule or a lens body,
+  a skill's `description` *is* its dispatch signature, so the stub left
+  behind cannot be content-free and the double-registration risk
+  returns. The bodies are written as neutral prose instead, so a future
+  relocation is a file move.
+- **`AGENTS.md` stays at the repository root, not in `ai/`.** Root is
+  where every harness that honors the convention looks for it.
+- **`docs/guidelines/` is not kept as a redirect.** Two files, no
+  external consumers, and the repo's own links were updated in the same
+  commit.
+
+### 11.7 Validation
+
+- No file outside `ai/` states a rule; each states only where the rule
+  lives. Checked by grep for the moved paths.
+- Both persona files carry an identical `description` (required — it is
+  the dispatch signature) and nothing else in common beyond the shared
+  boundary paragraph.
+- Re-run section 6's evals after any edit to `ai/bench-file-format.md`,
+  and section 9's real-task pass after any edit to the skill.
+- The risk this revision adds: a persona or rule shim whose link the
+  agent does not follow degrades to its boundary paragraph. That is why
+  each shim keeps the identity and the out-of-scope statement inline —
+  the failure mode is a less-grounded agent, not an unbounded one.
