@@ -21,5 +21,6 @@ used because it is the one root every harness this project targets can
 read; `ai/README.md` has the table.
 
 Do not restate project facts in this file; put them in `AGENTS.md` or in
-the canonical `ai/` document they belong to. See
-`ai/agent-primitives-design.md` for the layout and why.
+the canonical `ai/` document they belong to. `ai/README.md` maps the
+layout and says which file to read for what; read it before adding,
+moving, or editing any agent primitive. Ordinary work does not need it.
