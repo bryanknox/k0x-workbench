@@ -14,9 +14,9 @@ hold only the entrypoints that point at it.**
 | File | Holds | Read it when |
 |---|---|---|
 | [bench-file-format.md](bench-file-format.md) | structure, `DefaultWorkingDirectory` inheritance, preferred tool patterns, and cleanup rules for `*K0xBench.json` | creating or editing any bench file |
-| [pwsh-workflow-steps-guidelines.md](pwsh-workflow-steps-guidelines.md) | rules for the PowerShell that GitHub Actions steps run, and its Pester tests | writing or reviewing anything under `.github/workflows/pwsh*` |
-| [pwsh-orexit-pattern-guidelines.md](pwsh-orexit-pattern-guidelines.md) | the `OrExit` failure pattern | a workflow script or function must fail the step |
-| [workflow-pwsh-dev-lens.md](workflow-pwsh-dev-lens.md) | the shared body of the `workflow-pwsh-dev` expert lens | you were dispatched as that lens |
+| [gh-workflow-pwsh-steps-guidelines.md](gh-workflow-pwsh-steps-guidelines.md) | rules for the PowerShell that GitHub Actions steps run, and its Pester tests | writing or reviewing anything under `.github/workflows/pwsh*` |
+| [gh-workflow-pwsh-orexit-guidelines.md](gh-workflow-pwsh-orexit-guidelines.md) | the `OrExit` failure pattern | a workflow script or function must fail the step |
+| [gh-workflow-pwsh-dev-lens.md](gh-workflow-pwsh-dev-lens.md) | the shared body of the `gh-workflow-pwsh-dev` expert lens | you were dispatched as that lens |
 | [agent-primitives-design.md](agent-primitives-design.md) | the design packet behind this layout, and the portability facts it rests on | changing the layout, or adding/dropping a harness |
 
 Ordinary work needs at most one of these. Do not read them all.

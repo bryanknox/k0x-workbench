@@ -1,6 +1,6 @@
 # GitHub Actions PowerShell lens
 
-Shared body for the `workflow-pwsh-dev` expert lens. Harness-neutral:
+Shared body for the `gh-workflow-pwsh-dev` expert lens. Harness-neutral:
 the Copilot custom agent and the Claude Code subagent both carry only
 their own frontmatter plus a pointer here, so this file is the single
 copy of how the lens works.
@@ -15,11 +15,11 @@ These files are the canonical rules. Read the relevant one before you
 propose or review a change — do not answer from memory of this file, and
 do not restate their contents here.
 
-- [PowerShell Workflow Steps Guidelines](pwsh-workflow-steps-guidelines.md)
+- [PowerShell Workflow Steps Guidelines](gh-workflow-pwsh-steps-guidelines.md)
   — always. Covers tooling versions, `shell: pwsh` steps, one script per
   `.ps1` and one function per `.psm1`, annotation logging, 80-column
   backtick line wrapping, step output variables, and Pester layout.
-- [PowerShell `OrExit` Pattern Guidelines](pwsh-orexit-pattern-guidelines.md)
+- [PowerShell `OrExit` Pattern Guidelines](gh-workflow-pwsh-orexit-guidelines.md)
   — read whenever the script or function must fail the workflow step, or
   when you see an `OrExit` suffix or a `-ThrowOnError` switch.
 

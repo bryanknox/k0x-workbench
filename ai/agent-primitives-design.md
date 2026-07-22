@@ -261,8 +261,8 @@ No BLOCKER findings. Design proceeds.
 | bench rules | `.github/instructions/K0xWorkbench.instructions.md` | rule (glob `**/*K0xBench.json`) | Copilot touches a bench file | — |
 | bench rule shim | `.claude/rules/k0xbench.md` | rule (paths `**/*K0xBench.json`) | Claude Code reads a bench file | bench rules |
 | normalize skill | `.claude/skills/normalize-bench-file/SKILL.md` | module entrypoint | `/normalize-bench-file` or discovery, both harnesses | bench rules |
-| pwsh lens (Copilot) | `.github/agents/workflow-pwsh-dev.agent.md` | persona | user selects the agent | pwsh guidelines |
-| pwsh lens (Claude) | `.claude/agents/workflow-pwsh-dev.md` | persona | `Task` subagent selection | pwsh guidelines |
+| pwsh lens (Copilot) | `.github/agents/gh-workflow-pwsh-dev.agent.md` | persona | user selects the agent | pwsh guidelines |
+| pwsh lens (Claude) | `.claude/agents/gh-workflow-pwsh-dev.md` | persona | `Task` subagent selection | pwsh guidelines |
 
 Invocation modes: orientation and rule files are runtime-injected (no
 dispatch). The skill is **BOTH** (discovery + explicit `/` invocation) —
@@ -306,7 +306,7 @@ stays silent on the second.
 3. Emit `.github/copilot-instructions.md` pointer. — depends on 1
 4. Emit `.claude/skills/normalize-bench-file/SKILL.md`; delete the prompt file. — depends on bench rules being canonical
 5. Emit `.claude/rules/k0xbench.md`; fix the broken heading reference (F10). — depends on 4's reference names
-6. Harden `.github/agents/workflow-pwsh-dev.agent.md`; mirror it to `.claude/agents/workflow-pwsh-dev.md`. — no deps
+6. Harden `.github/agents/gh-workflow-pwsh-dev.agent.md`; mirror it to `.claude/agents/gh-workflow-pwsh-dev.md`. — no deps
 7. Validate (step 8) and refresh the project memory. — depends on all
 
 ---
@@ -452,7 +452,7 @@ Re-ran the refactor-pattern triggers across the emitted module graph.
 
 | # | Finding | Trigger | Severity | Cure |
 |---|---|---|---|---|
-| G1 | The `workflow-pwsh-dev` persona body is byte-identical in `.claude/agents/workflow-pwsh-dev.md` and `.github/agents/workflow-pwsh-dev.agent.md`. Only the `tools:` syntax differs. | R3 DUPLICATED INLINE CONTENT | HIGH | R3 EXTRACT to `ai/workflow-pwsh-dev-lens.md`; both files keep frontmatter, identity, and the out-of-scope boundary. |
+| G1 | The `gh-workflow-pwsh-dev` persona body is byte-identical in `.claude/agents/gh-workflow-pwsh-dev.md` and `.github/agents/gh-workflow-pwsh-dev.agent.md`. Only the `tools:` syntax differs. | R3 DUPLICATED INLINE CONTENT | HIGH | R3 EXTRACT to `ai/gh-workflow-pwsh-dev-lens.md`; both files keep frontmatter, identity, and the out-of-scope boundary. |
 | G2 | The canonical bench rules sit at a Copilot-owned path (`.github/instructions/`) while three consumers across two harnesses read them. Section 10's own "Drop Copilot" row admits the problem: it has to *fold the canonical copy* into a Claude path. | R3 WRONG-LENS INLINE | MEDIUM | Move the body to `ai/bench-file-format.md`; both rule files become shims. |
 | G3 | "Where primitives live and why" is told three times — `AGENTS.md` (40 lines, always-on), `.github/copilot-instructions.md`, and `CLAUDE.md`. | R3 DUPLICATED INLINE CONTENT + R5 PROSE BLOAT | MEDIUM | Extract to `ai/README.md`; `AGENTS.md` keeps a 6-line pointer, which also evicts 34 lines from every session's prefix. |
 | G4 | The neutral corpus is scattered across `docs/guidelines/`, `.github/instructions/`, and two persona bodies. An agent has no single place to look. | — (SoC) | LOW | Consolidate under `ai/`. |
@@ -507,16 +507,16 @@ agent follows with a tool call; the one exception is `CLAUDE.md`'s
 |---|---|---|---|
 | primitive map | `ai/README.md` | asset | what `ai/` is; per-harness entrypoint locations; link-vs-import rule |
 | bench rules | `ai/bench-file-format.md` | asset (canonical) | bench file structure, inheritance, tool patterns, cleanup |
-| pwsh lens body | `ai/workflow-pwsh-dev-lens.md` | asset (canonical) | grounding duty, in/out of scope, working rules, test command |
-| pwsh guidelines | `ai/pwsh-*-guidelines.md` | asset (canonical) | unchanged content, moved from `docs/guidelines/` |
+| pwsh lens body | `ai/gh-workflow-pwsh-dev-lens.md` | asset (canonical) | grounding duty, in/out of scope, working rules, test command |
+| pwsh guidelines | `ai/gh-workflow-pwsh-*-guidelines.md` | asset (canonical) | unchanged content, moved from `docs/guidelines/` |
 | design packet | `ai/agent-primitives-design.md` | asset | this file |
 | project orientation | `AGENTS.md` | rule (always on) | project facts; links into `ai/` |
 | Claude entrypoint | `CLAUDE.md` | rule (always on) | `@AGENTS.md` + Claude-only notes |
 | Copilot entrypoint | `.github/copilot-instructions.md` | rule (always on) | pointer to `AGENTS.md` and `ai/` |
 | bench rule (Claude) | `.claude/rules/k0xbench.md` | rule (`paths:`) | glob + link |
 | bench rule (Copilot) | `.github/instructions/K0xWorkbench.instructions.md` | rule (`applyTo:`) | glob + link |
-| pwsh lens (Claude) | `.claude/agents/workflow-pwsh-dev.md` | persona | frontmatter + link + boundary |
-| pwsh lens (Copilot) | `.github/agents/workflow-pwsh-dev.agent.md` | persona | frontmatter + link + boundary |
+| pwsh lens (Claude) | `.claude/agents/gh-workflow-pwsh-dev.md` | persona | frontmatter + link + boundary |
+| pwsh lens (Copilot) | `.github/agents/gh-workflow-pwsh-dev.agent.md` | persona | frontmatter + link + boundary |
 | normalize skill | `.claude/skills/normalize-bench-file/SKILL.md` | module entrypoint | procedure; loads `ai/bench-file-format.md` at step 1 |
 
 Composition modes are unchanged from section 3.5: every `ai/` file is a

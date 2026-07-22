@@ -133,8 +133,8 @@ rules — do not restate them elsewhere.
 Rules for `.github/workflows/pwsh` (scripts and modules) and
 `pwsh-unit-tests` (Pester tests) are defined in:
 
-- [ai/pwsh-workflow-steps-guidelines.md](ai/pwsh-workflow-steps-guidelines.md)
-- [ai/pwsh-orexit-pattern-guidelines.md](ai/pwsh-orexit-pattern-guidelines.md)
+- [ai/gh-workflow-pwsh-steps-guidelines.md](ai/gh-workflow-pwsh-steps-guidelines.md)
+- [ai/gh-workflow-pwsh-orexit-guidelines.md](ai/gh-workflow-pwsh-orexit-guidelines.md)
 
 Read the relevant file before writing or reviewing workflow PowerShell.
 These are the only copies of those rules.

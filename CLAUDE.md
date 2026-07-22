@@ -15,7 +15,7 @@ not restate project facts here.
   when you read a matching file.
 - Repo skills live in `.claude/skills/`. `/normalize-bench-file` cleans
   up `*K0xBench.json` files.
-- `.claude/agents/workflow-pwsh-dev.md` is the lens for GitHub Actions
+- `.claude/agents/gh-workflow-pwsh-dev.md` is the lens for GitHub Actions
   PowerShell work. Load it via the `Task` tool when working under
   `.github/workflows/pwsh` or `.github/workflows/pwsh-unit-tests`.
 - `@AGENTS.md` above is the only import in this repo's agent guidance.

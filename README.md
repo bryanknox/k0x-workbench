@@ -122,7 +122,7 @@ Specifies the minimum logging level for messages that should be written to log f
 
 - [Agent primitives design](./ai/agent-primitives-design.md)
 
-- [PowerShell in GitHub Actions Workflows](./ai/pwsh-workflow-steps-guidelines.md)
+- [PowerShell in GitHub Actions Workflows](./ai/gh-workflow-pwsh-steps-guidelines.md)
 
 - [WiX MSI Installer project documentation](./WixMsi/README.md)
 
@@ -141,7 +141,7 @@ Specifies the minimum logging level for messages that should be written to log f
   - In Visual Studio Test Explorer
   - or, `dotnet test`
 
-- See: [PowerShell Workflow Steps Guidelines](./ai/pwsh-workflow-steps-guidelines.md)
+- See: [PowerShell Workflow Steps Guidelines](./ai/gh-workflow-pwsh-steps-guidelines.md)
   for info about tests for related PowerShell scripts.
 
 ### Running
