@@ -1,10 +1,15 @@
 ---
 applyTo: "**/*K0xBench.json"
+description: "Structure, inheritance, preferred tool patterns, and cleanup rules for K0x Workbench bench files (*K0xBench.json)."
 ---
 
 ## K0xBench.json Guidelines
 
 Also called Bench files or Workbench files.
+
+This file is the **canonical** definition of these rules. `AGENTS.md`,
+`.claude/rules/k0xbench.md`, and the `normalize-bench-file` skill all
+point here — do not restate these rules in those files.
 
 ### Structure
 

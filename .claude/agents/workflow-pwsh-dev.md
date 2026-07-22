@@ -1,7 +1,7 @@
 ---
 name: workflow-pwsh-dev
 description: 'Expert lens for the PowerShell that GitHub Actions workflows in this repo run: scripts and modules in .github/workflows/pwsh and their Pester tests in .github/workflows/pwsh-unit-tests. Use when writing, reviewing, refactoring, or debugging workflow PowerShell, the OrExit failure pattern, workflow step outputs, or Pester mocks.'
-tools: ['read', 'edit', 'search', 'execute']
+tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
 # GitHub Actions PowerShell lens

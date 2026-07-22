@@ -112,9 +112,13 @@ Specifies the minimum logging level for messages that should be written to log f
 
 ## Development docs in this repo
 
+- [AGENTS.md - project orientation for AI coding agents](./AGENTS.md)
+
 - [WpfBlazor - K0x Workbench app overview](./src/WpfBlazor/README.md)
 
 - [Dependabot use](./docs/dependabot.md)
+
+- [Agent primitives design](./docs/agent-primitives-design.md)
 
 - [PowerShell in GitHub Actions Workflows](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
 
