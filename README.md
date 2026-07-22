@@ -84,23 +84,29 @@ Specifies the minimum logging level for messages that should be written to log f
 
 ### Repo Folder structure
 
+`.claude\agents` - Claude Code subagents (expert lenses).
+
+`.claude\rules` - Claude Code path-scoped rules.
+
+`.claude\skills` - Skills (task procedures). Despite the folder name these
+are not Claude-only — Copilot and Cursor read this path too.
+
 `.github\agents` - GitHub Copilot custom agents.
 
-`.github\instructions` - GitHub Copilot instructions.
-
-`.github\prompts` - GitHub Copilot prompts.
+`.github\instructions` - GitHub Copilot path-scoped instructions.
 
 `.github\workflows` - GitHub Actions workflows.
 
 `.github\workflows\pwsh` - PowerShell scripts used by workflows.
 
-`.github\workflows\pwsh-unit-tests` - Pester tests for Powershell scripts used by workflows.
+`.github\workflows\pwsh-unit-tests` - Pester tests for PowerShell scripts used by workflows.
+
+`ai\` - Harness-neutral guidance shared by AI coding agents. Files under
+`.claude\` and `.github\` are thin entrypoints that link here.
 
 `docs\` - Docs for developing in this repo.
 
-`docs\guidelines` - Guidelines for devs and agents developing in this repo.
-
-`scripts\` - Scripts development and local dev testing.
+`scripts\` - Scripts for development and local dev testing.
 
 `src\` - Source code for the K0xWorkbench app and associated libraries.
 
@@ -114,11 +120,17 @@ Specifies the minimum logging level for messages that should be written to log f
 
 - [WpfBlazor - K0x Workbench app overview](./src/WpfBlazor/README.md)
 
+- [WiX MSI Installer project documentation](./WixMsi/README.md)
+
+- [Release Management](./docs/release-management.md)
+
 - [Dependabot use](./docs/dependabot.md)
 
-- [PowerShell in GitHub Actions Workflows](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
+- [AGENTS.md - project orientation for AI coding agents](./AGENTS.md)
 
-- [WiX MSI Installer project documentation](./WixMsi/README.md)
+- [ai/ - harness-neutral guidance shared by AI coding agents](./ai/README.md)
+  - Indexes the bench file format, the PowerShell workflow guidelines,
+    and the agent primitives design record.
 
 ## Local Development
 
@@ -135,7 +147,7 @@ Specifies the minimum logging level for messages that should be written to log f
   - In Visual Studio Test Explorer
   - or, `dotnet test`
 
-- See: [PowerShell Workflow Steps Guidelines](./docs/guidelines/pwsh-workflow-steps-guidelines.md)
+- See: [PowerShell Workflow Steps Guidelines](./ai/gh-workflow-pwsh-steps-guidelines.md)
   for info about tests for related PowerShell scripts.
 
 ### Running

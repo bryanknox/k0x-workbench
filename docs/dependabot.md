@@ -20,7 +20,7 @@ to keep review overhead low.
 
 Because the repo uses Central Package Management with transitive pinning and
 committed NuGet lock files, a merged NuGet update PR may require regenerating the
-lock files (see the restore commands in [CLAUDE.md](../CLAUDE.md)) if Dependabot's
+lock files (see the restore commands in [AGENTS.md](../AGENTS.md)) if Dependabot's
 own update does not.
 
 ## Check that Dependabot is enabled

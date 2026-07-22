@@ -1,6 +1,6 @@
 ---
-applyTo: "**/*K0xBench.json"
-description: "Structure, inheritance, preferred tool patterns, and cleanup rules for K0x Workbench bench files (*K0xBench.json)."
+paths:
+  - "**/*K0xBench.json"
 ---
 
 # Bench file rules
