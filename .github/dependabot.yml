@@ -1,5 +1,8 @@
 version: 2
 updates:
+  # GitHub Actions used by workflows in .github/workflows.
+  # Actions are pinned to full commit SHAs.
+  # Dependabot updates the SHA and the trailing version comment together.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -13,7 +16,11 @@ updates:
           - "*"
     commit-message:
       prefix: "ci"
+      include: "scope"
 
+  # NuGet packages.
+  # Versions are managed centrally in Directory.Packages.props,
+  # so Dependabot updates the <PackageVersion> items there.
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -26,4 +33,5 @@ updates:
         patterns:
           - "*"
     commit-message:
-      prefix: "deps"
+      prefix: "build"
+      include: "scope"

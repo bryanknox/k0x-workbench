@@ -9,10 +9,20 @@ Dependabot is configured in [`.github/dependabot.yml`](../.github/dependabot.yml
 
 Two package ecosystems are watched, both rooted at the repo root (`/`):
 
-| Ecosystem        | Covers                                   | PR commit prefix |
-| ---------------- | ---------------------------------------- | ---------------- |
-| `github-actions` | Action versions in `.github/workflows/`  | `ci`             |
-| `nuget`          | NuGet packages (`Directory.Packages.props`) | `deps`        |
+| Ecosystem        | Covers                                      | PR title prefix |
+| ---------------- | ------------------------------------------- | --------------- |
+| `github-actions` | Action versions in `.github/workflows/`     | `ci(deps)`      |
+| `nuget`          | NuGet packages (`Directory.Packages.props`) | `build(deps)`   |
+
+Prefixes follow [Conventional Commits](https://www.conventionalcommits.org/): `ci`
+for CI configuration (the Actions the workflows run) and `build` for the build
+system's external dependencies (NuGet packages). The `(deps)` scope comes from
+`include: "scope"`, which makes Dependabot append the dependency scope it resolved.
+So a grouped Actions PR is titled, for example:
+
+```text
+ci(deps): bump the actions group with 7 updates
+```
 
 Both run on a **weekly** schedule (Saturday 03:00 America/Los_Angeles) and **group**
 all updates in the ecosystem into a single PR (one PR for Actions, one for NuGet)
