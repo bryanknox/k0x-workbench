@@ -50,6 +50,14 @@ Invoke-Pester -Path .                          # all tests
 Invoke-Pester -Path "Some-Function.Tests.ps1"  # one test file
 ```
 
+Vendored agent skills (copied from upstream repos listed in
+`scripts/vendored-skills.json`; see [ai/README.md](ai/README.md#vendored-skills)):
+
+```powershell
+.\scripts\UpdateVendoredSkills.ps1          # refresh vendored skills to latest upstream releases
+.\scripts\UpdateVendoredSkills.ps1 -Check   # verify they match their pinned upstream commits
+```
+
 Local publish / installer build (outputs to git-ignored
 `local-published-ignored/`):
 
