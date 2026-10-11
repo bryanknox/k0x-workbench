@@ -46,7 +46,7 @@ A squash merge produces **one** commit, so a PR gets **one** type. If a
 branch mixes unrelated changes, split it into separate PRs rather than
 combining types.
 
-Dependabot PRs use the `ci(deps)` and `build(deps)` prefixes. See
+Dependabot PRs use the `ci` and `build` types. See
 [dependabot.md](dependabot.md).
 
 ## Breaking changes

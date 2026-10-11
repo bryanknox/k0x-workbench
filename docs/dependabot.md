@@ -12,7 +12,7 @@ Two package ecosystems are watched, both rooted at the repo root (`/`):
 | Ecosystem        | Covers                                      | PR title prefix |
 | ---------------- | ------------------------------------------- | --------------- |
 | `github-actions` | Action versions in `.github/workflows/`     | `ci(deps)`      |
-| `nuget`          | NuGet packages (`Directory.Packages.props`) | `build(deps)`   |
+| `nuget`          | NuGet packages (`Directory.Packages.props`) | `build`         |
 
 Prefixes follow [Conventional Commits](https://www.conventionalcommits.org/): `ci`
 for CI configuration (the Actions the workflows run) and `build` for the build
@@ -21,8 +21,18 @@ system's external dependencies (NuGet packages). The `(deps)` scope comes from
 So a grouped Actions PR is titled, for example:
 
 ```text
-ci(deps): bump the actions group with 7 updates
+ci(deps): bump the actions group across 1 directory with 5 updates
 ```
+
+Grouped NuGet PRs currently arrive without the scope and with a capitalized
+subject, even though `include: "scope"` is set for that ecosystem too:
+
+```text
+build: Bump the nuget group with 7 updates
+```
+
+Both forms pass the [PR Title check](conventional-commits.md). It accepts
+any scope and any subject casing, as long as the type is in its list.
 
 Both run on a **weekly** schedule (Saturday 03:00 America/Los_Angeles) and **group**
 all updates in the ecosystem into a single PR (one PR for Actions, one for NuGet)
