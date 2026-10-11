@@ -20,7 +20,7 @@
     The script never commits or pushes; review the changes and commit
     them yourself.
 
-    See ai/README.md ("Vendored skills") for the workflow.
+    See docs/vendored-skills.md for the workflow.
 
 .PARAMETER Source
     Names of the sources (the "name" field in vendored-skills.json) to
