@@ -14,11 +14,12 @@ not restate project facts here.
 - Path-scoped rules live in `.claude/rules/`. They load automatically
   when you read a matching file.
 - Repo skills live in `.claude/skills/`. `/normalize-bench-file` cleans
-  up `*K0xBench.json` files.
+  up `*K0xBench.json` files. `/write-pr-title` writes the Conventional
+  Commits PR title that `main` requires.
 - Some skills there are vendored copies of upstream skills, listed in
   `scripts/vendored-skills.json`. They are the exception to the thin
-  entrypoint rule above; do not edit them in place. See "Vendored skills"
-  in `ai/README.md`.
+  entrypoint rule above; do not edit them in place. See
+  `docs/vendored-skills.md`.
 - `.claude/agents/gh-workflow-pwsh-dev.md` is the lens for GitHub Actions
   PowerShell work. Load it via the `Task` tool when working under
   `.github/workflows/pwsh` or `.github/workflows/pwsh-unit-tests`.

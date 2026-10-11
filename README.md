@@ -89,7 +89,8 @@ Specifies the minimum logging level for messages that should be written to log f
 `.claude\rules` - Claude Code path-scoped rules.
 
 `.claude\skills` - Skills (task procedures). Despite the folder name these
-are not Claude-only — Copilot and Cursor read this path too.
+are not Claude-only — Copilot and Cursor read this path too. Some are
+[vendored](./docs/vendored-skills.md) from upstream repos; don't edit those in place.
 
 `.github\agents` - GitHub Copilot custom agents.
 
@@ -125,6 +126,10 @@ are not Claude-only — Copilot and Cursor read this path too.
 - [Release Management](./docs/release-management.md)
 
 - [Dependabot use](./docs/dependabot.md)
+
+- [Pull requests and conventional commits](./docs/conventional-commits.md)
+
+- [Vendored agent skills](./docs/vendored-skills.md)
 
 - [AGENTS.md - project orientation for AI coding agents](./AGENTS.md)
 
@@ -165,6 +170,15 @@ dotnet run -- <path-to-workbench.json>
 See [Start from Command Line](#start-from-command-line) for details on the
 command-line argument. Requires the Microsoft Edge WebView2 Runtime (the app
 prompts to install it if missing).
+
+### Pull requests
+
+`main` takes only squash-merged PRs, and the PR title becomes the commit
+message, so the title must be a [Conventional Commits](https://www.conventionalcommits.org/)
+message (for example `fix: ...` or `feat: ...`). When merging, **don't
+edit the squash commit message** in the merge box.
+
+See [Pull Requests and Conventional Commits](./docs/conventional-commits.md).
 
 ### Releasing
 

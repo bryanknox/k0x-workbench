@@ -51,7 +51,7 @@ Invoke-Pester -Path "Some-Function.Tests.ps1"  # one test file
 ```
 
 Vendored agent skills (copied from upstream repos listed in
-`scripts/vendored-skills.json`; see [ai/README.md](ai/README.md#vendored-skills)):
+`scripts/vendored-skills.json`; see [docs/vendored-skills.md](docs/vendored-skills.md)):
 
 ```powershell
 .\scripts\UpdateVendoredSkills.ps1          # refresh vendored skills to latest upstream releases
@@ -127,6 +127,16 @@ compatibility (`BenchJsonFileModel.Bench`, typed `Kit`). In code, name
 identifiers for a bench file's root kit `benchKit` / `BenchKit`; use
 plain `kit` for generic `Kit` values. Avoid `rootKit` — it reads as
 "rootkit".
+
+### Pull requests and commits on `main`
+
+`main` takes only squash-merged PRs, and the PR title becomes the
+commit message, so every PR title must be a Conventional Commits
+message. The rules, including how to merge without editing the squash
+commit message, are in
+[docs/conventional-commits.md](docs/conventional-commits.md). Read it
+before you open, retitle, or merge a PR, and use the `write-pr-title`
+skill to write the title. It is the only copy of those rules.
 
 ### Bench (K0xBench.json) file format
 
