@@ -1,0 +1,49 @@
+# PR-title lint: validates that the pull request title is a valid
+# Conventional Commits message. In a squash-only repo the PR title
+# becomes the commit message on the default branch, so this check
+# is the enforcement point for conventional history.
+#
+# COUPLING: the job "name" below ("Validate conventional PR title")
+# is referenced BY NAME as a required status check in the branch
+# ruleset. Renaming the job silently breaks that requirement.
+name: PR Title
+
+on:
+  pull_request:
+    # "edited" matters: when someone fixes a bad title, the check
+    # re-runs immediately instead of leaving a stale failure.
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  lint-pr-title:
+    name: Validate conventional PR title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # The Conventional Commits de-facto type set: feat and fix
+          # from the specification, the other eight from the Angular
+          # convention. Pinned here rather than left to the action's
+          # defaults so the types this repository accepts are stated
+          # in the repository, not implied by an action version.
+          #
+          # CUSTOMIZE: this list is yours to edit. Remove types you
+          # do not want, or add your own. Keep feat and fix -- they
+          # are what the specification defines, and what semantic
+          # versioning tooling reads.
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore

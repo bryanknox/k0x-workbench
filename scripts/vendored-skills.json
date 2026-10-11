@@ -1,0 +1,18 @@
+{
+    "sources": [
+        {
+            "name": "conventional-pr-titles",
+            "repository": "https://github.com/bryanknox/conventional-pr-titles",
+            "tagPrefix": "conventional-pr-titles--v",
+            "skillsPath": "skills",
+            "skills": [
+                "write-pr-title",
+                "enforce-conventional-commits"
+            ],
+            "vendored": {
+                "ref": "conventional-pr-titles--v2.1.0",
+                "commit": "fc151f4e5e8618dc534d773d295626eabc785415"
+            }
+        }
+    ]
+}

@@ -62,6 +62,41 @@ each skill root would register the skill more than once in the harnesses
 that read several roots. The skill bodies are written as harness-neutral
 prose instead, so relocating one is a file move, not a rewrite.
 
+### Vendored skills
+
+Some skill folders in `.claude/skills/` are copied verbatim from other
+repositories, so every contributor gets them without installing anything.
+They are the one exception to "harness directories hold only
+entrypoints": a vendored skill is a full copy, owned upstream.
+
+[`scripts/vendored-skills.json`](../scripts/vendored-skills.json) is the
+only list of them. Each entry in `sources` names an upstream repository,
+the skill folders taken from it (`skills`), and — written by the script,
+never by hand — the tag and commit they were last copied from
+(`vendored`).
+
+- **Do not edit a vendored skill in place.** Fix it upstream, release it,
+  then refresh. An in-place edit is overwritten by the next refresh.
+- **Refresh:** `.\scripts\UpdateVendoredSkills.ps1` copies every source's
+  skills from its latest release tag. `-Source <name>` limits it to one
+  source; add `-Ref <tag|branch|sha>` to pin something other than the
+  latest. Review the diff and commit it; the script never commits.
+- **Verify:** `.\scripts\UpdateVendoredSkills.ps1 -Check` changes nothing.
+  It reports newer upstream releases and exits 1 if any vendored folder
+  differs from its pinned commit.
+- **Add a source or skill:** add the entry (`name`, `repository`,
+  `skills`, and `tagPrefix` / `skillsPath` if they differ from the
+  defaults `v` / `skills`), then run the script. Skill names must be
+  unique across sources and must not collide with a repo-owned skill;
+  the script checks both before copying anything.
+- **Remove a skill:** delete its name from `skills` and its
+  `.claude/skills/<name>/` folder in the same commit. The script never
+  deletes a folder it is not told about.
+
+A personal copy of a skill with the same name
+(`~/.claude/skills/<name>/`) takes precedence over the project copy in
+Claude Code.
+
 ## Adding or changing guidance
 
 1. Put the fact in the `ai/` file it belongs to — or add a new one and
